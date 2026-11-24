@@ -1,5 +1,5 @@
 /* DATASS Móvil Offline · service worker: guarda la app en el equipo para usarla sin conexión */
-const VERSION = 'datass-v1';
+const VERSION = 'datass-v2';
 const APP = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(APP)).then(() => self.skipWaiting()));
