@@ -5236,8 +5236,13 @@ function drawIcons(){
 }
 function setThemeColor(){
  let m=document.querySelector('meta[name="theme-color"]');if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m)}
- const c=getComputedStyle(document.documentElement).getPropertyValue(S.user?'--hdr':'--card').trim();if(c)m.content=c;
+ /* la barra del celular toma el color de lo que está arriba de la pantalla (cabecera roja, blanca, mapa…) */
+ let c='';try{const a=document.getElementById('app'),r=a&&a.getBoundingClientRect();let el=r&&document.elementFromPoint(r.left+r.width/2,r.top+2);
+  while(el&&el!==document.documentElement){const b=getComputedStyle(el).backgroundColor,mm=b&&b.match(/rgba?\(([^)]+)\)/);if(mm){const v=mm[1].split(',').map(x=>parseFloat(x));if(v.length<4||v[3]>.5){c=b;break}}el=el.parentElement}}catch(e){}
+ if(!c)c=getComputedStyle(document.documentElement).getPropertyValue(S.user?'--hdr':'--card').trim();if(c&&m.content!==c)m.content=c;
 }
+{let tq=0;const tc=()=>{cancelAnimationFrame(tq);tq=requestAnimationFrame(()=>{try{setThemeColor()}catch(e){}})};document.addEventListener('scroll',tc,true);addEventListener('resize',tc);setInterval(tc,1500);
+ {const _rt=render;render=function(){const r=_rt.apply(this,arguments);[120,380,700].forEach(t=>setTimeout(tc,t));return r}}}
 /* Campos con etiqueta interna: envuelve label.f + su campo en una sola caja */
 function fieldsInit(){
  document.querySelectorAll('#app label.f').forEach(l=>{
