@@ -3380,6 +3380,7 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .eqsh p{margin:0 0 8px}
 .rcard .nw{white-space:nowrap}
 @media (max-width:375px){.rcard .ill{width:64px;height:56px}.rcard .ill svg:not(.i){width:60px;height:50px}}
+.appver{text-align:center;font-size:var(--fs-xs);color:var(--muted);margin:24px 0 8px}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6657,6 +6658,9 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  Object.keys(D).forEach(k=>{if(TECH[k])TECH[k].dc=D[k]});if(TECH.T4)TECH.T4.nc='Bomba dosificadora';
  act.cloEqInfo=function(k){const t=TECH[k];if(!t)return;sheet({title:t.n,html:`<div class="eqsh"><div class="ill">${techSvg(k)}</div><p class="eqfull">${esc(t.full||t.n)}</p><p>${esc(t.d)}</p></div>`,actions:[{label:'Elegir este equipo',act:'cloEqInfoPick',arg:k,primary:true}]})};
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
+
+/* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 24/11 · 18:19</p></div>');return v}}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
