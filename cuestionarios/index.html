@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#C8102E"><title>Cuestionarios por
+actividad · App Móvil DATASS</title>
+<link rel="icon" href="../icons/favicon-32-v3.png">
+<style>
+:root{--red:#C8102E;--ink:#1F2328;--mut:#5E6670;--line:#E4E6EA;--bg:#F6F7F9}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+header.top{position:sticky;top:0;z-index:5;background:var(--red);color:#fff;display:flex;align-items:center;gap:12px;padding:12px 18px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+header.top a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;opacity:.95}header.top b{font-size:16px;flex:1}
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;max-width:1180px;margin:0 auto;padding:24px 18px 64px}
+nav#TOC{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 12px}
+nav#TOC ul{list-style:none;margin:0;padding-left:10px}nav#TOC>ul{padding-left:0}nav#TOC a{color:var(--ink);text-decoration:none;display:block;padding:3px 6px;border-radius:6px}nav#TOC a:hover{background:#FBEDEE;color:var(--red)}
+nav#TOC ul ul a{color:var(--mut);font-size:13px}
+main{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 34px;min-width:0}
+h1{font-size:30px;line-height:1.2;margin:0 0 8px}h2{font-size:23px;margin:40px 0 12px;padding-top:8px;border-top:1px solid var(--line)}h3{font-size:18px;margin:28px 0 8px}
+a{color:var(--red)}img{max-width:100%;height:auto;border-radius:12px;display:block;margin:14px auto}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#F3F4F6}
+blockquote{margin:14px 0;padding:10px 16px;background:#FFF7E8;border-left:4px solid #E0A12B;border-radius:8px}blockquote p{margin:4px 0}
+code{background:#F3F4F6;padding:1px 5px;border-radius:5px;font-size:.92em}
+.upd{color:var(--mut);font-size:13px;margin:0 0 18px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;padding:14px 10px 48px}nav#TOC{position:static;max-height:none}main{padding:18px 16px}h1{font-size:25px}}
+</style></head><body>
+<header class="top"><b>Cuestionarios por
+actividad</b><a href="../">← Abrir la app</a></header>
+<div class="wrap"><nav id="TOC"><ul>
+<li><a href="#cuestionarios-por-actividad-app-móvil-datass"
+id="toc-cuestionarios-por-actividad-app-móvil-datass">Cuestionarios por
+actividad · App Móvil DATASS</a>
+<ul>
+<li><a href="#cómo-leer-este-documento"
+id="toc-cómo-leer-este-documento">Cómo leer este documento</a></li>
+<li><a href="#monitoreo-del-servicio-de-agua"
+id="toc-monitoreo-del-servicio-de-agua">1. Monitoreo del servicio de
+agua</a></li>
+<li><a href="#cloración" id="toc-cloración">2. Cloración</a></li>
+<li><a href="#limpieza-y-desinfección"
+id="toc-limpieza-y-desinfección">3. Limpieza y desinfección</a></li>
+<li><a href="#operación-y-mantenimiento-de-agua-potable"
+id="toc-operación-y-mantenimiento-de-agua-potable">4. Operación y
+mantenimiento de agua potable</a></li>
+<li><a href="#operación-y-mantenimiento-de-alcantarillado"
+id="toc-operación-y-mantenimiento-de-alcantarillado">5. Operación y
+mantenimiento de alcantarillado</a></li>
+<li><a href="#datos-que-se-guardan-en-todos-los-registros"
+id="toc-datos-que-se-guardan-en-todos-los-registros">6. Datos que se
+guardan en todos los registros</a></li>
+</ul></li>
+</ul></nav><main><p class="upd">Actualizado: 25/11/2026 15:38</p>
+<h1 id="cuestionarios-por-actividad-app-móvil-datass">Cuestionarios por
+actividad · App Móvil DATASS</h1>
+<p><a href="diccionario.xlsx">Descargar el diccionario de campos
+(Excel)</a></p>
+<h2 id="cómo-leer-este-documento">Cómo leer este documento</h2>
+<p>Este documento lista, actividad por actividad, los datos que la App
+Móvil DATASS pide en cada paso del registro. Sirve para capacitar a los
+usuarios de campo y como referencia para el equipo técnico; el detalle
+campo por campo, con filtros y nombre sugerido para la API, está en el
+<strong>diccionario de campos</strong> (Excel).</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columna</th>
+<th>Qué indica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Paso</td>
+<td>Pantalla o etapa del registro donde aparece el campo.</td>
+</tr>
+<tr class="even">
+<td>Campo</td>
+<td>Dato que se pide, con el nombre que ve el usuario.</td>
+</tr>
+<tr class="odd">
+<td>Tipo</td>
+<td>Número, texto, opción única, varias opciones, casilla, foto,
+ubicación o fecha y hora.</td>
+</tr>
+<tr class="even">
+<td>Obligatorio</td>
+<td>Sí: no se puede guardar sin él. No: opcional. Condicional: solo en
+ciertos casos.</td>
+</tr>
+<tr class="odd">
+<td>Opciones / rango</td>
+<td>Valores que se pueden elegir o límites aceptados, con su
+unidad.</td>
+</tr>
+<tr class="even">
+<td>Regla o aviso</td>
+<td>Validación, alerta o comportamiento de la app con ese dato.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Etapa de demostración.</strong> Los campos corresponden a la
+demo actual, que se usa para validar los flujos con los usuarios. Pueden
+cambiar antes de la versión final.</p>
+</blockquote>
+<h2 id="monitoreo-del-servicio-de-agua">1. Monitoreo del servicio de
+agua</h2>
+<p>El monitoreo es un recorrido: reservorio, viviendas (primera,
+intermedia y última) y, si hay, piletas. Cada punto pide cloro residual
+y fotos; en las viviendas se pide además el titular y la continuidad del
+servicio.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+<th>Opciones / rango</th>
+<th>Regla o aviso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Inicio</td>
+<td>Reservorio de partida</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Reservorios del sistema (más cercano primero)</td>
+<td>Define el recorrido: reservorio → viviendas → piletas.</td>
+</tr>
+<tr class="even">
+<td>Reservorio</td>
+<td>Cloro residual</td>
+<td>Número (mg/L)</td>
+<td>Sí</td>
+<td>0 a 5 mg/L</td>
+<td>Fuera de 0,5–1,5 mg/L se guarda como alerta.</td>
+</tr>
+<tr class="odd">
+<td>Reservorio</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>Sí (mín. 2)</td>
+<td>Reservorio · Punto de medición · Evidencia adicional</td>
+<td>Al menos 2 fotos.</td>
+</tr>
+<tr class="even">
+<td>Reservorio</td>
+<td>Observaciones</td>
+<td>Texto</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Reservorio</td>
+<td>Ubicación GPS</td>
+<td>Ubicación</td>
+<td>Automático</td>
+<td>Precisión en m</td>
+<td>Verde ≤ ±20 m, ámbar ≤ ±50 m, rojo &gt; ±50 m; en rojo queda marcado
+«Ubicación imprecisa».</td>
+</tr>
+<tr class="even">
+<td>Vivienda · identificación</td>
+<td>DNI del titular</td>
+<td>Texto (8 dígitos)</td>
+<td>Sí</td>
+<td>8 dígitos</td>
+<td>Se busca al titular; si no existe se registra como titular
+nuevo.</td>
+</tr>
+<tr class="odd">
+<td>Vivienda · identificación</td>
+<td>Vivienda</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Viviendas del titular o nueva</td>
+<td>Obligatorio elegir o registrar la vivienda.</td>
+</tr>
+<tr class="even">
+<td>Vivienda · continuidad</td>
+<td>¿Cuenta con agua hoy?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · No</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Vivienda · continuidad</td>
+<td>¿Cuántas horas recibe agua?</td>
+<td>Opción única</td>
+<td>Condicional</td>
+<td>Menos de 6 h · 6 a 12 h · 12 a 18 h · Más de 18 h · Continuo 24
+h</td>
+<td>Solo si cuenta con agua hoy.</td>
+</tr>
+<tr class="even">
+<td>Vivienda · continuidad</td>
+<td>¿Cuántos días recibe agua?</td>
+<td>Opción única</td>
+<td>Condicional</td>
+<td>1 a 2 días · 3 a 4 días · 5 a 6 días · Todos los días</td>
+<td>Solo si cuenta con agua hoy.</td>
+</tr>
+<tr class="odd">
+<td>Vivienda · continuidad</td>
+<td>¿El hogar almacena agua para consumo?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · No</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Vivienda · continuidad</td>
+<td>¿El servicio es suficiente?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · Regular · No</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Vivienda · calidad</td>
+<td>Cloro residual</td>
+<td>Número (mg/L)</td>
+<td>Sí</td>
+<td>0 a 5 mg/L</td>
+<td>Fuera de 0,5–1,5 mg/L se guarda como alerta.</td>
+</tr>
+<tr class="even">
+<td>Vivienda · calidad</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>Sí (mín. 1)</td>
+<td>Punto de abastecimiento · Almacenamiento (de corresponder) · Entorno
+/ evidencia</td>
+<td>Al menos 1 foto.</td>
+</tr>
+<tr class="odd">
+<td>Vivienda · calidad</td>
+<td>Observaciones</td>
+<td>Texto</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Pileta (opcional)</td>
+<td>Cloro, fotos y observación</td>
+<td>Igual que vivienda</td>
+<td>Sí</td>
+<td>—</td>
+<td>Se agrega con «+ Pileta». Si no hay, el resumen indica que no hubo
+piletas.</td>
+</tr>
+<tr class="odd">
+<td>Todos los puntos</td>
+<td>Distancia al punto anterior</td>
+<td>Número (m)</td>
+<td>Automático</td>
+<td>—</td>
+<td>Aviso si está a menos de 20 m del anterior; se puede guardar
+igual.</td>
+</tr>
+<tr class="even">
+<td>Resumen</td>
+<td>Envío</td>
+<td>Acción</td>
+<td>Sí</td>
+<td>Sincronizar con DATASS · Guardar y enviar después</td>
+<td>Requiere todos los puntos registrados.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cloración">2. Cloración</h2>
+<p>La cloración tiene 9 pasos con el método A, 10 con el método B
+(agrega la medición previa) y 4 con el equipo «Otros», que no usa
+calculadora. Los pasos 6 (cálculo) y 9 (resumen) no piden datos:
+muestran resultados.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+<th>Opciones / rango</th>
+<th>Regla o aviso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 · Punto de cloración</td>
+<td>Punto de cloración</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Reservorios del sistema o punto nuevo</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>1 · Punto nuevo</td>
+<td>Ubicación del equipo</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Caseta de bombeo · Planta de tratamiento · Captación · Línea de
+distribución · Otro</td>
+<td>Solo al agregar un punto.</td>
+</tr>
+<tr class="odd">
+<td>1 · Punto nuevo</td>
+<td>Nombre del punto</td>
+<td>Texto (máx. 60)</td>
+<td>Sí</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>1 · Punto nuevo</td>
+<td>Referencia de ubicación</td>
+<td>Texto</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>1 · Punto nuevo</td>
+<td>Reservorio relacionado</td>
+<td>Opción única</td>
+<td>No</td>
+<td>Reservorios del sistema</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>1 · Punto nuevo</td>
+<td>¿El equipo está donde se incorpora la solución?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · No</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>1 · Punto nuevo</td>
+<td>Punto de incorporación</td>
+<td>Texto</td>
+<td>Condicional</td>
+<td>—</td>
+<td>Solo si la respuesta anterior es No.</td>
+</tr>
+<tr class="even">
+<td>2 · Equipo instalado</td>
+<td>Equipo</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Doble recipiente · Flotador adaptado · Autocompensante · Bomba
+dosificadora / inyectora · Otros</td>
+<td>Con «Otros» el registro tiene 4 pasos y sin calculadora.</td>
+</tr>
+<tr class="odd">
+<td>2 · Equipo instalado</td>
+<td>Descripción del equipo</td>
+<td>Texto</td>
+<td>Condicional</td>
+<td>—</td>
+<td>Solo con «Otros».</td>
+</tr>
+<tr class="even">
+<td>2 · Equipo instalado</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>No</td>
+<td>Equipo instalado · Detalle o placa</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>3 · Caudal</td>
+<td>Método de medición</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Recipiente y tiempo · Lectura de instrumento</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>3 · Caudal</td>
+<td>Volumen del recipiente</td>
+<td>Opción única / número (L)</td>
+<td>Condicional</td>
+<td>10 L · 20 L · Otro (volumen)</td>
+<td>Con recipiente y tiempo.</td>
+</tr>
+<tr class="odd">
+<td>3 · Caudal</td>
+<td>Tiempos de llenado</td>
+<td>Número (s)</td>
+<td>Condicional</td>
+<td>Mínimo 3 mediciones &gt; 0</td>
+<td>Con recipiente y tiempo; hay cronómetro.</td>
+</tr>
+<tr class="even">
+<td>3 · Caudal</td>
+<td>Instrumento utilizado</td>
+<td>Opción única</td>
+<td>Condicional</td>
+<td>Caudalímetro · Medidor ultrasónico · Otro instrumento validado</td>
+<td>Con lectura de instrumento.</td>
+</tr>
+<tr class="odd">
+<td>3 · Caudal</td>
+<td>Lectura y unidad</td>
+<td>Número + unidad</td>
+<td>Condicional</td>
+<td>&gt; 0 · L/s · L/min · L/h · m³/h</td>
+<td>Con lectura de instrumento.</td>
+</tr>
+<tr class="even">
+<td>3 · Caudal</td>
+<td>¿Cuántas horas al día funciona?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>1 a 24 horas</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>3 · Caudal</td>
+<td>¿La dosificación funciona en ese mismo período?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · No</td>
+<td>Con No queda pendiente de revisión técnica.</td>
+</tr>
+<tr class="even">
+<td>4 · Método de preparación</td>
+<td>Método</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>A · Para un período de recarga · B · Según el caudal medido</td>
+<td>El método B agrega la medición previa.</td>
+</tr>
+<tr class="odd">
+<td>4b · Medición previa (método B)</td>
+<td>Líquido de prueba</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Agua limpia · Solución en uso</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>4b · Medición previa (método B)</td>
+<td>Mediciones (volumen y tiempo)</td>
+<td>Número (mL, s)</td>
+<td>Sí</td>
+<td>Al menos 1 medición &gt; 0</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>4b · Medición previa (método B)</td>
+<td>El flujo se mantuvo estable</td>
+<td>Casilla</td>
+<td>Sí</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>5 · Dosis</td>
+<td>Producto</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Hipoclorito de calcio · Hipoclorito de sodio (líquido)</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>5 · Dosis</td>
+<td>Cloro disponible del producto</td>
+<td>Número (%)</td>
+<td>Condicional</td>
+<td>0 a 100 % (sugerido 65 o 70)</td>
+<td>Con hipoclorito de calcio; dato de la etiqueta.</td>
+</tr>
+<tr class="even">
+<td>5 · Dosis</td>
+<td>Base y concentración del producto</td>
+<td>Opción + número</td>
+<td>Condicional</td>
+<td>% m/v · % m/m · g/L</td>
+<td>Con hipoclorito de sodio; con % m/m pide densidad (kg/L).</td>
+</tr>
+<tr class="odd">
+<td>5 · Dosis</td>
+<td>Dosis aplicada</td>
+<td>Número (mg/L)</td>
+<td>Sí</td>
+<td>&gt; 0 y ≤ 5 mg/L</td>
+<td>Sin valor predeterminado: la define el área técnica.</td>
+</tr>
+<tr class="even">
+<td>5 · Dosis</td>
+<td>Período de recarga</td>
+<td>Número (días)</td>
+<td>Condicional</td>
+<td>Sugerido 7 o 14 días</td>
+<td>Solo método A.</td>
+</tr>
+<tr class="odd">
+<td>5 · Dosis</td>
+<td>Capacidad del tanque</td>
+<td>Número (L)</td>
+<td>Sí</td>
+<td>&gt; 0 (sugerido 600)</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>5 · Dosis</td>
+<td>Volumen final a preparar</td>
+<td>Número (L)</td>
+<td>Sí</td>
+<td>&gt; 0 y ≤ capacidad</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>5 · Dosis</td>
+<td>Volumen no aprovechable</td>
+<td>Número (L)</td>
+<td>Sí</td>
+<td>≥ 0 y &lt; volumen final</td>
+<td>0 si todo es utilizable.</td>
+</tr>
+<tr class="even">
+<td>6 · Cálculo</td>
+<td>Cantidad de producto y caudal objetivo</td>
+<td>Calculado</td>
+<td>Automático</td>
+<td>—</td>
+<td>Resultado de la calculadora; no se edita.</td>
+</tr>
+<tr class="odd">
+<td>7 · Preparación</td>
+<td>Pasos de preparación</td>
+<td>Casillas</td>
+<td>Sí</td>
+<td>6 o 7 pasos según el producto</td>
+<td>Todos deben confirmarse.</td>
+</tr>
+<tr class="even">
+<td>7 · Preparación</td>
+<td>¿El tanque tenía solución remanente?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>No · Sí</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>7 · Preparación</td>
+<td>Volumen final preparado</td>
+<td>Número (L)</td>
+<td>No</td>
+<td>&gt; 0 y ≤ capacidad</td>
+<td>Si se deja vacío se usa el volumen calculado.</td>
+</tr>
+<tr class="even">
+<td>7 · Preparación</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>No</td>
+<td>Preparación · Tanque cerrado</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>8 · Calibración</td>
+<td>Verificaciones del equipo</td>
+<td>Casillas</td>
+<td>Sí</td>
+<td>3 verificaciones según el equipo</td>
+<td>Todas deben confirmarse.</td>
+</tr>
+<tr class="even">
+<td>8 · Calibración</td>
+<td>Mediciones de entrega (volumen y tiempo)</td>
+<td>Número (mL, s)</td>
+<td>Sí</td>
+<td>Al menos 1 medición &gt; 0</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>8 · Calibración</td>
+<td>La entrega se mantuvo estable</td>
+<td>Casilla</td>
+<td>Sí</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>8 · Calibración</td>
+<td>Equipo en posición operativa</td>
+<td>Casilla</td>
+<td>Sí</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>8 · Calibración</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>No</td>
+<td>Medición · Equipo calibrado</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>9 · Resumen</td>
+<td>Envío</td>
+<td>Acción</td>
+<td>Sí</td>
+<td>Guardar y sincronizar · Guardar en el equipo</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Equipo «Otros»</td>
+<td>Producto</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Hipoclorito de calcio · de sodio · Cloro gas · Pastillas · Otro</td>
+<td>Queda como calibración pendiente.</td>
+</tr>
+<tr class="even">
+<td>Equipo «Otros»</td>
+<td>Dosis aplicada</td>
+<td>Número (mg/L)</td>
+<td>No</td>
+<td>Si se conoce</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Equipo «Otros»</td>
+<td>Ajuste o lectura del equipo</td>
+<td>Texto</td>
+<td>No</td>
+<td>Ej.: rotámetro en 2 lb/día</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Equipo «Otros»</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>Sí (mín. 1)</td>
+<td>Equipo · Ajuste o lectura</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h2 id="limpieza-y-desinfección">3. Limpieza y desinfección</h2>
+<p>Primero se confirma la verificación previa; luego se registra cada
+unidad de cada componente. Las actividades que se pueden marcar cambian
+según el componente.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+<th>Opciones / rango</th>
+<th>Regla o aviso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Antes de empezar</td>
+<td>Verificación previa</td>
+<td>Casillas</td>
+<td>Sí</td>
+<td>Población informada · EPP completo · Insumos disponibles</td>
+<td>Las tres deben marcarse.</td>
+</tr>
+<tr class="even">
+<td>Antes de empezar</td>
+<td>Ubicación GPS</td>
+<td>Ubicación</td>
+<td>Automático</td>
+<td>Precisión y satélites</td>
+<td>Se puede usar ubicación aproximada.</td>
+</tr>
+<tr class="odd">
+<td>Componentes</td>
+<td>Componente y unidad</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Captación · Línea de conducción · Reservorio · Red · Planta, según
+el sistema</td>
+<td>Se registra unidad por unidad.</td>
+</tr>
+<tr class="even">
+<td>Unidad</td>
+<td>Actividades realizadas</td>
+<td>Varias opciones</td>
+<td>Sí (mín. 1)</td>
+<td>Según el componente (p. ej. captación: limpieza de la cámara, retiro
+de sedimentos, solución clorada, tapa y cerco)</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Unidad</td>
+<td>Método aplicado</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Contacto · Inundación</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Unidad</td>
+<td>Unidad de concentración</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>% · ppm</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Unidad</td>
+<td>Cloro (HTH)</td>
+<td>Número (kg)</td>
+<td>Sí</td>
+<td>&gt; 0</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Unidad</td>
+<td>Concentración</td>
+<td>Número (% o ppm)</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Unidad</td>
+<td>Volumen de agua</td>
+<td>Número (L)</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Unidad</td>
+<td>Tiempo de contacto</td>
+<td>Número (h)</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Unidad</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>Sí (4)</td>
+<td>Antes · Durante · Después · Insumos</td>
+<td>Las 4 son obligatorias.</td>
+</tr>
+<tr class="even">
+<td>Unidad</td>
+<td>Observaciones</td>
+<td>Texto</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Actividades por componente</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Componente</th>
+<th>Actividades que se pueden marcar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Captación</td>
+<td>Limpieza de la cámara de captación · Retiro de sedimentos y material
+extraño · Aplicación de solución clorada · Verificación de tapa y cerco
+perimétrico</td>
+</tr>
+<tr class="even">
+<td>Línea de conducción</td>
+<td>Apertura de válvulas de purga · Lavado por arrastre · Aplicación de
+solución clorada · Enjuague y cierre de válvulas</td>
+</tr>
+<tr class="odd">
+<td>Reservorio</td>
+<td>Vaciado y limpieza de sedimentos · Lavado de paredes interiores ·
+Aplicación de solución clorada · Verificación de hermeticidad de tapa ·
+Llenado y reactivación del servicio</td>
+</tr>
+<tr class="even">
+<td>Red de distribución</td>
+<td>Purga en puntos bajos · Aplicación de solución clorada ·
+Verificación de cloro residual en grifos</td>
+</tr>
+<tr class="odd">
+<td>Planta de tratamiento</td>
+<td>Limpieza de unidades de tratamiento · Retiro de lodos y sedimentos ·
+Aplicación de solución clorada · Enjuague y puesta en operación</td>
+</tr>
+</tbody>
+</table>
+<h2 id="operación-y-mantenimiento-de-agua-potable">4. Operación y
+mantenimiento de agua potable</h2>
+<p>Cada visita tiene una situación y una fecha. La primera vez se
+verifica el inventario de componentes; después se registran las
+condiciones de cada unidad.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+<th>Opciones / rango</th>
+<th>Regla o aviso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nueva visita</td>
+<td>Situación de la visita</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Verificación de campo · Antes · Durante · Después del
+mantenimiento</td>
+<td>Sin inventario verificado solo se permite «Verificación de
+campo».</td>
+</tr>
+<tr class="even">
+<td>Nueva visita</td>
+<td>Fecha de la visita</td>
+<td>Fecha</td>
+<td>Sí</td>
+<td>Por defecto, hoy</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Verificar inventario</td>
+<td>¿Tiene este componente?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · No</td>
+<td>Por cada componente del catálogo del sistema.</td>
+</tr>
+<tr class="even">
+<td>Verificar inventario</td>
+<td>N.º de unidades</td>
+<td>Número entero</td>
+<td>Condicional</td>
+<td>≥ 1</td>
+<td>Si tiene el componente.</td>
+</tr>
+<tr class="odd">
+<td>Verificar inventario</td>
+<td>Componente adicional</td>
+<td>Texto + número</td>
+<td>No</td>
+<td>—</td>
+<td>Queda para revisión en la web.</td>
+</tr>
+<tr class="even">
+<td>Registrar condiciones (por unidad)</td>
+<td>Estado operativo</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Opera normal · Opera limitado · No opera</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Registrar condiciones (por unidad)</td>
+<td>Condición del entorno</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Seguro · Poco seguro · Inseguro</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Registrar condiciones (por unidad)</td>
+<td>¿Requiere mejoras?</td>
+<td>Opción única</td>
+<td>Sí</td>
+<td>Sí · No</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Registrar condiciones (por unidad)</td>
+<td>Detalle de la mejora</td>
+<td>Texto (máx. 250)</td>
+<td>No</td>
+<td>—</td>
+<td>Solo si requiere mejoras.</td>
+</tr>
+<tr class="even">
+<td>Registrar condiciones (por unidad)</td>
+<td>Observación</td>
+<td>Texto</td>
+<td>No</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Registrar condiciones (por unidad)</td>
+<td>Fotografías</td>
+<td>Foto</td>
+<td>Sí (mín. 1)</td>
+<td>Hasta 3</td>
+<td>Se puede guardar y completar después.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Componentes del catálogo</strong> (según la tipología del
+sistema): Captación · Línea de conducción · CRP-6 · CRP-7 · Reservorio ·
+Sistema de cloración (solo condiciones, sin dosificación) · Red de
+distribución · Galería filtrante · Pozo tubular y/o artesiano · Caseta y
+equipo de bombeo · Línea de impulsión · Línea de distribución y aducción
+· Sistema de energía eléctrica para bombeo · Planta de tratamiento de
+agua potable.</p>
+<h2 id="operación-y-mantenimiento-de-alcantarillado">5. Operación y
+mantenimiento de alcantarillado</h2>
+<p>Usa el mismo formulario que agua potable (situación, fecha,
+inventario y condiciones por unidad); cambia el catálogo de
+componentes.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Componente</th>
+<th>Cómo se cuentan las unidades</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Conexiones domiciliarias de alcantarillado</td>
+<td>Cada unidad es un grupo de conexiones</td>
+<td>Registro individual solo si una conexión necesita seguimiento
+propio.</td>
+</tr>
+<tr class="even">
+<td>Red de alcantarillado</td>
+<td>Cada unidad es un tramo identificable</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Cámaras de inspección (buzones)</td>
+<td>Una unidad por buzón</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Planta de Tratamiento de Aguas Residuales (PTAR)</td>
+<td>Componente general</td>
+<td>Sin parámetros de laboratorio ni eficiencia de tratamiento.</td>
+</tr>
+</tbody>
+</table>
+<p>Por cada unidad se registran los mismos campos de la sección 4:
+estado operativo, condición del entorno, ¿requiere mejoras? (con detalle
+opcional), observación y al menos 1 fotografía.</p>
+<h2 id="datos-que-se-guardan-en-todos-los-registros">6. Datos que se
+guardan en todos los registros</h2>
+<p>Además de lo que el usuario llena, cada registro guarda estos datos
+sin que el usuario los escriba.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dato</th>
+<th>Cómo se obtiene</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sistema y centro poblado</td>
+<td>Del sistema elegido.</td>
+</tr>
+<tr class="even">
+<td>Registrado por (nombre y DNI)</td>
+<td>De la sesión del usuario.</td>
+</tr>
+<tr class="odd">
+<td>Fecha y hora</td>
+<td>Del celular, al guardar.</td>
+</tr>
+<tr class="even">
+<td>Ubicación y precisión del GPS</td>
+<td>Del celular; en precisión baja queda la marca «Ubicación
+imprecisa».</td>
+</tr>
+<tr class="odd">
+<td>Estado de envío</td>
+<td>Por enviar, enviado o con error; al sincronizar, DATASS asigna un
+código de recepción.</td>
+</tr>
+<tr class="even">
+<td>Estado de validación</td>
+<td>En validación, validado, observado, subsanado o vencido; lo cambia
+el supervisor en la web DATASS.</td>
+</tr>
+</tbody>
+</table>
+</main></div><script>document.querySelectorAll('main img').forEach(i=>{i.style.cursor='zoom-in';i.title='Toca para ampliar';i.onclick=()=>window.open(i.src,'_blank')})</script></body></html>
