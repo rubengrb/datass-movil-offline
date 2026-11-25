@@ -5804,7 +5804,8 @@ screens.perfil=()=>{const u=S.user||{},p=prof();const ini=(u.nombre||'?').split(
  <button class="btn danger logoutb" data-act="logout">${icon('logout')} Cerrar sesión</button>
  <h3 class="sub">${icon('gear')} Modo demostración <span class="badge warn" style="margin-left:4px">Solo prototipo</span></h3>
  <div class="card"><div class="row"><div class="ico">${icon(S.online?'wifi':'wifioff')}</div><div class="grow"><b>Conexión a internet</b><small>Simula campo sin señal</small></div><button class="switch ${S.online?'on':''}" role="switch" aria-checked="${S.online}" aria-label="Conexión a internet" data-act="toggleNet"></button></div>
- <div class="row" style="border-top:1px solid var(--line)"><div class="ico">${icon('alert')}</div><div class="grow"><b>Simular fallo de envío</b><small>Para probar el error y el reintento</small></div><button class="switch ${S.failSync?'on':''}" role="switch" aria-checked="${S.failSync}" aria-label="Simular fallo de envío" data-act="toggleFail"></button></div></div>
+ <div class="row" style="border-top:1px solid var(--line)"><div class="ico">${icon('alert')}</div><div class="grow"><b>Simular fallo de envío</b><small>Para probar el error y el reintento</small></div><button class="switch ${S.failSync?'on':''}" role="switch" aria-checked="${S.failSync}" aria-label="Simular fallo de envío" data-act="toggleFail"></button></div>
+ <div class="row" style="border-top:1px solid var(--line)"><div class="ico">${icon('pin')}</div><div class="grow"><b>Exigir precisión del GPS</b><small>Con precisión baja, espera 15 s y pide el motivo antes de guardar</small></div><button class="switch ${S.gpsReq?'on':''}" role="switch" aria-checked="${!!S.gpsReq}" aria-label="Exigir precisión del GPS" data-act="toggleGpsReq"></button></div></div>
  <div class="btns static"><button class="btn ghost danger" data-act="resetAsk">${icon('trash')} Restablecer datos del prototipo</button></div></div></div>`}};
 screens.ajustes=()=>{const p=prof();const r=(ic,t,s,act,arg,extra)=>`<button class="row" data-act="${act}" ${arg?`data-arg="${arg}"`:''}><div class="ico">${icon(ic)}</div><div class="grow"><b>${t}</b><small>${s}</small></div>${extra||icon('chev','chev')}</button>`;
  const nPerm=ALLM.filter(m=>canReg(m)).length;
@@ -6293,7 +6294,7 @@ setTimeout(()=>{const _fd=act.fillDni;act.fillDni=function(d){const r=_fd.apply(
 
 /* ===== Punto del recorrido · vista mapa (C1): mapa centrado en el punto, distancia siempre visible, formulario en hoja inferior ===== */
 setTimeout(()=>{act.gpsRetry=()=>{const i=P_().pi,d=S.mon&&S.mon.points[i]&&S.mon.points[i].data;if(!d)return;delete d.gps;toast('Buscando una mejor señal de GPS…','info');render()};
- const _sp=act.savePoint;act.savePoint=function(){if(!UI._gpsLowOk&&S.monView!=='lista'&&document.querySelector('.mpscr')&&UI.mpLv==='r'){toast('Precisión GPS baja: espera una mejor señal o guarda con ubicación imprecisa','warn');return}return _sp.apply(this,arguments)}},0);
+ const _sp=act.savePoint;act.savePoint=function(){if(!UI._gpsLowOk&&!S.gpsReq&&S.monView!=='lista'&&document.querySelector('.mpscr')&&UI.mpLv==='r'){const pt=S.mon&&S.mon.points[P_().pi];if(pt){pt.data=pt.data||{};pt.data.gpsLow={prec:UI.mpInfo&&UI.mpInfo.prec,motivo:''}}return _sp.apply(this,arguments)}if(!UI._gpsLowOk&&S.monView!=='lista'&&document.querySelector('.mpscr')&&UI.mpLv==='r'){toast('Precisión GPS baja: espera una mejor señal o guarda con ubicación imprecisa','warn');return}return _sp.apply(this,arguments)}},0);
 /* distancia al último punto registrado (las viviendas no traen coordenadas) */
 /* semáforo de precisión GPS (umbrales configurables en Ajustes) */
 window.gpsLv=prec=>prec==null?null:prec<=+(S.gpsG||20)?'g':prec<=+(S.gpsR||50)?'a':'r';
@@ -6327,7 +6328,7 @@ window.prevDist=function(m,i,g){const r=prevRef(m,i);if(!r)return null;const pg=
   const exp=!!UI.mpExp,foc=UI.mpFoc||'both';UI.mpK=(m.sysIdx||'')+':'+i;const mpT=UI.mpT&&UI.mpT.k===UI.mpK?UI.mpT:null,isc=mpT?` style="transform:translate(-50%,-50%) scale(${1/mpT.s})"`:'',psc=mpT?` style="transform:translate(-50%,-100%) rotate(-45deg) scale(${1/mpT.s})"`:'';
   const tx=foc==='me'?'translate(calc(-50% + 18%),-6%)':foc==='pt'?'translate(calc(-50% - 2%),4%)':'translateX(-50%)';
   const inner0=(v.body||'').replace(/^<div class="pad">/,'').replace(/<\/div>\s*$/,'').replace(/<div class="gps[^"]*">[\s\S]*?<\/div><\/div><\/div>|<div class="gps wait">[\s\S]*?<\/div><\/div><\/div>/,'');const _rk=UI.mpK;if(lv!=='r')UI.redT=null;else if(!UI.redT||UI.redT.k!==_rk)UI.redT={k:_rk,t:Date.now()};const _rw=lv==='r'&&(Date.now()-UI.redT.t>=GPS_WAIT);if(lv==='r'&&!_rw&&!UI.redT.sch){UI.redT.sch=1;setTimeout(()=>{if(UI.redT&&UI.redT.k===_rk&&S.nav.route==='mon-punto')render()},GPS_WAIT-(Date.now()-UI.redT.t)+60)}
-  const inner=lv==='r'?inner0.replace(/<button class="btn" data-act="savePoint">[\s\S]*?<\/button>/,_rw?`<button class="btn gpslow" data-act="gpsLowSave">${icon('alert')}Guardar igual</button>`:`<button class="btn gpswait" data-act="gpsRetry">${icon('refresh')}Esperando señal</button>`):inner0;UI.mpLv=lv;
+  const inner=lv==='r'&&S.gpsReq?inner0.replace(/<button class="btn" data-act="savePoint">[\s\S]*?<\/button>/,_rw?`<button class="btn gpslow" data-act="gpsLowSave">${icon('alert')}Guardar igual</button>`:`<button class="btn gpswait" data-act="gpsRetry">${icon('refresh')}Esperando señal</button>`):inner0;UI.mpLv=lv;
   const body=`<div class="mapscr mpscr">
    <div class="mapcv mpcv" ${mpT?`style="transform-origin:${mpT.o};transform:${mpT.t}"`:''}>${svg}
     ${wait?'':`<span class="mpacc lv-${lv}" aria-hidden="true" style="left:${ME[0]/W*100}%;top:${ME[1]/H*100}%;width:${Math.max(8,Math.min(90,prec*2.16*2/W*100))}%"></span>`}
@@ -6698,7 +6699,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:26</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:53</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6750,7 +6751,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;
  act.gpsLowOk=function(){const m=UI.gpsLowM;if(m==null){UI.gpsLowErr='Elige un motivo para continuar.';return gpsLowSheet()}if(m===3&&!String(UI.gpsLowNota||'').trim()){UI.gpsLowErr='Describe el motivo.';return gpsLowSheet()}
   const i=P_().pi,d=S.mon.points[i].data;d.gpsLow={prec:UI.mpInfo&&UI.mpInfo.prec,motivo:m===3?String(UI.gpsLowNota).trim():GPS_MOT[m]};UI.sheet=null;renderOverlay();UI._gpsLowOk=1;try{act.savePoint()}finally{UI._gpsLowOk=0}}},0);
 /* el registro de monitoreo lleva la marca para el supervisor */
-{const _ml=monLineas;monLineas=function(r){const L=_ml.apply(this,arguments);const P=(S.mon&&S.mon.points)||[];const low=P.filter(p=>p.done&&p.data&&p.data.gpsLow);if(low.length){L.push(['Ubicación imprecisa (revisar en web)',low.map(p=>`${p.nombre} ±${p.data.gpsLow.prec} m · ${p.data.gpsLow.motivo}`).join('; ')]);r.meta=r.meta||{};r.meta.gpsLow=low.length}return L}}
+{const _ml=monLineas;monLineas=function(r){const L=_ml.apply(this,arguments);const P=(S.mon&&S.mon.points)||[];const low=P.filter(p=>p.done&&p.data&&p.data.gpsLow);if(low.length){L.push(['Ubicación imprecisa (revisar en web)',low.map(p=>`${p.nombre} ±${p.data.gpsLow.prec} m${p.data.gpsLow.motivo?' · '+p.data.gpsLow.motivo:''}`).join('; ')]);r.meta=r.meta||{};r.meta.gpsLow=low.length}return L}}
 
 /* ===== Descarga automática de los sistemas (operador: asignados · supervisión: los que elige) ===== */
 UI.dlp=UI.dlp||{};UI.dlFail=UI.dlFail||{};
@@ -6848,6 +6849,8 @@ setTimeout(()=>{if(typeof act==='undefined')return;
    <p class="mini" style="margin:8px 2px 0">Si eliges «Más tarde», los descargas cuando quieras desde Inicio o tu Perfil.</p>`,
    actions:[{label:icon('download')+` Descargar ahora · ${mbTxt(opPendMB(L))}`,act:'dlNuevosGo',arg:L.join(','),primary:true},{label:'Más tarde',act:'closeSheet'}]})};
  act.dlNuevosGo=function(ids){const L=String(ids).split(',');UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),...L])];S.dlMapQ=S.dlMapQ||{};L.forEach(id=>{const d=sys(id).distrito;if(!mapsOf()[d])S.dlMapQ[id]=d});save();renderOverlay();autoDlKick()}},0);
+
+setTimeout(()=>{if(typeof act==='undefined')return;act.toggleGpsReq=function(){S.gpsReq=!S.gpsReq;UI.redT=null;save();render()}},0);
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
