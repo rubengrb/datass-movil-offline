@@ -3388,6 +3388,7 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .pfscr .mprow .ico{background:var(--line);color:var(--text)}
 .mprow.alhl{background:var(--amber-bg);transition:background .4s}
 .mprow .allk{opacity:.7}
+.btn.gpslow{background:var(--amber-bg);color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6266,7 +6267,7 @@ setTimeout(()=>{const _fd=act.fillDni;act.fillDni=function(d){const r=_fd.apply(
 
 /* ===== Punto del recorrido · vista mapa (C1): mapa centrado en el punto, distancia siempre visible, formulario en hoja inferior ===== */
 setTimeout(()=>{act.gpsRetry=()=>{const i=P_().pi,d=S.mon&&S.mon.points[i]&&S.mon.points[i].data;if(!d)return;delete d.gps;toast('Buscando una mejor señal de GPS…','info');render()};
- const _sp=act.savePoint;act.savePoint=function(){if(S.monView!=='lista'&&document.querySelector('.mpscr')&&UI.mpLv==='r'){toast('Precisión GPS baja: espera una mejor señal para guardar','warn');return}return _sp.apply(this,arguments)}},0);
+ const _sp=act.savePoint;act.savePoint=function(){if(!UI._gpsLowOk&&S.monView!=='lista'&&document.querySelector('.mpscr')&&UI.mpLv==='r'){toast('Precisión GPS baja: espera una mejor señal o guarda con ubicación imprecisa','warn');return}return _sp.apply(this,arguments)}},0);
 /* distancia al último punto registrado (las viviendas no traen coordenadas) */
 /* semáforo de precisión GPS (umbrales configurables en Ajustes) */
 window.gpsLv=prec=>prec==null?null:prec<=+(S.gpsG||20)?'g':prec<=+(S.gpsR||50)?'a':'r';
@@ -6299,7 +6300,8 @@ window.prevDist=function(m,i,g){const r=prevRef(m,i);if(!r)return null;const pg=
   UI.mpInfo={nm:pt.nombre,tipo:pt.tipo==='reservorio'?'Reservorio':pt.tipo==='pileta'?'Pileta':'Vivienda',cp:String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()),done:!!pt.done,dist:pr&&!wait?pr.d:dist,pv:pr,inside,prec,g:wait?null:g,sid:s.id};
   const exp=!!UI.mpExp,foc=UI.mpFoc||'both';UI.mpK=(m.sysIdx||'')+':'+i;const mpT=UI.mpT&&UI.mpT.k===UI.mpK?UI.mpT:null,isc=mpT?` style="transform:translate(-50%,-50%) scale(${1/mpT.s})"`:'',psc=mpT?` style="transform:translate(-50%,-100%) rotate(-45deg) scale(${1/mpT.s})"`:'';
   const tx=foc==='me'?'translate(calc(-50% + 18%),-6%)':foc==='pt'?'translate(calc(-50% - 2%),4%)':'translateX(-50%)';
-  const inner0=(v.body||'').replace(/^<div class="pad">/,'').replace(/<\/div>\s*$/,'').replace(/<div class="gps[^"]*">[\s\S]*?<\/div><\/div><\/div>|<div class="gps wait">[\s\S]*?<\/div><\/div><\/div>/,'');const inner=lv==='r'?inner0.replace(/<button class="btn" data-act="savePoint">[\s\S]*?<\/button>/,`<button class="btn gpswait" data-act="gpsRetry">${icon('refresh')}Esperando señal</button>`):inner0;UI.mpLv=lv;
+  const inner0=(v.body||'').replace(/^<div class="pad">/,'').replace(/<\/div>\s*$/,'').replace(/<div class="gps[^"]*">[\s\S]*?<\/div><\/div><\/div>|<div class="gps wait">[\s\S]*?<\/div><\/div><\/div>/,'');const _rk=UI.mpK;if(lv!=='r')UI.redT=null;else if(!UI.redT||UI.redT.k!==_rk)UI.redT={k:_rk,t:Date.now()};const _rw=lv==='r'&&(Date.now()-UI.redT.t>=GPS_WAIT);if(lv==='r'&&!_rw&&!UI.redT.sch){UI.redT.sch=1;setTimeout(()=>{if(UI.redT&&UI.redT.k===_rk&&S.nav.route==='mon-punto')render()},GPS_WAIT-(Date.now()-UI.redT.t)+60)}
+  const inner=lv==='r'?inner0.replace(/<button class="btn" data-act="savePoint">[\s\S]*?<\/button>/,_rw?`<button class="btn gpslow" data-act="gpsLowSave">${icon('alert')}Guardar igual</button>`:`<button class="btn gpswait" data-act="gpsRetry">${icon('refresh')}Esperando señal</button>`):inner0;UI.mpLv=lv;
   const body=`<div class="mapscr mpscr">
    <div class="mapcv mpcv" ${mpT?`style="transform-origin:${mpT.o};transform:${mpT.t}"`:''}>${svg}
     ${wait?'':`<span class="mpacc lv-${lv}" aria-hidden="true" style="left:${ME[0]/W*100}%;top:${ME[1]/H*100}%;width:${Math.max(8,Math.min(90,prec*2.16*2/W*100))}%"></span>`}
@@ -6670,7 +6672,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 24/11 · 22:13</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 00:40</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6712,6 +6714,17 @@ setTimeout(()=>{if(typeof act==='undefined')return;
  act.almVer=function(ids){const L=String(ids).split(',').map(id=>document.getElementById('alm-'+id)).filter(Boolean);if(!L.length)return;L[0].scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'});L.forEach(el=>el.classList.add('alhl'));setTimeout(()=>L.forEach(el=>el.classList.remove('alhl')),2600)}},0);
 /* Ajustes: «Mapas sin conexión» pasa a «Almacenamiento» */
 {const _ajA=screens.ajustes;screens.ajustes=function(){const v=_ajA.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/(<button class="row" data-act="go" data-arg=")mapas("[^>]*>[\s\S]*?<b>)Mapas sin conexión(<\/b><small>)[^<]*(<\/small>)/,(m,a,b,c,d)=>(a+'almacen'+b).replace(icon('map'),icon('db'))+'Almacenamiento'+c+'Usando '+f1(almTot())+' MB'+d);return v}}
+
+/* GPS en rojo: tras esperar, se puede guardar con ubicación imprecisa indicando un motivo; queda marcado para revisión en la web */
+const GPS_WAIT=15000,GPS_MOT=['Sin cobertura de GPS en la zona','Árboles, techos o paredes cerca','Quebrada o cerro cercano','Otro motivo'];
+function gpsLowSheet(){const m=UI.gpsLowM,e=UI.gpsLowErr;sheet({title:'Guardar con ubicación imprecisa',html:`<p class="hint" style="margin:0 0 12px">La precisión del GPS es de <b>±${UI.mpInfo&&UI.mpInfo.prec||'—'} m</b>. El punto se guardará marcado como <b>«Ubicación imprecisa»</b> y tu supervisor lo revisará en la web.</p><label class="f" style="margin-top:0">¿Por qué no mejora la señal?</label><div class="card list optlist" role="radiogroup" aria-label="Motivo">${GPS_MOT.map((t,i)=>`<button class="row opt ${m===i?'on':''}" role="radio" aria-checked="${m===i}" data-act="gpsLowPick" data-arg="${i}"><div class="grow"><b>${t}</b></div>${m===i?icon('check'):''}</button>`).join('')}</div>${m===3?`<input class="inp" id="gpslownota" style="margin-top:8px" placeholder="Describe el motivo" value="${esc(UI.gpsLowNota||'')}" oninput="UI.gpsLowNota=this.value;UI.gpsLowErr=''" aria-label="Describe el motivo">`:''}${e?`<p class="ferr" role="alert" style="color:var(--bad);font-size:13px;margin:8px 2px 0">${e}</p>`:''}`,actions:[{label:'Guardar punto',act:'gpsLowOk',primary:true},{label:'Seguir esperando',act:'closeSheet'}]})}
+setTimeout(()=>{if(typeof act==='undefined')return;
+ act.gpsLowSave=function(){const d=S.mon&&S.mon.points[P_().pi]&&S.mon.points[P_().pi].data;if(d&&d.gpsLow&&d.gpsLow.prec===(UI.mpInfo&&UI.mpInfo.prec)){UI._gpsLowOk=1;try{act.savePoint()}finally{UI._gpsLowOk=0}return}UI.gpsLowM=null;UI.gpsLowNota='';UI.gpsLowErr='';gpsLowSheet()};
+ act.gpsLowPick=function(i){UI.gpsLowM=+i;UI.gpsLowErr='';gpsLowSheet()};
+ act.gpsLowOk=function(){const m=UI.gpsLowM;if(m==null){UI.gpsLowErr='Elige un motivo para continuar.';return gpsLowSheet()}if(m===3&&!String(UI.gpsLowNota||'').trim()){UI.gpsLowErr='Describe el motivo.';return gpsLowSheet()}
+  const i=P_().pi,d=S.mon.points[i].data;d.gpsLow={prec:UI.mpInfo&&UI.mpInfo.prec,motivo:m===3?String(UI.gpsLowNota).trim():GPS_MOT[m]};UI.sheet=null;renderOverlay();UI._gpsLowOk=1;try{act.savePoint()}finally{UI._gpsLowOk=0}}},0);
+/* el registro de monitoreo lleva la marca para el supervisor */
+{const _ml=monLineas;monLineas=function(r){const L=_ml.apply(this,arguments);const P=(S.mon&&S.mon.points)||[];const low=P.filter(p=>p.done&&p.data&&p.data.gpsLow);if(low.length){L.push(['Ubicación imprecisa (revisar en web)',low.map(p=>`${p.nombre} ±${p.data.gpsLow.prec} m · ${p.data.gpsLow.motivo}`).join('; ')]);r.meta=r.meta||{};r.meta.gpsLow=low.length}return L}}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
