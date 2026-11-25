@@ -3389,6 +3389,18 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .mprow.alhl{background:var(--amber-bg);transition:background .4s}
 .mprow .allk{opacity:.7}
 .btn.gpslow{background:var(--amber-bg);color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
+/* Descarga automática: estados en la tarjeta */
+.newtg{font-size:11px;font-weight:800;background:var(--primary);color:#fff;border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+.stx.dlg{color:var(--muted)}
+.dlbar{height:4px;border-radius:2px;background:var(--line);margin-top:8px;overflow:hidden;width:70%}.dlbar i{display:block;height:100%;background:var(--primary);transition:width .16s linear}
+.sysact{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);background:var(--card);color:var(--text);align-self:center}.sysact svg{width:20px;height:20px}
+/* Sistemas que supervisas: casillas cuadradas y etiquetas */
+.slc{border-radius:7px}
+.sltg{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 8px;margin-top:4px;width:max-content;max-width:100%}.sltg svg{width:12px;height:12px;flex:none}
+.sltg.ok{background:var(--ok-bg,#e6f4ea);color:var(--ok)}.sltg.dl{background:var(--line);color:var(--text)}.sltg.rm{background:var(--amber-bg);color:var(--amber)}.sltg.lk{background:var(--line);color:var(--muted)}
+.slr.lk .slc{background:var(--line);border-color:var(--line);color:var(--muted)}
+.slr .grow{display:flex;flex-direction:column}
+.sectitle.sth{display:flex;justify-content:space-between;align-items:center}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6161,41 +6173,48 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
 {const cpNm=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
  const selChanged=()=>{const d=P_().draft||[];return JSON.stringify([...d].sort())!==JSON.stringify([...scopeIds()].sort())};
  const selList=()=>{const n=P_(),d=n.draft||[],q=(n.q||'').toLowerCase().trim(),fk=n.fk||'all',fcp=n.fcp||'',fpr=n.fpr||'';
-  return ambito().filter(x=>(!q||(x.nombre+' '+x.sap+' '+x.cp+' '+x.prest).toLowerCase().includes(q))&&(!fcp||x.cp===fcp)&&(!fpr||x.prest===fpr)&&(fk==='all'||(fk==='on'?d.includes(x.id):fk==='alc'?x.kind==='alc':x.kind!=='alc')))};
+  return ambito().filter(x=>(!q||(x.nombre+' '+x.sap+' '+x.cp+' '+x.prest).toLowerCase().includes(q))&&(!fcp||x.cp===fcp)&&(!fpr||x.prest===fpr)&&(fk==='all'||(fk.startsWith('d:')?x.distrito===fk.slice(2):fk==='on'?d.includes(x.id):fk==='alc'?x.kind==='alc':x.kind!=='alc')))};
  LIVE.sel=()=>{const d=P_().draft||[],L=selList();const n0=P_(),act0=!!((n0.q||'').trim()||n0.fcp||n0.fpr||(n0.fk&&n0.fk!=='all')),tot=ambito().length;
   if(!L.length)return fltEmpty('No hay sistemas con esos filtros.',act0,'selClear');
   const fl=act0?`<div class="fltl" role="status"><span>Mostrando <b>${L.length} de ${tot}</b></span><button data-act="selClear">${icon('x')}Limpiar filtros</button></div>`:'';
-  const row=x=>{const on=d.includes(x.id),a=x.kind==='alc';return `<button class="slr ${on?'on':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.nombre)}</b><small>${esc(x.sap)} · ${esc(cpNm(x))}</small></span><span class="slc" aria-hidden="true">${icon('check')}</span></button>`};
-  return [['sap','Agua potable'],['alc','Alcantarillado']].map(([k,t])=>{const G=L.filter(x=>(x.kind==='alc'?'alc':'sap')===k);if(!G.length)return '';const n=G.filter(x=>d.includes(x.id)).length,full=n===G.length;
-   return `<div class="sectitle slgh"><span>${t} · ${n} de ${G.length}</span>${S.online?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
+  const dlL=dlOf();
+  const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
+   const tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):(on?`<span class="sltg dl">${icon('download')}Se descargará · ${f1(almSz(x.id))} MB</span>`:'');
+   return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.nombre)}</b><small>${esc(x.sap)} · ${esc(cpNm(x))}${x.distrito?' · '+esc(x.distrito):''}</small>${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
+  return [['eq','En tu equipo'],['nodl','Sin descargar']].map(([k,t])=>{const G=L.filter(x=>(dlL.includes(x.id)?'eq':'nodl')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
+   return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='nodl'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
  screens.sel=()=>{const p=prof();if(!p.sel)return screens.home();const n=P_();const d=n.draft||(n.draft=[...scopeIds()]);
   const amb=ambito(),cps=[...new Set(amb.map(x=>x.cp))].sort(),prs=[...new Set(amb.map(x=>x.prest).filter(Boolean))].sort(),fk=n.fk||'all';
   const nA=amb.filter(x=>x.kind==='alc').length,nS=amb.length-nA,anim=navKey()!==UI.lastKey,more=!!UI.selMore||!!n.fcp||!!n.fpr;
-  const chips=[['all','Todos',amb.length],['on','Elegidos',d.length]];if(fk==='sap'||fk==='alc')n.fk='all';
-  const hero=`<section class="hhome ${anim?'anim':''}"><div class="hhtop"><button class="hhcir hhbk" data-act="back" aria-label="Regresar">${icon('back')}</button><div class="hhwho"><b>Elegir sistemas</b><span>${esc(ambLabel())}</span></div><span class="hhcir" role="img" aria-label="${S.online?'Con conexión':'Sin conexión'}">${icon(S.online?'wifi':'wifioff')}</span></div>
-  <div class="hhfeat none"><span class="hhlab">Elegidos</span><span class="hhbig"><span data-count="${d.length}">${d.length}</span> de ${amb.length}</span><span class="hhsub">Luego los descargas desde Mis sistemas</span></div>
+  const dists=[...new Set(amb.map(x=>x.distrito).filter(Boolean))].sort(),chips=[['all','Todos',amb.length],...(dists.length>1?dists.map(t=>['d:'+t,t,amb.filter(x=>x.distrito===t).length]):[])];if(fk==='sap'||fk==='alc'||fk==='on')n.fk='all';
+  const hero=`<section class="hhome ${anim?'anim':''}"><div class="hhtop"><button class="hhcir hhbk" data-act="back" aria-label="Regresar">${icon('back')}</button><div class="hhwho"><b>Sistemas que supervisas</b><span>${esc(ambLabel())}</span></div><span class="hhcir" role="img" aria-label="${S.online?'Con conexión':'Sin conexión'}">${icon(S.online?'wifi':'wifioff')}</span></div>
+  <div class="hhfeat none"><span class="hhlab">Elegidos</span><span class="hhbig"><span data-count="${d.length}">${d.length}</span> de ${amb.length}</span><span class="hhsub">Lo que elijas se descarga para usarlo sin conexión</span></div>
   <div class="hhsrch">${icon('search')}<input class="inp" placeholder="Buscar sistema, código o centro poblado" data-bind="nav.p.q" data-live enterkeyhint="search" value="${esc(n.q||'')}" aria-label="Buscar sistema"><button class="hsx" data-act="srchClear" data-arg="q" aria-label="Borrar búsqueda" ${(n.q||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
   const body=`${hero}<div class="pad hhpad selpad">
   ${S.online?'':`<div class="note warn" style="margin:0 0 12px">${icon('wifioff')}<div>Necesitas conexión para elegir o quitar sistemas. Los ya elegidos siguen disponibles sin conexión.</div></div>`}
-  <div class="chips selch" role="group" aria-label="Filtros">${chips.map(([k,t,c])=>`<button class="${fk===k?'on':''}" aria-pressed="${fk===k}" data-act="selFk" data-arg="${k}">${t} · ${c}</button>`).join('')}<button class="${more?'on':''}" aria-pressed="${more}" data-act="selMore" aria-label="Más filtros">${icon('filter')}</button></div>
+  <div class="chips selch" role="group" aria-label="Filtrar por distrito">${chips.map(([k,t,c])=>`<button class="${fk===k?'on':''}" aria-pressed="${fk===k}" data-act="selFk" data-arg="${k}">${t} · ${c}</button>`).join('')}</div>
   ${more?`<div class="grid2 selmore">${selectF('nav.p.fcp',[['','Todos los centros poblados'],...cps],n.fcp||'')}${selectF('nav.p.fpr',[['','Todos los prestadores'],...prs],n.fpr||'')}</div>`:''}
   <div id="live">${LIVE.sel()}</div></div>
-  <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${icon('upload')} Guardar selección (${d.length})</button></div>`;
-  return {title:'Elegir sistemas',back:true,nobar:true,tabs:false,body}};
+  <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${(()=>{const mb=d.filter(id=>!dlOf().includes(id)).reduce((a,id)=>a+almSz(id),0);return mb?`${icon('download')} Guardar · ${f1(mb)} MB por descargar`:`${icon('check')} Guardar`})()}</button></div>`;
+  return {title:'Sistemas que supervisas',back:true,nobar:true,tabs:false,body}};
  setTimeout(()=>{
   act.selFk=k=>{P_().fk=k;save();render()};
   act.selClear=()=>{const n=P_();n.q='';n.fcp='';n.fpr='';n.fk='all';UI.selMore=0;save();render()};
-  act.selGrp=k=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const n=P_(),d=n.draft,G=selList().filter(x=>(x.kind==='alc'?'alc':'sap')===k),full=G.every(x=>d.includes(x.id));
+  act.selGrp=k=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const n=P_(),d=n.draft,G=selList().filter(x=>k==='nodl'?!dlOf().includes(x.id):k==='eq'?dlOf().includes(x.id):(x.kind==='alc'?'alc':'sap')===k),full=G.every(x=>d.includes(x.id));
    if(!full){G.forEach(x=>{if(!d.includes(x.id))d.push(x.id)})}else{const busy=id=>(S.mon&&S.mon.sysIdx===id)||(S.lyd&&S.lyd.sysIdx===id)||(S.clo&&S.clo.sysId===id)||S.visits.some(v=>v.sysId===id&&!v.saved&&v.dni===S.user.dni)||myUnsynced().some(r=>r.sysId===id);let kept=0;G.forEach(x=>{if(busy(x.id)){kept++;return}const i=d.indexOf(x.id);if(i>=0)d.splice(i,1)});if(kept)toast(`${kept} sistema${kept>1?'s':''} con trabajo pendiente se mantiene${kept>1?'n':''}. Quítalo${kept>1?'s':''} uno por uno.`,'warn')}
    selRefresh()};
   act.selMore=()=>{if(UI.selMore||P_().fcp||P_().fpr){UI.selMore=0;P_().fcp='';P_().fpr=''}else UI.selMore=1;render()};
-  act.selGuardar=async()=>{if(!S.online)return toast('Necesitas conexión para guardar la selección.','bad');const d=[...P_().draft];const l=dlOf();const keep=l.filter(id=>d.includes(id));l.length=0;keep.forEach(x=>l.push(x));S.sel[S.user.dni]=d;S.asgNotice=null;P_().leaveOK=1;save();tab('home');const n=d.filter(id=>!l.includes(id)).length;toast(n?`Selección guardada. Descarga ${n===1?'el sistema':'tus '+n+' sistemas'} para usarlos sin conexión.`:'Selección guardada.','ok')};
+  act.selGuardar=async(force)=>{if(!S.online)return toast('Necesitas conexión para guardar la selección.','bad');const d=[...P_().draft];const l=dlOf();const rem=l.filter(id=>!d.includes(id)&&!almBusy(id));
+   if(rem.length&&force!==1){const nn=rem.map(id=>sys(id).nombre),add=d.filter(id=>!l.includes(id)).length;return sheet({title:`¿Quitar ${rem.length} sistema${rem.length>1?'s':''} del equipo?`,html:`<p class="hint" style="margin:0">Desmarcaste <b>${nn.map(esc).join(', ')}</b>, que ya ${rem.length>1?'están':'está'} en tu equipo. Si ${rem.length>1?'los':'lo'} quitas, sin conexión ya no podrás registrar en ${rem.length>1?'ellos':'él'}. Puedes volver a elegir${rem.length>1?'los':'lo'} cuando quieras.</p>${add?`<p class="hint" style="margin:12px 0 0">${add===1?'El sistema nuevo se descargará':'Los '+add+' sistemas nuevos se descargarán'} al guardar.</p>`:''}`,actions:[{label:'Guardar y quitar',act:'selGuardarOk',primary:true},{label:rem.length>1?'Mantenerlos':'Mantener '+nn[0],act:'selMantener'}]})}
+   const keep=l.filter(id=>d.includes(id)||almBusy(id));l.length=0;keep.forEach(x=>l.push(x));keep.forEach(id=>{if(!d.includes(id))d.push(id)});S.sel[S.user.dni]=d;S.asgNotice=null;P_().leaveOK=1;save();tab('home');autoDlKick()};
+  act.selGuardarOk=()=>{UI.sheet=null;renderOverlay();act.selGuardar(1)};
+  act.selMantener=()=>{UI.sheet=null;const d=P_().draft;dlOf().forEach(id=>{if(!d.includes(id))d.push(id)});save();renderOverlay();render()};
   const selBusy=id=>(S.mon&&S.mon.sysIdx===id)||(S.lyd&&S.lyd.sysIdx===id)||(S.clo&&S.clo.sysId===id)||S.visits.some(v=>v.sysId===id&&!v.saved&&v.dni===S.user.dni)||myUnsynced().some(r=>r.sysId===id);
   const selRefresh=()=>{const d=P_().draft||[],t=ambito().length;const l=document.getElementById('live');if(!l)return render();l.innerHTML=LIVE.sel();
    const c=document.querySelector('.selch [data-arg="on"]');if(c)c.textContent='Elegidos · '+d.length;
    const hb=document.querySelector('#scroll section.hhome .hhbig');if(hb)hb.innerHTML=`<span data-count="${d.length}">${d.length}</span> de ${t}`;
    const bs=document.querySelector('#app>.hcbar .hhwho span');if(bs)bs.textContent=`${d.length} de ${t} elegido${t===1?'':'s'}`;
-   const sb=document.querySelector('#app>.selbar .btn');if(sb){sb.innerHTML=`${icon('upload')} Guardar selección (${d.length})`;sb.disabled=!(selChanged()&&S.online)}save()};
+   const sb=document.querySelector('#app>.selbar .btn');if(sb){const mb=d.filter(id=>!dlOf().includes(id)).reduce((a,id)=>a+almSz(id),0);sb.innerHTML=mb?`${icon('download')} Guardar · ${f1(mb)} MB por descargar`:`${icon('check')} Guardar`;sb.disabled=!(selChanged()&&S.online)}save()};
   act.selToggle=id=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const d=P_().draft;const i=d.indexOf(id);if(i<0){d.push(id);return selRefresh()}if(selBusy(id)&&!P_().force)return act.selQuitar(id);d.splice(i,1);selRefresh()};
   const _bk=act.back;act.back=function(...a){if(S.nav.route==='sel'&&selChanged()&&!P_().leaveOK){return sheet({title:'¿Salir sin guardar?',body:'Tienes cambios en tu selección de sistemas que aún no guardas.',actions:[{label:'Seguir eligiendo',act:'closeSheet',primary:true},{label:'Salir sin guardar',act:'selLeave'}]})}return _bk.apply(this,a)};
   act.selLeave=()=>{UI.sheet=null;renderOverlay();P_().leaveOK=1;UI.selMore=0;act.back()};
@@ -6672,7 +6691,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 00:40</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 08:28</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6725,6 +6744,43 @@ setTimeout(()=>{if(typeof act==='undefined')return;
   const i=P_().pi,d=S.mon.points[i].data;d.gpsLow={prec:UI.mpInfo&&UI.mpInfo.prec,motivo:m===3?String(UI.gpsLowNota).trim():GPS_MOT[m]};UI.sheet=null;renderOverlay();UI._gpsLowOk=1;try{act.savePoint()}finally{UI._gpsLowOk=0}}},0);
 /* el registro de monitoreo lleva la marca para el supervisor */
 {const _ml=monLineas;monLineas=function(r){const L=_ml.apply(this,arguments);const P=(S.mon&&S.mon.points)||[];const low=P.filter(p=>p.done&&p.data&&p.data.gpsLow);if(low.length){L.push(['Ubicación imprecisa (revisar en web)',low.map(p=>`${p.nombre} ±${p.data.gpsLow.prec} m · ${p.data.gpsLow.motivo}`).join('; ')]);r.meta=r.meta||{};r.meta.gpsLow=low.length}return L}}
+
+/* ===== Descarga automática de los sistemas (operador: asignados · supervisión: los que elige) ===== */
+UI.dlp=UI.dlp||{};UI.dlFail=UI.dlFail||{};
+function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null);if(!pend.length)return;
+ pend.forEach(id=>{UI.dlp[id]=0;delete UI.dlFail[id]});render();
+ UI.dlT=setInterval(()=>{const ids=Object.keys(UI.dlp);if(!S.online){ids.forEach(id=>{UI.dlFail[id]=1;delete UI.dlp[id]});clearInterval(UI.dlT);UI.dlT=null;render();return}
+  const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}if(UI.dlp[id]>=100)done.push(id)});
+  if(done.length){const l=dlOf();done.forEach(id=>{delete UI.dlp[id];if(!l.includes(id))l.push(id)});save()}
+  if(!Object.keys(UI.dlp).length){clearInterval(UI.dlT);UI.dlT=null;const nv=done.filter(id=>sysNew(id)),all=Object.keys(S.newSys||{});
+   const fin=UI.dlBatch||[];UI.dlBatch=null;if(fin.length){S.asgNotice=fin.length===1?`${sys(fin[0]).nombre} ya está disponible sin conexión.`:`${fin.length} sistemas ya están disponibles sin conexión.`}save();render()}
+  else if(done.length)render()},RM()?100:160);
+ UI.dlBatch=pend}
+/* sistemas nuevos: los que entran a tu lista después de la primera vez (etiqueta «Nuevo» por 3 días) */
+function sysNew(id){const t=(S.newSys||{})[id];return t&&Date.now()-t<3*864e5}
+function trackNew(){if(!S.user)return;S.known=S.known||{};S.newSys=S.newSys||{};const k=S.user.dni,ids=myScope().map(s=>s.id);if(!S.known[k]||!S.known[k].length){S.known[k]=ids;return}ids.forEach(id=>{if(!S.known[k].includes(id)){S.known[k].push(id);S.newSys[id]=Date.now()}})}
+{const _rA=render;render=function(){try{trackNew()}catch(e){}const r=_rA.apply(this,arguments);if(S.user&&S.online&&needsDl()&&!UI.dlT)setTimeout(autoDlKick,500);return r}}
+/* tarjeta del sistema: estado de descarga en la línea de estado; sin enlace «Descargar» */
+{const _sc=sysCardHome;sysCardHome=function(s,dist){let h=_sc.apply(this,arguments);if(!needsDl())return h;
+ h=h.replace(/<button class="btn ghost sysdl"[\s\S]*?<\/button>/,'').replace(/<span class="dlk"[\s\S]*?<\/span>(<i class="dlsep">·<\/i>)?/,'').replace(/<span class="dlst[\s\S]*?<\/span>/,'');
+ if(sysNew(s.id))h=h.replace(/(<div class="nm">[\s\S]*?)(<\/div>)/,`$1<span class="newtg">Nuevo</span>$2`);
+ const p=UI.dlp[s.id],fail=UI.dlFail[s.id],dl=dlOf().includes(s.id);let line=null,btn=null;
+ if(p!=null){line=`<div class="stx dlg"><span>Descargando · <span class="dlpct">${Math.round(p)}%</span></span></div><div class="dlbar" role="progressbar" aria-label="Descargando ${esc(s.nombre)}" aria-valuemin="0" aria-valuemax="100"><i style="width:${p}%"></i></div>`}
+ else if(fail){line=`<div class="stx warn">${icon('alert')}<span>Descarga incompleta</span></div>`;btn=`<span class="sysact" role="button" tabindex="0" data-act="dlRetry" data-arg="${s.id}" aria-label="Reintentar la descarga de ${esc(s.nombre)}" title="Reintentar">${icon('refresh')}</span>`}
+ else if(!dl){line=`<div class="stx warn">${icon('clock')}<span>Se descargará al tener conexión</span></div>`}
+ if(line){h=h.replace(/<div class="stx[^"]*">[\s\S]*?<\/div>(?=(<div class="dist">|<\/div>))/,line)}
+ else if(/<div class="stx ok"><span>Todo al día<\/span><\/div>/.test(h)){h=h.replace(/<div class="stx ok"><span>Todo al día<\/span><\/div>/,`<div class="stx ok">${icon('cloudok')}<span>Listo sin conexión</span></div>`)}
+ if(btn)h=h.replace(/<svg class="i chev"[\s\S]*?<\/svg>(?=<\/div><\/button>)/,btn);
+ return h}}
+setTimeout(()=>{if(typeof act==='undefined')return;act.dlRetry=function(id){if(!S.online)return toast('Necesitas conexión para descargar el sistema.','bad');delete UI.dlFail[id];autoDlKick()}},0);
+/* inicio: sin «Descargar todos» ni filtros «En el equipo / En la nube»; quien elige sistemas ve «Cambiar sistemas» */
+{const _hm=screens.home;screens.home=function(){const v=_hm.apply(this,arguments);if(!v||!v.body||!needsDl())return v;let b=v.body;
+ b=b.replace(/<button[^>]*data-arg="(ready|todl)"[^>]*>[\s\S]*?<\/button>/g,'').replace(/<(span|button) class="stlink[^"]*"[^>]*data-act="dlAll"[^>]*>[\s\S]*?<\/\1>/g,'').replace(/<span class="stlink dis">Descargando…<\/span>/g,'');
+ b=b.replace('Elegidos para monitorear','Que supervisas');
+ b=b.replace(/(<button class="hhpick" data-act="go" data-arg="sel">[\s\S]*?<\/svg>)Elegir sistemas/,'$1Elegir los sistemas que supervisas');
+ v.body=b;return v}}
+/* Ajustes: «Sistemas a monitorear» pasa a «Sistemas que supervisas» */
+{const _ajS=screens.ajustes;screens.ajustes=function(){const v=_ajS.apply(this,arguments);if(v&&v.body)v.body=v.body.replace('<b>Sistemas a monitorear</b><small>Elige los sistemas que supervisas</small>','<b>Sistemas que supervisas</b><small>Cambiar sistemas</small>');return v}}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
