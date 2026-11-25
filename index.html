@@ -3457,6 +3457,31 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .btn.danger.logoutb{background:transparent!important;color:var(--primary)!important;border:1.5px solid var(--primary)!important;box-shadow:none}
 .btn.danger.logoutb svg{color:var(--primary)!important}
 .btn.danger.logoutb:active{background:var(--chip)!important}
+/* ===== Paletas nuevas (combinaciones de color propuestas) ===== */
+:root[data-pal=noche]{--hdr:#0E2A47;--primary:#FF6B4A;--on-primary:#0E2A47;--brand:#FF6B4A;--deep:#0E2A47;--blue:#D9472B;--link:#D9472B;--blue-l:#FFE9E3;--blue-m:#FF6B4A;--info-bg:#ECE8DF;--chip:rgba(255,107,74,.14);--prog:#0E2A47;--prog-bg:#E4E0D6;--pin-sel:#0E2A47;--bg:#F4F1EA;--page:#E9E5DB;--line:#E2DDD1;--text:#0E2A47;--muted:#4F5D6E;--segtrack:#E6E1D6;--segbd:#DAD4C7}
+:root[data-pal=lima]{--hdr:#2B2D31;--primary:#C6FF3D;--on-primary:#2B2D31;--brand:#C6FF3D;--deep:#2B2D31;--blue:#2B2D31;--link:#2B2D31;--blue-l:#EFFFC9;--blue-m:#9ACC1F;--info-bg:#F2F2F3;--chip:rgba(198,255,61,.28);--prog:#2B2D31;--prog-bg:#E8E8EA;--pin-sel:#2B2D31;--bg:#FFFFFF;--page:#F2F2F3;--card:#F6F6F7;--line:#E4E4E7;--text:#2B2D31;--muted:#5C5E66;--segtrack:#EDEDEF;--segbd:#E0E0E3}
+:root[data-pal=amarillo]{--hdr:#2B2D31;--primary:#FFC93C;--on-primary:#2B2D31;--brand:#FFC93C;--deep:#2B2D31;--blue:#2B2D31;--link:#2B2D31;--blue-l:#FFF3D1;--blue-m:#E0A800;--info-bg:#ECECEE;--chip:rgba(255,201,60,.3);--prog:#2B2D31;--prog-bg:#C9CACD;--pin-sel:#2B2D31;--bg:#D9DADC;--page:#CDCED1;--card:#F4F4F5;--line:#C6C7CB;--text:#2B2D31;--muted:#55575E;--segtrack:#CFD0D3;--segbd:#C2C3C7}
+:root[data-pal=salvia]{--hdr:#9CAF88;--primary:#E8412C;--on-primary:#FFFFFF;--brand:#E8412C;--deep:#4F6143;--blue:#C9361F;--link:#C9361F;--blue-l:#FCE9E5;--blue-m:#E8412C;--info-bg:#ECEFE6;--chip:rgba(232,65,44,.1);--prog:#6E8460;--prog-bg:#E3E8DC;--pin-sel:#4F6143;--bg:#F7F5EF;--page:#ECE9E0;--line:#E3E0D6;--text:#2F3A28;--muted:#5E6656;--segtrack:#E8E5DC;--segbd:#DCD8CD}
+/* enlaces/estados activos con relleno de acento: texto oscuro legible */
+:root:is([data-pal=lima],[data-pal=amarillo]) .seg button.on,:root:is([data-pal=lima],[data-pal=amarillo]) .chips button.on{color:#2B2D31}
+:root[data-pal=noche] .seg button.on,:root[data-pal=noche] .chips button.on{color:#0E2A47}
+/* Salvia: cabecera clara con texto oscuro */
+:root[data-pal=salvia]:not([data-theme=dark]) .appbar.hero,:root[data-pal=salvia]:not([data-theme=dark]) .appbar.hero *{color:#1F2A18}
+:root[data-pal=salvia]:not([data-theme=dark]) .appbar.hero svg{color:#1F2A18}
+/* modo oscuro */
+:root[data-theme="dark"][data-pal=noche]{--hdr:#0E2A47;--primary:#FF6B4A;--on-primary:#0E2A47;--blue:#FF8F75;--link:#FF8F75;--blue-l:#3A1F1A;--info-bg:#1A2433;--chip:rgba(255,107,74,.16);--prog:#8FB3E0;--prog-bg:#1A2433;--bg:#0B1522;--page:#060D16;--card:#132131;--line:#24344A;--text:#EEF1F5;--muted:#A6B2C2;--segtrack:#1A2433;--segbd:#24344A}
+:root[data-theme="dark"][data-pal=lima]{--hdr:#2E3036;--primary:#C6FF3D;--on-primary:#1F2024;--blue:#C6FF3D;--link:#C6FF3D;--blue-l:#2A331A;--info-bg:#25262B;--chip:rgba(198,255,61,.14);--prog:#C6FF3D;--prog-bg:#2A2B30;--bg:#16171A;--page:#0E0F11;--card:#1F2024;--line:#33353B;--text:#F2F2F3;--muted:#A9AAB0;--segtrack:#25262B;--segbd:#33353B}
+:root[data-theme="dark"][data-pal=amarillo]{--hdr:#2E3036;--primary:#FFC93C;--on-primary:#1F2024;--blue:#FFC93C;--link:#FFC93C;--blue-l:#3A3018;--info-bg:#25262B;--chip:rgba(255,201,60,.14);--prog:#FFC93C;--prog-bg:#2A2B30;--bg:#16171A;--page:#0E0F11;--card:#1F2024;--line:#33353B;--text:#F2F2F3;--muted:#A9AAB0;--segtrack:#25262B;--segbd:#33353B}
+:root[data-theme="dark"][data-pal=salvia]{--hdr:#3F4D36;--primary:#E8412C;--on-primary:#fff;--blue:#FF8A78;--link:#FF8A78;--blue-l:#3A1D18;--info-bg:#1F251B;--chip:rgba(232,65,44,.16);--prog:#B5C7A1;--prog-bg:#252C20;--bg:#12160F;--page:#0B0E09;--card:#1B2117;--line:#2E3828;--text:#EEF1EA;--muted:#A9B3A0;--segtrack:#1F251B;--segbd:#2E3828}
+/* ajustes de legibilidad de las paletas nuevas */
+:root:is([data-pal=noche],[data-pal=lima],[data-pal=amarillo]) .tabbar button.on{color:var(--on-primary)!important}
+:root:is([data-pal=noche],[data-pal=lima],[data-pal=amarillo]) .tabbar button.on svg{color:var(--on-primary)!important}
+:root[data-pal=salvia]:not([data-theme=dark]) :is(.dlk,.hpl,.ptrc,.avbtn){color:#4F6143}
+:root[data-pal=salvia]:not([data-theme=dark]) :is(.hhome,.hhtop.hcin){color:#1F2A18}
+:root[data-pal=salvia]:not([data-theme=dark]) .hhome .hhpick.sec{color:#1F2A18;background:rgba(31,42,24,.1)}
+:root[data-pal=salvia]:not([data-theme=dark]) .hhome :is(span,b,small,strong,p,em,i,div){color:#1F2A18!important}
+:root[data-pal=salvia]:not([data-theme=dark]) .hhome :is(.hchip2,.hhchip){background:rgba(31,42,24,.12)!important}
+:root[data-pal=salvia]:not([data-theme=dark]) .hhome .hhwho span{opacity:.8}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5107,7 +5132,7 @@ const PHI={"presentation-chart":{"l": "<path d=\"M216,42H134V24a6,6,0,0,0-12,0V4
 const phIcon=n=>`<svg class="tph" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><g class="tph-l">${PHI[n].l}</g><g class="tph-f">${PHI[n].f}</g></svg>`;
 const VIEW_OK=['home','sistema','tablero','guardados','perfil','ajustes','aj-apariencia','aj-vistas','aj-permisos','aj-gps','ficha-mapa','mapas'];
 const tabOf=r=>['guardados','sync','perfil','tablero'].includes(r)?r:'home';
-const PALS=[['a','Institucional','#C8102E','#C8102E'],['b','Roja y azul','#C8102E','#0056AC'],['vino','Rojo y vino','#C8102E','#7A1022'],['grafito','Rojo y grafito','#C8102E','#2E3035'],['rosa','Vino y rosa','#7A1022','#FBEDEE'],['blanco','Grafito y blanco','#2E3035','#FFFFFF'],['marino','Rojo y marino','#C8102E','#1E3A5F'],['marinop','Rojo y marino profundo','#C8102E','#0F2A4A'],['marinoa','Rojo y marino azulado','#C8102E','#21468A'],['oceano','Océano','#0B4F8A','#0F6E7A'],['bosque','Bosque','#1F6B45','#16543A'],['andina','Andina','#9C3F1E','#6E3418'],['indigo','Índigo','#3F3A9E','#2E2A78'],['petroleo','Petróleo','#0F5E5C','#0B4746'],['grafneu','Grafito neutro','#2E3035','#3E4C5E']];
+const PALS=[['a','Institucional','#C8102E','#C8102E'],['b','Roja y azul','#C8102E','#0056AC'],['vino','Rojo y vino','#C8102E','#7A1022'],['grafito','Rojo y grafito','#C8102E','#2E3035'],['rosa','Vino y rosa','#7A1022','#FBEDEE'],['blanco','Grafito y blanco','#2E3035','#FFFFFF'],['marino','Rojo y marino','#C8102E','#1E3A5F'],['marinop','Rojo y marino profundo','#C8102E','#0F2A4A'],['marinoa','Rojo y marino azulado','#C8102E','#21468A'],['oceano','Océano','#0B4F8A','#0F6E7A'],['bosque','Bosque','#1F6B45','#16543A'],['andina','Andina','#9C3F1E','#6E3418'],['indigo','Índigo','#3F3A9E','#2E2A78'],['petroleo','Petróleo','#0F5E5C','#0B4746'],['grafneu','Grafito neutro','#2E3035','#3E4C5E'],['noche','Azul noche','#0E2A47','#FF6B4A'],['lima','Grafito lima','#2B2D31','#C6FF3D'],['amarillo','Gris amarillo','#2B2D31','#FFC93C'],['salvia','Salvia','#9CAF88','#E8412C']];
 const palName=()=>(PALS.find(x=>x[0]===(S.pal||'a'))||PALS[0])[1];
 const palPick=()=>`<div class="shgrid" role="radiogroup">${PALS.map(([k,l,c1,c2])=>`<button role="radio" aria-checked="${(S.pal||'a')===k}" class="shopt ${(S.pal||'a')===k?'on':''}" data-act="ajSet" data-path="pal" data-val="${k}"><i class="shsw" style="background:linear-gradient(135deg,${c1} 50%,${c2} 50%)"></i><span class="shl">${l}${k==='a'?'<small class="segdef">Por defecto</small>':''}</span></button>`).join('')}</div>`;
 function applyTheme(){const d=document.documentElement;if(S.cards==='compacta'){S.cards='sombra';S.density=S.density||'compacta'}if(S.sysCards&&!S.density)S.density=S.sysCards;if(S.cards==='plana')d.dataset.cards='plana';else delete d.dataset.cards;d.dataset.density=S.density==='amplia'?'amplia':'compacta';if(S.sysic==='tipo'||S.sysic==='neutro')d.dataset.sysic=S.sysic;else delete d.dataset.sysic;if(S.pal&&S.pal!=='a'&&PALS.some(x=>x[0]===S.pal))d.dataset.pal=S.pal;else delete d.dataset.pal;const shm={vino:'vino',grafito:'grafito',rosa:'rosa',blanco:'blanca',marino:'marino',marinop:'marinop',marinoa:'marinoa',oceano:'oceano',bosque:'bosque',andina:'andina',indigo:'indigo',petroleo:'petroleo',grafneu:'grafneu'}[S.pal];if(shm)d.dataset.syshead=shm;else delete d.dataset.syshead;if(S.theme==='light'||S.theme==='dark')d.dataset.theme=S.theme;else delete d.dataset.theme}
@@ -6769,7 +6794,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 18:04</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 18:18</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
