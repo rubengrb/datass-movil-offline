@@ -3408,6 +3408,9 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .pfsys.nodl .ico{background:var(--line);color:var(--muted)}.pfsys.nodl b{color:var(--muted)}
 .pfall .ico{background:var(--primary-soft,#fde8eb);color:var(--primary)}.pfall b{color:var(--primary)}
 .sltg.nd{color:var(--muted)}
+.seg button{flex-direction:column;gap:2px}.seg button .segl{display:inline-flex;align-items:center;gap:8px}
+.segdef{display:block;font-size:11px;font-weight:600;opacity:.75;letter-spacing:.01em}
+.shopt .shl{display:flex;flex-direction:column;gap:1px}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5056,7 +5059,7 @@ const VIEW_OK=['home','sistema','tablero','guardados','perfil','ajustes','aj-apa
 const tabOf=r=>['guardados','sync','perfil','tablero'].includes(r)?r:'home';
 const PALS=[['a','Institucional','#C8102E','#C8102E'],['b','Roja y azul','#C8102E','#0056AC'],['vino','Rojo y vino','#C8102E','#7A1022'],['grafito','Rojo y grafito','#C8102E','#2E3035'],['rosa','Vino y rosa','#7A1022','#FBEDEE'],['blanco','Grafito y blanco','#2E3035','#FFFFFF'],['marino','Rojo y marino','#C8102E','#1E3A5F'],['marinop','Rojo y marino profundo','#C8102E','#0F2A4A'],['marinoa','Rojo y marino azulado','#C8102E','#21468A'],['oceano','Océano','#0B4F8A','#0F6E7A'],['bosque','Bosque','#1F6B45','#16543A'],['andina','Andina','#9C3F1E','#6E3418'],['indigo','Índigo','#3F3A9E','#2E2A78'],['petroleo','Petróleo','#0F5E5C','#0B4746'],['grafneu','Grafito neutro','#2E3035','#3E4C5E']];
 const palName=()=>(PALS.find(x=>x[0]===(S.pal||'a'))||PALS[0])[1];
-const palPick=()=>`<div class="shgrid" role="radiogroup">${PALS.map(([k,l,c1,c2])=>`<button role="radio" aria-checked="${(S.pal||'a')===k}" class="shopt ${(S.pal||'a')===k?'on':''}" data-act="ajSet" data-path="pal" data-val="${k}"><i class="shsw" style="background:linear-gradient(135deg,${c1} 50%,${c2} 50%)"></i>${l}</button>`).join('')}</div>`;
+const palPick=()=>`<div class="shgrid" role="radiogroup">${PALS.map(([k,l,c1,c2])=>`<button role="radio" aria-checked="${(S.pal||'a')===k}" class="shopt ${(S.pal||'a')===k?'on':''}" data-act="ajSet" data-path="pal" data-val="${k}"><i class="shsw" style="background:linear-gradient(135deg,${c1} 50%,${c2} 50%)"></i><span class="shl">${l}${k==='a'?'<small class="segdef">Por defecto</small>':''}</span></button>`).join('')}</div>`;
 function applyTheme(){const d=document.documentElement;if(S.cards==='compacta'){S.cards='sombra';S.density=S.density||'compacta'}if(S.sysCards&&!S.density)S.density=S.sysCards;if(S.cards==='plana')d.dataset.cards='plana';else delete d.dataset.cards;d.dataset.density=S.density==='amplia'?'amplia':'compacta';if(S.sysic==='tipo'||S.sysic==='neutro')d.dataset.sysic=S.sysic;else delete d.dataset.sysic;if(S.pal&&S.pal!=='a'&&PALS.some(x=>x[0]===S.pal))d.dataset.pal=S.pal;else delete d.dataset.pal;const shm={vino:'vino',grafito:'grafito',rosa:'rosa',blanco:'blanca',marino:'marino',marinop:'marinop',marinoa:'marinoa',oceano:'oceano',bosque:'bosque',andina:'andina',indigo:'indigo',petroleo:'petroleo',grafneu:'grafneu'}[S.pal];if(shm)d.dataset.syshead=shm;else delete d.dataset.syshead;if(S.theme==='light'||S.theme==='dark')d.dataset.theme=S.theme;else delete d.dataset.theme}
 function netStrip(route){
  if(!S.user||route==='sync')return '';const pend=myUnsynced().length;
@@ -5782,7 +5785,8 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 
 /* ===================== Perfil (A1) y Ajustes con barra flotante ===================== */
 const ftop=(title,right)=>`<div class="ftop"><button class="mcb" data-act="back" aria-label="Volver">${icon('back')}</button><div class="fpill">${esc(title)}</div>${right||'<span class="fsp"></span>'}</div>`;
-const segD=(path,opts,cur,labels)=>{const val=cur;return `<div class="seg" role="radiogroup">${opts.map((o,i)=>`<button role="radio" aria-checked="${val===o}" class="${val===o?'on':''}" data-act="ajSet" data-path="${path}" data-val="${esc(o)}">${val===o?icon('check'):''}${labels[i]}</button>`).join('')}</div>`};
+const AJ_DEF={theme:'auto',sysic:'estado',cards:'sombra',density:'compacta',loginStyle:'rojo',actView:'barras',heatui:'franja',histView:'cal',syncView:'env',monView:'mapa',gpsG:'20',gpsR:'50',gpsSim:''};
+const segD=(path,opts,cur,labels)=>{const val=cur;return `<div class="seg" role="radiogroup">${opts.map((o,i)=>`<button role="radio" aria-checked="${val===o}" class="${val===o?'on':''}" data-act="ajSet" data-path="${path}" data-val="${esc(o)}"><span class="segl">${val===o?icon('check'):''}${labels[i]}</span>${AJ_DEF[path]===o?'<small class="segdef">Por defecto</small>':''}</button>`).join('')}</div>`};
 const ajBar=()=>{const n=Object.keys(UI.ajDraft||{}).length;return n?`<div class="ajbar" role="status"><i></i><b>${n} cambio${n>1?'s':''}</b><button class="ajd" data-act="ajDiscard">Descartar</button><button class="aja" data-act="ajApply">Aplicar</button></div>`:''};
 const TEMA_T={auto:'Automático',light:'Claro',dark:'Oscuro'};
 screens.perfil=()=>{const u=S.user||{},p=prof();const ini=(u.nombre||'?').split(' ').map(x=>x[0]).slice(0,2).join('');
@@ -6699,7 +6703,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 11:32</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 11:42</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6851,6 +6855,9 @@ setTimeout(()=>{if(typeof act==='undefined')return;
  act.dlNuevosGo=function(ids){const L=String(ids).split(',');UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),...L])];S.dlMapQ=S.dlMapQ||{};L.forEach(id=>{const d=sys(id).distrito;if(!mapsOf()[d])S.dlMapQ[id]=d});save();renderOverlay();autoDlKick()}},0);
 
 setTimeout(()=>{if(typeof act==='undefined')return;act.toggleGpsReq=function(){S.gpsReq=!S.gpsReq;UI.redT=null;save();render()}},0);
+
+/* valores por defecto: inicio de sesión con color e Historial en calendario */
+{const _rD=render;render=function(){try{if(S.loginStyle==null)S.loginStyle='rojo';if(S.histView==null)S.histView='cal'}catch(e){}return _rD.apply(this,arguments)}}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
