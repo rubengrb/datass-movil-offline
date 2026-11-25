@@ -3421,6 +3421,30 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .slr .grow small.tgin{animation:tgin .22s ease-out}
 .lgdemo{justify-content:flex-start!important;text-align:left;padding-left:16px!important}.lgdemo svg.i{flex:none}
 .lgname .bdg,.lgbrand .of{text-transform:uppercase}
+/* Panel lateral: selector «Ver como» propio y scroll fino */
+.gdd{position:relative}
+.gddb{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 12px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line);color:inherit;font:inherit;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.gddb:hover{border-color:#C9CED6}
+.gdd.open .gddb,.gddb:focus-visible{border-color:var(--primary);box-shadow:0 0 0 3px var(--chip);outline:none}
+.gddb b,.gddo b{display:block;font-size:var(--fs-sm);font-weight:700;line-height:1.3}
+.gddb small,.gddo small{display:block;font-size:var(--fs-xs);color:var(--muted);line-height:1.3;margin-top:1px}
+.gddb .ph{color:var(--muted);font-weight:600}
+.gddb>svg.i{flex:none;color:var(--muted);transition:transform .2s var(--ease)}
+.gdd.open .gddb>svg.i{transform:rotate(180deg);color:var(--primary)}
+.gddl{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;max-height:min(420px,60vh);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:0 12px 32px rgba(17,24,39,.14),0 2px 6px rgba(17,24,39,.06);padding:8px;opacity:0;transform:translateY(-4px) scale(.99);transform-origin:top;pointer-events:none;visibility:hidden;transition:opacity .16s var(--ease),transform .16s var(--ease),visibility 0s .16s}
+.gdd.open .gddl{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition:opacity .16s var(--ease),transform .16s var(--ease)}
+.gddh{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 12px 4px}
+.gddh:first-child{padding-top:4px}
+.gddo{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px 12px;border-radius:var(--r-md);background:none;border:0;color:inherit;font:inherit;cursor:pointer}
+.gddo:hover,.gddo:focus-visible{background:var(--info-bg);outline:none}
+.gddo.on{background:var(--chip)}
+.gddo.on b{color:var(--primary)}
+.gddo>svg.i{flex:none;color:var(--primary);width:18px;height:18px}
+.guide,.gddl{scrollbar-width:thin;scrollbar-color:rgba(60,60,70,.22) transparent}
+.guide::-webkit-scrollbar,.gddl::-webkit-scrollbar{width:6px}
+.guide::-webkit-scrollbar-track,.gddl::-webkit-scrollbar-track{background:transparent}
+.guide::-webkit-scrollbar-thumb,.gddl::-webkit-scrollbar-thumb{background:rgba(60,60,70,.22);border-radius:6px}
+.guide:hover::-webkit-scrollbar-thumb,.gddl:hover::-webkit-scrollbar-thumb{background:rgba(60,60,70,.38)}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5138,12 +5162,25 @@ function renderOverlay(){
  if(UI.toast)h+=`<div class="toast ${UI.toast.type}" role="status">${icon(UI.toast.type==='bad'?'alert':UI.toast.type==='ok'?'checkc':'info')}<span>${esc(UI.toast.msg)}</span>${UI.toast.action?`<button class="tact" data-act="${UI.toast.action.act}" data-arg="${esc(UI.toast.action.arg||'')}">${esc(UI.toast.action.label)}</button>`:''}</div>`;
  o.innerHTML=h;
 }
+/* Panel lateral · «Ver como»: lista propia agrupada por rol (reemplaza el select nativo) */
+function guideDD(cur){const P=Object.entries(PROFILES),cp=PROFILES[cur];
+ const grp=[['Registrador','Registradores'],['Visualizador','Visualizadores']].map(([k,t])=>[t,P.filter(([,p])=>p.tipo===k)]).filter(g=>g[1].length);
+ const opt=([d,p])=>`<button type="button" class="gddo${d===cur?' on':''}" role="option" aria-selected="${d===cur}" data-gdd="${d}"><span class="grow"><b>${esc(p.cargo)}</b><small>${esc(p.nombre)}</small></span>${d===cur?icon('check'):''}</button>`;
+ return `<div class="gdd" id="gdd"><button type="button" class="gddb" id="gprof" aria-haspopup="listbox" aria-expanded="false"><span class="grow">${cp?`<b>${esc(cp.cargo)}</b><small>${cp.tipo==='Registrador'?'Registra':'Solo visualiza'} · ${esc(cp.nombre)}</small>`:'<b class="ph">Elige un perfil</b>'}</span>${icon('down')}</button>
+ <div class="gddl" role="listbox" aria-label="Ver como">${grp.map(([t,l])=>`<div class="gddh">${t} · ${l.length}</div>${l.map(opt).join('')}`).join('')}</div></div>`}
+(function(){const close=()=>{const g=document.getElementById('gdd');if(g){g.classList.remove('open');g.querySelector('.gddb').setAttribute('aria-expanded','false')}};
+ document.addEventListener('click',e=>{const t=e.target.closest&&e.target;if(!t)return;const o=t.closest('.gddo');if(o){e.stopPropagation();close();if(o.dataset.gdd&&!o.classList.contains('on'))act.switchProf(o.dataset.gdd);return}
+  const b=t.closest('.gddb');if(b){e.stopPropagation();const g=b.parentNode,op=!g.classList.contains('open');g.classList.toggle('open',op);b.setAttribute('aria-expanded',op);if(op){const on=g.querySelector('.gddo.on')||g.querySelector('.gddo');const l=g.querySelector('.gddl');if(on)l.scrollTop=Math.max(0,on.offsetTop-l.clientHeight/2+on.offsetHeight/2)}return}
+  if(!t.closest('.gdd'))close()},true);
+ document.addEventListener('keydown',e=>{const g=document.getElementById('gdd');if(!g||!g.contains(document.activeElement))return;
+  if(e.key==='Escape'){close();g.querySelector('.gddb').focus();return}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!g.classList.contains('open')){g.querySelector('.gddb').click();return}const os=[...g.querySelectorAll('.gddo')];let i=os.indexOf(document.activeElement);if(i<0)i=os.findIndex(o=>o.classList.contains('on'));i=Math.min(os.length-1,Math.max(0,i+(e.key==='ArrowDown'?1:-1)));os[i].focus();os[i].scrollIntoView({block:'nearest'})}},true)})();
 function renderGuide(){
  const g=document.getElementById('guide');const cur=S.user?.dni;
- g.innerHTML=`<span class="tag">Rediseño · propuesta UX/UI</span><h1>DATASS Campo</h1>
+ g.innerHTML=`<span class="tag">Rediseño · propuesta UX/UI</span><h1>App Móvil DATASS</h1>
  <p>Demo con navegación <b>sistema primero</b>: eliges el sistema y, sobre él, la actividad. Conserva la lógica de los 5 módulos de la versión original. Lo que registres se guarda en este navegador.</p>
  <label class="f" for="gprof" style="margin-top:0">Ver como</label>
- <div class="sel-wrap"><select id="gprof" class="inp" data-guide-prof>${!cur?'<option value="">— Elige un perfil —</option>':''}${Object.entries(PROFILES).map(([d,p])=>`<option value="${d}" ${cur===d?'selected':''}>${p.cargo} · ${p.tipo}</option>`).join('')}</select>${icon('down')}</div>
+ ${guideDD(cur)}
  <div class="card row" style="margin-top:12px"><div class="ico">${icon(S.online?'wifi':'wifioff')}</div><div class="grow"><b>${S.online?'Con conexión':'Sin conexión'}</b><small>Cambia para probar el modo offline</small></div><button class="switch ${S.online?'on':''}" role="switch" aria-checked="${S.online}" aria-label="Conexión a internet" data-act="toggleNet"></button></div>
  <div class="card row" style="margin-top:8px"><div class="ico">${icon('alert')}</div><div class="grow"><b>Simular fallo de envío</b><small>Prueba el error y el reintento</small></div><button class="switch ${S.failSync?'on':''}" role="switch" aria-checked="${S.failSync}" aria-label="Simular fallo de envío" data-act="toggleFail"></button></div>
  <h2>Ir directo a un flujo</h2>
@@ -6713,7 +6750,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 15:40</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 15:47</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6907,6 +6944,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _ls=act.lgSoon;
  act.lgSoon=function(a){
   if(a==='Cuestionarios')return sheet({title:'Cuestionarios',html:`<div class="card list">
    <a class="row" style="text-decoration:none;color:inherit" href="${DOCS_URL}cuestionarios/" target="_blank" rel="noopener"><div class="ico">${icon('clip')}</div><div class="grow"><b>Cuestionarios por actividad</b><small>Datos que pide cada formulario, paso a paso</small></div>${icon('chev','chev')}</a>
+   <a class="row" href="${DOCS_URL}cuestionarios/flujo/" target="_blank" rel="noopener" style="border-top:1px solid var(--line);text-decoration:none;color:inherit"><div class="ico">${icon('grid')}</div><div class="grow"><b>Flujo de pantallas</b><small>Cada pantalla con sus campos, lista para imprimir</small></div>${icon('chev','chev')}</a>
    <a class="row" href="${DOCS_URL}cuestionarios/diccionario.xlsx" download style="border-top:1px solid var(--line);text-decoration:none;color:inherit"><div class="ico">${icon('file')}</div><div class="grow"><b>Diccionario de campos (Excel)</b><small>Para el equipo técnico: tipos, reglas y nombre API</small></div>${icon('chev','chev')}</a></div>
    <p class="mini" style="margin:8px 2px 0">Se abren en el navegador. Necesitas conexión la primera vez.</p>`,actions:[]});
   if(a!=='Manuales')return _ls.apply(this,arguments);
