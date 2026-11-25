@@ -3417,6 +3417,8 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .dlban.okd>svg{color:var(--green,#1F7A3A)}
 .dlban.out{animation:dlbout .38s ease forwards;overflow:hidden}
 @keyframes dlbout{0%{opacity:1;max-height:90px}60%{opacity:0;max-height:90px;margin-bottom:16px;padding-top:12px;padding-bottom:12px}100%{opacity:0;max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}}
+.slr .grow small.sladd{display:flex;align-items:center;gap:4px;color:var(--primary);font-weight:700}.slr .grow small.sladd svg.i{width:14px;height:14px;flex:none}
+.slr .grow small.tgin{animation:tgin .22s ease-out}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6198,7 +6200,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
   const dlL=dlOf(),sv=scopeIds(),_md=new Set(ambito().map(z=>z.distrito)).size>1;
   const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
    const was=sv.includes(x.id),tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):'';
-   return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.sap)} · ${esc(x.nombre)}</b><small>CP ${cpNice(x)}${x.distrito&&_md&&!P_().fdis?' · '+esc(x.distrito):''}</small>${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
+   return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.sap)} · ${esc(x.nombre)}</b>${!was&&on&&!inEq?`<small class="sladd">${icon('plus')}Se agregará a tu lista</small>`:`<small>CP ${cpNice(x)}${x.distrito&&_md&&!P_().fdis?' · '+esc(x.distrito):''}</small>`}${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
   return [['el','Elegidos'],['av','Disponibles']].map(([k,t])=>{const G=L.filter(x=>(sv.includes(x.id)?'el':'av')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
    return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='av'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
  screens.sel=()=>{const p=prof();if(!p.sel)return screens.home();const n=P_();const d=n.draft||(n.draft=[...scopeIds()]);
@@ -6709,7 +6711,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 13:48</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 13:53</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6883,12 +6885,12 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 setTimeout(()=>{if(typeof act==='undefined')return;const _st=act.selToggle;
  act.selToggle=function(id){const q=`.slr[data-arg="${CSS.escape(String(id))}"]`,o=document.querySelector(q),h0=o?o.getBoundingClientRect().height:0,hadTag=!!(o&&o.querySelector('.sltg'));
   const r=_st.apply(this,arguments);const n=document.querySelector(q);if(!n||!h0||RM())return r;
-  const h1=n.getBoundingClientRect().height,tg=n.querySelector('.sltg');if(tg&&!hadTag)tg.classList.add('tgin');
+  const h1=n.getBoundingClientRect().height,tg=n.querySelector('.sltg');if(tg&&!hadTag)tg.classList.add('tgin');const sm=n.querySelector('.grow small');if(sm)sm.classList.add('tgin');
   if(Math.abs(h1-h0)<1)return r;n.style.height=h0+'px';n.style.overflow='hidden';n.getBoundingClientRect();
   n.style.transition='height .22s cubic-bezier(.2,.7,.2,1)';n.style.height=h1+'px';
   const end=()=>{n.style.height='';n.style.overflow='';n.style.transition='';n.removeEventListener('transitionend',end)};n.addEventListener('transitionend',end);setTimeout(end,320);return r}},0);
 
-function selBtnTxt(d){const sv=scopeIds(),k=d.filter(id=>!sv.includes(id)).length;return `Guardar · ${d.length} sistema${d.length===1?'':'s'}${k&&sv.length&&k<d.length?` (+${k} nuevo${k>1?'s':''})`:''}`}
+function selBtnTxt(d){const sv=scopeIds(),k=d.filter(id=>!sv.includes(id)).length;return `Guardar · ${d.length} sistema${d.length===1?'':'s'}`}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
