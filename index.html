@@ -3407,6 +3407,7 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .sectitle.opsec{margin-top:16px}
 .pfsys.nodl .ico{background:var(--line);color:var(--muted)}.pfsys.nodl b{color:var(--muted)}
 .pfall .ico{background:var(--primary-soft,#fde8eb);color:var(--primary)}.pfall b{color:var(--primary)}
+.sltg.nd{color:var(--muted)}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6173,7 +6174,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
  const hero=`<section class="hhome">${top}<div class="hhfeat none"><span class="hhlab">${esc(typeof ambLabel==='function'?ambLabel():'Tus sistemas')}</span><span class="hhbig"><span data-count="${all.length}">${all.length}</span> sistema${all.length===1?'':'s'}</span><span class="hhsub">Elegidos para monitorear</span></div><button class="hhpick sec" data-act="go" data-arg="sel">${icon('edit')}Cambiar sistemas</button>
  <div class="hhsrch">${icon('search')}<input class="inp" placeholder="Buscar sistema, código o centro poblado" data-bind="nav.p.q" data-live enterkeyhint="search" value="${esc(n.q||'')}" aria-label="Buscar sistema"><button class="hsx" data-act="srchClear" data-arg="q" aria-label="Borrar búsqueda" ${(n.q||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
  let body=v.body||'';{const fm=body.match(/<button class="foldbtn filt[\s\S]*?<\/div><\/div><\/div>/);let ch='';if(fm){const cm=fm[0].match(/<div class="chips"[\s\S]*?<\/div>/);if(cm)ch=cm[0].replace(/<button[^>]*data-act="nearMe"[\s\S]*?<\/button>/,'').replace('<div class="chips"','<div class="chips hin spch"');body=body.replace(fm[0],'')}if(ch)body=body.replace(/(<div class="sectitle sth[^"]*">[\s\S]*?<\/div>)/,(m)=>m+ch)}
- body=body.replace(/<button[^>]*data-act="go" data-arg="sel"[^>]*>[\s\S]*?<\/button>/g,'');{const nP=dlPend().length;if(nP){body=body.replace(/<button class="stlink" data-act="dlAll">[\s\S]*?<\/button>/,'').replace(/<span class="stlink dis">Descargando…<\/span>/,'');const mb=(nP*2.4).toFixed(1).replace('.',',');body=body.replace('<div class="tiles"',()=>`<div class="dlban hin">${icon('clouddl')}<div class="grow"><b>${nP} sistema${nP>1?'s':''} en la nube</b><small>~${mb} MB · mejor con wifi</small></div>${UI.dling&&UI.dling.length>1?`<span class="dlbt dis">Descargando…</span>`:`<button class="dlbt" data-act="dlAll">${nP>1?'Descargar todos':'Descargar'}</button>`}</div><div class="tiles"`)}}body=body.replace('<div class="tiles"',()=>homeQuick()+'<div class="sectitle hin">Tu actividad</div><div class="tiles tc hin"');return Object.assign({},v,{nobar:true,keepTabs:true,right:'',body:hero+body.replace('<div class="pad">','<div class="pad hhpad">')})}}
+ body=body.replace(/<button[^>]*data-act="go" data-arg="sel"[^>]*>[\s\S]*?<\/button>/g,'');{const nP=dlPend().length;if(nP){body=body.replace(/<button class="stlink" data-act="dlAll">[\s\S]*?<\/button>/,'').replace(/<span class="stlink dis">Descargando…<\/span>/,'');const mb=String(Math.round(opPendMB(dlPend().map(x=>x.id))*10)/10).replace('.',',');body=body.replace('<div class="tiles"',()=>`<div class="dlban hin">${icon('clouddl')}<div class="grow"><b>${nP} sistema${nP>1?'s':''} en la nube</b><small>${mb} MB · mejor con wifi</small></div>${UI.dling&&UI.dling.length>1?`<span class="dlbt dis">Descargando…</span>`:`<button class="dlbt" data-act="dlAll">${nP>1?'Descargar todos':'Descargar'}</button>`}</div><div class="tiles"`)}}body=body.replace('<div class="tiles"',()=>homeQuick()+'<div class="sectitle hin">Tu actividad</div><div class="tiles tc hin"');return Object.assign({},v,{nobar:true,keepTabs:true,right:'',body:hero+body.replace('<div class="pad">','<div class="pad hhpad">')})}}
 
 /* ===== Elegir sistemas (A): una sola lista con check, cabecera roja, sin tabbar ===== */
 {const cpNm=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
@@ -6183,36 +6184,36 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
  LIVE.sel=()=>{const d=P_().draft||[],L=selList();const n0=P_(),act0=!!((n0.q||'').trim()||n0.fcp||n0.fpr||(n0.fk&&n0.fk!=='all')),tot=ambito().length;
   if(!L.length)return fltEmpty('No hay sistemas con esos filtros.',act0,'selClear');
   const fl=act0?`<div class="fltl" role="status"><span>Mostrando <b>${L.length} de ${tot}</b></span><button data-act="selClear">${icon('x')}Limpiar filtros</button></div>`:'';
-  const dlL=dlOf();
+  const dlL=dlOf(),sv=scopeIds();
   const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
-   const tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):(on?`<span class="sltg dl">${icon('download')}Se descargará · ${f1(almSz(x.id))} MB</span>`:'');
+   const was=sv.includes(x.id),tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):(on?`<span class="sltg dl">${icon('plus')}Se agregará a tu lista</span>`:'');
    return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.nombre)}</b><small>${esc(x.sap)} · ${esc(cpNm(x))}${x.distrito?' · '+esc(x.distrito):''}</small>${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
-  return [['eq','En tu equipo'],['nodl','Sin descargar']].map(([k,t])=>{const G=L.filter(x=>(dlL.includes(x.id)?'eq':'nodl')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
-   return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='nodl'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
+  return [['el','Elegidos'],['av','Disponibles']].map(([k,t])=>{const G=L.filter(x=>(sv.includes(x.id)?'el':'av')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
+   return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='av'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
  screens.sel=()=>{const p=prof();if(!p.sel)return screens.home();const n=P_();const d=n.draft||(n.draft=[...scopeIds()]);
   const amb=ambito(),cps=[...new Set(amb.map(x=>x.cp))].sort(),prs=[...new Set(amb.map(x=>x.prest).filter(Boolean))].sort(),fk=n.fk||'all';
   const nA=amb.filter(x=>x.kind==='alc').length,nS=amb.length-nA,anim=navKey()!==UI.lastKey,more=!!UI.selMore||!!n.fcp||!!n.fpr;
   const dists=[...new Set(amb.map(x=>x.distrito).filter(Boolean))].sort(),chips=[['all','Todos',amb.length],...(dists.length>1?dists.map(t=>['d:'+t,t,amb.filter(x=>x.distrito===t).length]):[])];if(fk==='sap'||fk==='alc'||fk==='on')n.fk='all';
   const hero=`<section class="hhome ${anim?'anim':''}"><div class="hhtop"><button class="hhcir hhbk" data-act="back" aria-label="Regresar">${icon('back')}</button><div class="hhwho"><b>Sistemas que supervisas</b><span>${esc(ambLabel())}</span></div><span class="hhcir" role="img" aria-label="${S.online?'Con conexión':'Sin conexión'}">${icon(S.online?'wifi':'wifioff')}</span></div>
-  <div class="hhfeat none"><span class="hhlab">Elegidos</span><span class="hhbig"><span data-count="${d.length}">${d.length}</span> de ${amb.length}</span><span class="hhsub">Lo que elijas se descarga para usarlo sin conexión</span></div>
+  <div class="hhfeat none"><span class="hhlab">Elegidos</span><span class="hhbig"><span data-count="${d.length}">${d.length}</span> de ${amb.length}</span><span class="hhsub">Elige los que vas a supervisar; luego decides cuáles descargar</span></div>
   <div class="hhsrch">${icon('search')}<input class="inp" placeholder="Buscar sistema, código o centro poblado" data-bind="nav.p.q" data-live enterkeyhint="search" value="${esc(n.q||'')}" aria-label="Buscar sistema"><button class="hsx" data-act="srchClear" data-arg="q" aria-label="Borrar búsqueda" ${(n.q||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
   const body=`${hero}<div class="pad hhpad selpad">
   ${S.online?'':`<div class="note warn" style="margin:0 0 12px">${icon('wifioff')}<div>Necesitas conexión para elegir o quitar sistemas. Los ya elegidos siguen disponibles sin conexión.</div></div>`}
   <div class="chips selch" role="group" aria-label="Filtrar por distrito">${chips.map(([k,t,c])=>`<button class="${fk===k?'on':''}" aria-pressed="${fk===k}" data-act="selFk" data-arg="${k}">${t} · ${c}</button>`).join('')}</div>
   ${more?`<div class="grid2 selmore">${selectF('nav.p.fcp',[['','Todos los centros poblados'],...cps],n.fcp||'')}${selectF('nav.p.fpr',[['','Todos los prestadores'],...prs],n.fpr||'')}</div>`:''}
   <div id="live">${LIVE.sel()}</div></div>
-  <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${(()=>{const mb=d.filter(id=>!dlOf().includes(id)).reduce((a,id)=>a+almSz(id),0);return mb?`${icon('download')} Guardar · ${f1(mb)} MB por descargar`:`${icon('check')} Guardar`})()}</button></div>`;
+  <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${icon('check')} Guardar · ${d.length} sistema${d.length===1?'':'s'}</button></div>`;
   return {title:'Sistemas que supervisas',back:true,nobar:true,tabs:false,body}};
  setTimeout(()=>{
   act.selFk=k=>{P_().fk=k;save();render()};
   act.selClear=()=>{const n=P_();n.q='';n.fcp='';n.fpr='';n.fk='all';UI.selMore=0;save();render()};
-  act.selGrp=k=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const n=P_(),d=n.draft,G=selList().filter(x=>k==='nodl'?!dlOf().includes(x.id):k==='eq'?dlOf().includes(x.id):(x.kind==='alc'?'alc':'sap')===k),full=G.every(x=>d.includes(x.id));
+  act.selGrp=k=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const n=P_(),d=n.draft,G=selList().filter(x=>k==='av'?!scopeIds().includes(x.id):k==='nodl'?!dlOf().includes(x.id):k==='eq'?dlOf().includes(x.id):(x.kind==='alc'?'alc':'sap')===k),full=G.every(x=>d.includes(x.id));
    if(!full){G.forEach(x=>{if(!d.includes(x.id))d.push(x.id)})}else{const busy=id=>(S.mon&&S.mon.sysIdx===id)||(S.lyd&&S.lyd.sysIdx===id)||(S.clo&&S.clo.sysId===id)||S.visits.some(v=>v.sysId===id&&!v.saved&&v.dni===S.user.dni)||myUnsynced().some(r=>r.sysId===id);let kept=0;G.forEach(x=>{if(busy(x.id)){kept++;return}const i=d.indexOf(x.id);if(i>=0)d.splice(i,1)});if(kept)toast(`${kept} sistema${kept>1?'s':''} con trabajo pendiente se mantiene${kept>1?'n':''}. Quítalo${kept>1?'s':''} uno por uno.`,'warn')}
    selRefresh()};
   act.selMore=()=>{if(UI.selMore||P_().fcp||P_().fpr){UI.selMore=0;P_().fcp='';P_().fpr=''}else UI.selMore=1;render()};
   act.selGuardar=async(force)=>{if(!S.online)return toast('Necesitas conexión para guardar la selección.','bad');const d=[...P_().draft];const l=dlOf();const rem=l.filter(id=>!d.includes(id)&&!almBusy(id));
-   if(rem.length&&force!==1){const nn=rem.map(id=>sys(id).nombre),add=d.filter(id=>!l.includes(id)).length;return sheet({title:`¿Quitar ${rem.length} sistema${rem.length>1?'s':''} del equipo?`,html:`<p class="hint" style="margin:0">Desmarcaste <b>${nn.map(esc).join(', ')}</b>, que ya ${rem.length>1?'están':'está'} en tu equipo. Si ${rem.length>1?'los':'lo'} quitas, sin conexión ya no podrás registrar en ${rem.length>1?'ellos':'él'}. Puedes volver a elegir${rem.length>1?'los':'lo'} cuando quieras.</p>${add?`<p class="hint" style="margin:12px 0 0">${add===1?'El sistema nuevo se descargará':'Los '+add+' sistemas nuevos se descargarán'} al guardar.</p>`:''}`,actions:[{label:'Guardar y quitar',act:'selGuardarOk',primary:true},{label:rem.length>1?'Mantenerlos':'Mantener '+nn[0],act:'selMantener'}]})}
-   const keep=l.filter(id=>d.includes(id)||almBusy(id));l.length=0;keep.forEach(x=>l.push(x));keep.forEach(id=>{if(!d.includes(id))d.push(id)});S.sel[S.user.dni]=d;S.asgNotice=null;P_().leaveOK=1;save();tab('home');autoDlKick()};
+   if(rem.length&&force!==1){const nn=rem.map(id=>sys(id).nombre),add=d.filter(id=>!l.includes(id)).length;return sheet({title:`¿Quitar ${rem.length} sistema${rem.length>1?'s':''} del equipo?`,html:`<p class="hint" style="margin:0">Desmarcaste <b>${nn.map(esc).join(', ')}</b>, que ya ${rem.length>1?'están':'está'} en tu equipo. Si ${rem.length>1?'los':'lo'} quitas, sin conexión ya no podrás registrar en ${rem.length>1?'ellos':'él'}. Puedes volver a elegir${rem.length>1?'los':'lo'} cuando quieras.</p>`,actions:[{label:'Guardar y quitar',act:'selGuardarOk',primary:true},{label:rem.length>1?'Mantenerlos':'Mantener '+nn[0],act:'selMantener'}]})}
+   const keep=l.filter(id=>d.includes(id)||almBusy(id));l.length=0;keep.forEach(x=>l.push(x));keep.forEach(id=>{if(!d.includes(id))d.push(id)});const prev=scopeIds().slice();S.sel[S.user.dni]=d;S.asgNotice=null;P_().leaveOK=1;save();tab('home');const nw=d.filter(id=>!prev.includes(id)&&!dlOf().includes(id));if(nw.length)setTimeout(()=>act.dlNuevos(nw.join(',')),RM()?50:450)};
   act.selGuardarOk=()=>{UI.sheet=null;renderOverlay();act.selGuardar(1)};
   act.selMantener=()=>{UI.sheet=null;const d=P_().draft;dlOf().forEach(id=>{if(!d.includes(id))d.push(id)});save();renderOverlay();render()};
   const selBusy=id=>(S.mon&&S.mon.sysIdx===id)||(S.lyd&&S.lyd.sysIdx===id)||(S.clo&&S.clo.sysId===id)||S.visits.some(v=>v.sysId===id&&!v.saved&&v.dni===S.user.dni)||myUnsynced().some(r=>r.sysId===id);
@@ -6220,7 +6221,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
    const c=document.querySelector('.selch [data-arg="on"]');if(c)c.textContent='Elegidos · '+d.length;
    const hb=document.querySelector('#scroll section.hhome .hhbig');if(hb)hb.innerHTML=`<span data-count="${d.length}">${d.length}</span> de ${t}`;
    const bs=document.querySelector('#app>.hcbar .hhwho span');if(bs)bs.textContent=`${d.length} de ${t} elegido${t===1?'':'s'}`;
-   const sb=document.querySelector('#app>.selbar .btn');if(sb){const mb=d.filter(id=>!dlOf().includes(id)).reduce((a,id)=>a+almSz(id),0);sb.innerHTML=mb?`${icon('download')} Guardar · ${f1(mb)} MB por descargar`:`${icon('check')} Guardar`;sb.disabled=!(selChanged()&&S.online)}save()};
+   const sb=document.querySelector('#app>.selbar .btn');if(sb){sb.innerHTML=`${icon('check')} Guardar · ${d.length} sistema${d.length===1?'':'s'}`;sb.disabled=!(selChanged()&&S.online)}save()};
   act.selToggle=id=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const d=P_().draft;const i=d.indexOf(id);if(i<0){d.push(id);return selRefresh()}if(selBusy(id)&&!P_().force)return act.selQuitar(id);d.splice(i,1);selRefresh()};
   const _bk=act.back;act.back=function(...a){if(S.nav.route==='sel'&&selChanged()&&!P_().leaveOK){return sheet({title:'¿Salir sin guardar?',body:'Tienes cambios en tu selección de sistemas que aún no guardas.',actions:[{label:'Seguir eligiendo',act:'closeSheet',primary:true},{label:'Salir sin guardar',act:'selLeave'}]})}return _bk.apply(this,a)};
   act.selLeave=()=>{UI.sheet=null;renderOverlay();P_().leaveOK=1;UI.selMore=0;act.back()};
@@ -6697,7 +6698,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:15</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:26</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6753,7 +6754,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 
 /* ===== Descarga automática de los sistemas (operador: asignados · supervisión: los que elige) ===== */
 UI.dlp=UI.dlp||{};UI.dlFail=UI.dlFail||{};
-function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null&&(!isOp()||(S.dlQ||[]).includes(id)));if(!pend.length)return;
+function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null&&(S.dlQ||[]).includes(id));if(!pend.length)return;
  pend.forEach(id=>{UI.dlp[id]=0;delete UI.dlFail[id]});render();
  UI.dlT=setInterval(()=>{const ids=Object.keys(UI.dlp);if(!S.online){ids.forEach(id=>{UI.dlFail[id]=1;delete UI.dlp[id]});clearInterval(UI.dlT);UI.dlT=null;render();return}
   const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}if(UI.dlp[id]>=100)done.push(id)});
@@ -6763,12 +6764,12 @@ function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pen
   else if(done.length)render()},RM()?100:160);
  UI.dlBatch=pend}
 /* sistemas nuevos: los que entran a tu lista después de la primera vez (etiqueta «Nuevo» por 3 días) */
-function sysNew(id){const t=(S.newSys||{})[id];return t&&Date.now()-t<3*864e5}
+function sysNew(id){if(!isOp())return false;const t=(S.newSys||{})[id];return t&&Date.now()-t<3*864e5}
 function trackNew(){if(!S.user)return;S.known=S.known||{};S.newSys=S.newSys||{};const k=S.user.dni,ids=myScope().map(s=>s.id);if(!S.known[k]||!S.known[k].length){S.known[k]=ids;return}ids.forEach(id=>{if(!S.known[k].includes(id)){S.known[k].push(id);S.newSys[id]=Date.now()}})}
-{const _rA=render;render=function(){try{trackNew()}catch(e){}const r=_rA.apply(this,arguments);if(S.user&&S.online&&needsDl()&&!UI.dlT&&(!isOp()||(S.dlQ||[]).length))setTimeout(autoDlKick,500);return r}}
+{const _rA=render;render=function(){try{trackNew()}catch(e){}const r=_rA.apply(this,arguments);if(S.user&&S.online&&needsDl()&&!UI.dlT&&(S.dlQ||[]).length)setTimeout(autoDlKick,500);return r}}
 /* tarjeta del sistema: estado de descarga en la línea de estado; sin enlace «Descargar» */
 {const _sc=sysCardHome;sysCardHome=function(s,dist){let h=_sc.apply(this,arguments);if(!needsDl())return h;
- if(isOp()&&!dlOf().includes(s.id)&&UI.dlp[s.id]==null&&!UI.dlFail[s.id]&&!(S.dlQ||[]).includes(s.id)){if(sysNew(s.id))h=h.replace(/(<div class="nm">[\s\S]*?)(<\/div>)/,`$1<span class="newtg">Nuevo</span>$2`);return h}
+ if(!dlOf().includes(s.id)&&UI.dlp[s.id]==null&&!UI.dlFail[s.id]&&!(S.dlQ||[]).includes(s.id)){if(sysNew(s.id))h=h.replace(/(<div class="nm">[\s\S]*?)(<\/div>)/,`$1<span class="newtg">Nuevo</span>$2`);return h}
  h=h.replace(/<button class="btn ghost sysdl"[\s\S]*?<\/button>/,'').replace(/<span class="dlk"[\s\S]*?<\/span>(<i class="dlsep">·<\/i>)?/,'').replace(/<span class="dlst[\s\S]*?<\/span>/,'');
  if(sysNew(s.id))h=h.replace(/(<div class="nm">[\s\S]*?)(<\/div>)/,`$1<span class="newtg">Nuevo</span>$2`);
  const p=UI.dlp[s.id],fail=UI.dlFail[s.id],dl=dlOf().includes(s.id);let line=null,btn=null;
@@ -6781,7 +6782,6 @@ function trackNew(){if(!S.user)return;S.known=S.known||{};S.newSys=S.newSys||{};
 setTimeout(()=>{if(typeof act==='undefined')return;act.dlRetry=function(id){if(!S.online)return toast('Necesitas conexión para descargar el sistema.','bad');delete UI.dlFail[id];autoDlKick()}},0);
 /* inicio: sin «Descargar todos» ni filtros «En el equipo / En la nube»; quien elige sistemas ve «Cambiar sistemas» */
 {const _hm=screens.home;screens.home=function(){const v=_hm.apply(this,arguments);if(!v||!v.body||!needsDl()||isOp())return v;let b=v.body;
- b=b.replace(/<button[^>]*data-arg="(ready|todl)"[^>]*>[\s\S]*?<\/button>/g,'').replace(/<(span|button) class="stlink[^"]*"[^>]*data-act="dlAll"[^>]*>[\s\S]*?<\/\1>/g,'').replace(/<span class="stlink dis">Descargando…<\/span>/g,'');
  b=b.replace('Elegidos para monitorear','Que supervisas');
  b=b.replace(/(<button class="hhpick" data-act="go" data-arg="sel">[\s\S]*?<\/svg>)Elegir sistemas/,'$1Elegir los sistemas que supervisas');
  v.body=b;return v}}
@@ -6797,7 +6797,7 @@ function opPendMB(ids){const ds=new Set();let t=0;ids.forEach(id=>{const s=sys(i
 {const _rN=render;render=function(){try{if(S.user&&isOp()&&S.asgNotice&&!/^Se agregaron|^Te asignaron/.test(S.asgNotice)){const n=dlPend().length;S.asgNotice=S.asgNotice.replace(/ Ya están? disponibles? sin conexión\.$/,n?` Descarga los que vas a usar sin conexión.`:' Ya están disponibles sin conexión.')}}catch(e){}return _rN.apply(this,arguments)}}
 setTimeout(()=>{if(typeof act==='undefined')return;
  const _dlS=act.dlSys,_oS=act.openSys,_rc=act.refreshCatalog;
- act.dlSys=function(id){if(!isOp())return _dlS.apply(this,arguments);const s=sys(id);if(!s)return;
+ act.dlSys=function(id){if(!needsDl())return _dlS.apply(this,arguments);const s=sys(id);if(!s)return;
   if(!S.online)return sheet({title:'Sin conexión',html:`<p class="hint" style="margin:0">Conéctate a internet para descargar ${esc(s.nombre)} (${mbTxt(sysMB(id))}) y usarlo sin conexión.</p>`,actions:[{label:'Entendido',act:'closeSheet',primary:true}]});
   const d=s.distrito,has=!!mapsOf()[d],mm=mapMB(d);UI.dlMap=!has;
   sheet({title:'¿Descargar '+s.nombre+'?',html:`<p class="hint" style="margin:0 0 12px">Para registrar sin internet en campo.</p><div class="card list dlsum">
@@ -6805,8 +6805,8 @@ setTimeout(()=>{if(typeof act==='undefined')return;
    ${has?`<div class="row"><div class="ico">${icon('map')}</div><div class="grow"><b>Mapa de ${esc(d)}</b><small>Ya está en tu equipo</small></div></div>`:`<div class="row"><div class="ico">${icon('map')}</div><div class="grow"><b>Mapa del distrito de ${esc(d)}</b><small>Sirve para todos tus sistemas de ${esc(d)}</small></div><span class="dlmb">${mm} MB</span><button class="switch on dlmapsw" role="switch" aria-checked="true" aria-label="Incluir mapa" data-act="dlMapTg"></button></div>`}</div>
    <p class="mini" style="margin:8px 2px 0">${S.mapWifi!==false?'Se descargará solo con wifi.':'Puede usar tus datos móviles.'}</p>`,
    actions:[{label:icon('download')+` Descargar · <span data-dltot data-a="1,2 MB" data-b="${mbTxt(1.2+(has?0:mm))}">${mbTxt(1.2+(has?0:mm))}</span>`,act:'dlSysGo',arg:id,primary:true},{label:'Ahora no',act:'closeSheet'}]})};
- const _go=act.dlSysGo;act.dlSysGo=function(id){if(!isOp())return _go.apply(this,arguments);const s=sys(id);UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),id])];if(UI.dlMap!==false&&!mapsOf()[s.distrito]){S.dlMapQ=S.dlMapQ||{};S.dlMapQ[id]=s.distrito}save();renderOverlay();autoDlKick()};
- const _dA=act.dlAll;act.dlAll=function(){if(!isOp())return _dA.apply(this,arguments);return act.dlTodos()};
+ const _go=act.dlSysGo;act.dlSysGo=function(id){if(!needsDl())return _go.apply(this,arguments);const s=sys(id);UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),id])];if(UI.dlMap!==false&&!mapsOf()[s.distrito]){S.dlMapQ=S.dlMapQ||{};S.dlMapQ[id]=s.distrito}save();renderOverlay();autoDlKick()};
+ const _dA=act.dlAll;act.dlAll=function(){if(!needsDl())return _dA.apply(this,arguments);return act.dlTodos()};
  act.dlTodos=function(){const ids=dlPend().map(s=>s.id).filter(id=>!opQ(id));if(!ids.length)return;if(!S.online)return toast('Necesitas conexión para descargar los sistemas.','bad');
   const ds=[...new Set(ids.map(id=>sys(id).distrito))].filter(d=>!mapsOf()[d]);
   sheet({title:`¿Descargar ${ids.length} sistemas?`,html:`<p class="hint" style="margin:0 0 12px">Quedarán en tu equipo para registrar sin internet.</p><div class="card list dlsum">
@@ -6820,24 +6820,34 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 /* Perfil: secciones por estado en el equipo (operador: + asignados sin descargar · supervisión: solo en tu equipo) */
 {const _pf=pfSysList;pfSysList=function(sc,p){if(!sc.length||!needsDl())return _pf.apply(this,arguments);
  const cpN=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
- const row=s=>{const dl=isDl(s.id),q=opQ(s.id),pc=UI.dlp[s.id];const sub=!dl&&isOp()?(pc!=null?`Descargando · ${Math.round(pc)}%`:q?'Se descargará al tener conexión':(S.online?'Sin descargar':'Conéctate para descargar')):`CP ${esc(s.cpCod||String(s.cp||'').match(/^\s*(\d+)/)?.[1]||'')} · ${esc(cpN(s))}`;
-  const side=!dl&&isOp()&&!q&&S.online?`<button class="pfdl" data-act="dlSys" data-arg="${s.id}" aria-label="Descargar ${esc(s.nombre)}">${icon('download')}</button>`:'';
+ const row=s=>{const dl=isDl(s.id),q=opQ(s.id),pc=UI.dlp[s.id];const sub=!dl?(pc!=null?`Descargando · ${Math.round(pc)}%`:q?'Se descargará al tener conexión':(S.online?'Sin descargar':'Conéctate para descargar')):`CP ${esc(s.cpCod||String(s.cp||'').match(/^\s*(\d+)/)?.[1]||'')} · ${esc(cpN(s))}`;
+  const side=!dl&&!q&&S.online?`<button class="pfdl" data-act="dlSys" data-arg="${s.id}" aria-label="Descargar ${esc(s.nombre)}">${icon('download')}</button>`:'';
   return `<div class="row pfsys ${dl?'':'nodl'}"><button class="pfsm" data-act="openSys" data-arg="${s.id}"><div class="ico ${s.kind==='alc'?'k-alc':'k-sap'}">${icon(s.kind==='alc'?'syssewer':'syswater')}</div><div class="grow"><b>${esc(s.sap)} · ${esc(s.nombre)}</b><small>${sub}</small></div></button>${side}<button class="pfch" data-act="openSys" data-arg="${s.id}" aria-label="Abrir ${esc(s.nombre)}" tabindex="-1">${icon('chev','chev')}</button></div>`};
- const A=sc.filter(s=>isDl(s.id)),B=isOp()?sc.filter(s=>!isDl(s.id)):[],todo=B.map(s=>s.id).filter(id=>!opQ(id));
+ const A=sc.filter(s=>isDl(s.id)),B=sc.filter(s=>!isDl(s.id)),todo=B.map(s=>s.id).filter(id=>!opQ(id));
  const lk=todo.length>1&&S.online?`<button class="row pfall" data-act="dlTodos"><div class="ico">${icon('download')}</div><div class="grow"><b>Descargar todos</b><small>${todo.length} sistemas · ${mbTxt(opPendMB(todo))}</small></div></button>`:'';
- return (A.length||!B.length?`<div class="sectitle">En tu equipo · ${A.length}</div><div class="card list">${A.map(row).join('')||'<div class="row"><div class="grow"><small>Aún no tienes sistemas en el equipo.</small></div></div>'}</div>`:'')+(B.length?`<div class="sectitle">Asignados sin descargar · ${B.length}</div><div class="card list">${lk}${B.map(row).join('')}</div>`:'')}}
+ return (A.length||!B.length?`<div class="sectitle">En tu equipo · ${A.length}</div><div class="card list">${A.map(row).join('')||'<div class="row"><div class="grow"><small>Aún no tienes sistemas en el equipo.</small></div></div>'}</div>`:'')+(B.length?`<div class="sectitle">${isOp()?'Asignados':'Elegidos'} sin descargar · ${B.length}</div><div class="card list">${lk}${B.map(row).join('')}</div>`:'')}}
 
 /* ===== Almacenamiento por perfil: quitar con conexión; supervisión lo saca de «Sistemas que supervisas» ===== */
 {const _alm=screens.almacen;screens.almacen=function(){const v=_alm.apply(this,arguments);if(!v||!v.body||!needsDl())return v;
- const t=isOp()?'Quitar un sistema no borra nada en DATASS ni te lo desasigna: sigue en Mis sistemas y puedes volver a descargarlo con conexión.':'Quitar un sistema no borra nada en DATASS: deja de estar en «Sistemas que supervisas» y puedes volver a elegirlo cuando quieras.';
+ const t=isOp()?'Quitar un sistema no borra nada en DATASS ni te lo desasigna: sigue en Mis sistemas y puedes volver a descargarlo con conexión.':'Quitar un sistema no borra nada en DATASS: sigue en «Sistemas que supervisas» y puedes volver a descargarlo con conexión.';
  v.body=v.body.replace(/Quitar un sistema no borra nada en DATASS: pasa a «En la nube» y puedes volver a descargarlo con conexión\./,t+(S.online?'':' Para quitar sistemas necesitas conexión.'));return v}}
 setTimeout(()=>{if(typeof act==='undefined')return;const _q=act.almQuitar,_qo=act.almQuitarOk;
  act.almQuitar=function(id){if(!needsDl())return _q.apply(this,arguments);if(almBusy(id))return act.almLock(id);const s=sys(id),nm=s.sap||s.nombre;
   if(!S.online)return sheet({title:'Necesitas conexión',html:`<p class="hint" style="margin:0">Para quitar ${esc(nm)} del equipo necesitas conexión, así podrás volver a descargarlo si lo necesitas. Sin conexión, tus sistemas se mantienen en el equipo.</p>`,actions:[{label:'Entendido',act:'closeSheet',primary:true}]});
-  const txt=isOp()?`Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} seguirá en Mis sistemas como «Sin descargar» y podrás volver a descargarlo con conexión. Mientras tanto, sin conexión no podrás registrar en él.`:`Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} dejará de estar en «Sistemas que supervisas». Si lo necesitas otra vez, lo eliges de nuevo y se descarga.`;
+  const txt=isOp()?`Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} seguirá en Mis sistemas como «Sin descargar» y podrás volver a descargarlo con conexión. Mientras tanto, sin conexión no podrás registrar en él.`:`Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} seguirá en «Sistemas que supervisas» como «Sin descargar» y podrás volver a descargarlo con conexión. Mientras tanto, sin conexión no podrás registrar en él.`;
   sheet({title:`¿Quitar ${esc(nm)} del equipo?`,html:`<p class="hint" style="margin:0">${txt}</p>`,actions:[{label:icon('trash')+' Quitar del equipo',act:'almQuitarOk',arg:id,primary:true,danger:true},{label:'Mantener',act:'closeSheet'}]})};
  act.almQuitarOk=function(id){if(!needsDl())return _qo.apply(this,arguments);if(almBusy(id))return act.almLock(id);if(!S.online)return act.almQuitar(id);const k=S.user.dni;
-  if(!isOp()&&S.sel&&S.sel[k])S.sel[k]=S.sel[k].filter(x=>String(x)!==String(id));if(S.dlQ)S.dlQ=S.dlQ.filter(x=>String(x)!==String(id));return _qo.apply(this,arguments)}},0);
+  if(S.dlQ)S.dlQ=S.dlQ.filter(x=>String(x)!==String(id));return _qo.apply(this,arguments)}},0);
+
+/* supervisión: tras guardar la lista, pregunta si descargar ahora los nuevos */
+setTimeout(()=>{if(typeof act==='undefined')return;
+ act.dlNuevos=function(ids){const L=String(ids).split(',').filter(id=>sys(id)&&!dlOf().includes(id));if(!L.length)return;const ds=[...new Set(L.map(id=>sys(id).distrito))].filter(d=>!mapsOf()[d]);
+  sheet({title:`¿Descargar ahora ${L.length===1?'el sistema nuevo':'los '+L.length+' nuevos'}?`,html:`<p class="hint" style="margin:0 0 12px">Ya ${L.length===1?'está':'están'} en tu lista. Si ${L.length===1?'lo':'los'} descargas ahora, podrás registrar sin internet en campo.</p><div class="card list dlsum">
+   <div class="row"><div class="ico">${icon('box')}</div><div class="grow"><b>${L.length===1?'Datos de '+esc(sys(L[0]).nombre):'Datos de '+L.length+' sistemas'}</b>${L.length>1?`<small>${L.map(id=>esc(sys(id).nombre)).join(', ')}</small>`:'<small>Ficha, reservorios, inventario e historial</small>'}</div><span class="dlmb">${mbTxt(L.length*1.2)}</span></div>
+   ${ds.length?`<div class="row"><div class="ico">${icon('map')}</div><div class="grow"><b>Mapa${ds.length>1?'s':''} de ${esc(ds.join(', '))}</b><small>Uno por distrito</small></div><span class="dlmb">${mbTxt(ds.reduce((a,d)=>a+mapMB(d),0))}</span></div>`:''}</div>
+   <p class="mini" style="margin:8px 2px 0">Si eliges «Más tarde», los descargas cuando quieras desde Inicio o tu Perfil.</p>`,
+   actions:[{label:icon('download')+` Descargar ahora · ${mbTxt(opPendMB(L))}`,act:'dlNuevosGo',arg:L.join(','),primary:true},{label:'Más tarde',act:'closeSheet'}]})};
+ act.dlNuevosGo=function(ids){const L=String(ids).split(',');UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),...L])];S.dlMapQ=S.dlMapQ||{};L.forEach(id=>{const d=sys(id).distrito;if(!mapsOf()[d])S.dlMapQ[id]=d});save();renderOverlay();autoDlKick()}},0);
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
