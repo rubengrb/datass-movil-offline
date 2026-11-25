@@ -3402,6 +3402,12 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .slr .grow{display:flex;flex-direction:column}
 .sectitle.sth{display:flex;justify-content:space-between;align-items:center}
 
+.sysc .stx.sdl{color:var(--muted)}
+.sysdlb{flex:none;align-self:center;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 12px;border-radius:999px;border:1.5px solid var(--primary);color:var(--primary);font-weight:700;font-size:var(--fs-sm);background:var(--card)}.sysdlb svg.i{width:16px;height:16px}
+.sectitle.opsec{margin-top:16px}
+.pfsys.nodl .ico{background:var(--line);color:var(--muted)}.pfsys.nodl b{color:var(--muted)}
+.pfall .ico{background:var(--primary-soft,#fde8eb);color:var(--primary)}.pfall b{color:var(--primary)}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -6691,7 +6697,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 08:28</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:04</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6747,11 +6753,11 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 
 /* ===== Descarga automática de los sistemas (operador: asignados · supervisión: los que elige) ===== */
 UI.dlp=UI.dlp||{};UI.dlFail=UI.dlFail||{};
-function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null);if(!pend.length)return;
+function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null&&(!isOp()||(S.dlQ||[]).includes(id)));if(!pend.length)return;
  pend.forEach(id=>{UI.dlp[id]=0;delete UI.dlFail[id]});render();
  UI.dlT=setInterval(()=>{const ids=Object.keys(UI.dlp);if(!S.online){ids.forEach(id=>{UI.dlFail[id]=1;delete UI.dlp[id]});clearInterval(UI.dlT);UI.dlT=null;render();return}
   const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}if(UI.dlp[id]>=100)done.push(id)});
-  if(done.length){const l=dlOf();done.forEach(id=>{delete UI.dlp[id];if(!l.includes(id))l.push(id)});save()}
+  if(done.length){const l=dlOf();done.forEach(id=>{delete UI.dlp[id];if(!l.includes(id))l.push(id);if(S.dlQ)S.dlQ=S.dlQ.filter(x=>x!==id);const md=(S.dlMapQ||{})[id];if(md){if(!mapsOf()[md])mapsOf()[md]={ts:Date.now(),mb:mapMB(md)};delete S.dlMapQ[id]}});save()}
   if(!Object.keys(UI.dlp).length){clearInterval(UI.dlT);UI.dlT=null;const nv=done.filter(id=>sysNew(id)),all=Object.keys(S.newSys||{});
    const fin=UI.dlBatch||[];UI.dlBatch=null;if(fin.length){S.asgNotice=fin.length===1?`${sys(fin[0]).nombre} ya está disponible sin conexión.`:`${fin.length} sistemas ya están disponibles sin conexión.`}save();render()}
   else if(done.length)render()},RM()?100:160);
@@ -6759,9 +6765,10 @@ function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pen
 /* sistemas nuevos: los que entran a tu lista después de la primera vez (etiqueta «Nuevo» por 3 días) */
 function sysNew(id){const t=(S.newSys||{})[id];return t&&Date.now()-t<3*864e5}
 function trackNew(){if(!S.user)return;S.known=S.known||{};S.newSys=S.newSys||{};const k=S.user.dni,ids=myScope().map(s=>s.id);if(!S.known[k]||!S.known[k].length){S.known[k]=ids;return}ids.forEach(id=>{if(!S.known[k].includes(id)){S.known[k].push(id);S.newSys[id]=Date.now()}})}
-{const _rA=render;render=function(){try{trackNew()}catch(e){}const r=_rA.apply(this,arguments);if(S.user&&S.online&&needsDl()&&!UI.dlT)setTimeout(autoDlKick,500);return r}}
+{const _rA=render;render=function(){try{trackNew()}catch(e){}const r=_rA.apply(this,arguments);if(S.user&&S.online&&needsDl()&&!UI.dlT&&(!isOp()||(S.dlQ||[]).length))setTimeout(autoDlKick,500);return r}}
 /* tarjeta del sistema: estado de descarga en la línea de estado; sin enlace «Descargar» */
 {const _sc=sysCardHome;sysCardHome=function(s,dist){let h=_sc.apply(this,arguments);if(!needsDl())return h;
+ if(isOp()&&!dlOf().includes(s.id)&&UI.dlp[s.id]==null&&!UI.dlFail[s.id]&&!(S.dlQ||[]).includes(s.id)){if(sysNew(s.id))h=h.replace(/(<div class="nm">[\s\S]*?)(<\/div>)/,`$1<span class="newtg">Nuevo</span>$2`);return h}
  h=h.replace(/<button class="btn ghost sysdl"[\s\S]*?<\/button>/,'').replace(/<span class="dlk"[\s\S]*?<\/span>(<i class="dlsep">·<\/i>)?/,'').replace(/<span class="dlst[\s\S]*?<\/span>/,'');
  if(sysNew(s.id))h=h.replace(/(<div class="nm">[\s\S]*?)(<\/div>)/,`$1<span class="newtg">Nuevo</span>$2`);
  const p=UI.dlp[s.id],fail=UI.dlFail[s.id],dl=dlOf().includes(s.id);let line=null,btn=null;
@@ -6774,13 +6781,52 @@ function trackNew(){if(!S.user)return;S.known=S.known||{};S.newSys=S.newSys||{};
  return h}}
 setTimeout(()=>{if(typeof act==='undefined')return;act.dlRetry=function(id){if(!S.online)return toast('Necesitas conexión para descargar el sistema.','bad');delete UI.dlFail[id];autoDlKick()}},0);
 /* inicio: sin «Descargar todos» ni filtros «En el equipo / En la nube»; quien elige sistemas ve «Cambiar sistemas» */
-{const _hm=screens.home;screens.home=function(){const v=_hm.apply(this,arguments);if(!v||!v.body||!needsDl())return v;let b=v.body;
+{const _hm=screens.home;screens.home=function(){const v=_hm.apply(this,arguments);if(!v||!v.body||!needsDl()||isOp())return v;let b=v.body;
  b=b.replace(/<button[^>]*data-arg="(ready|todl)"[^>]*>[\s\S]*?<\/button>/g,'').replace(/<(span|button) class="stlink[^"]*"[^>]*data-act="dlAll"[^>]*>[\s\S]*?<\/\1>/g,'').replace(/<span class="stlink dis">Descargando…<\/span>/g,'');
  b=b.replace('Elegidos para monitorear','Que supervisas');
  b=b.replace(/(<button class="hhpick" data-act="go" data-arg="sel">[\s\S]*?<\/svg>)Elegir sistemas/,'$1Elegir los sistemas que supervisas');
  v.body=b;return v}}
 /* Ajustes: «Sistemas a monitorear» pasa a «Sistemas que supervisas» */
 {const _ajS=screens.ajustes;screens.ajustes=function(){const v=_ajS.apply(this,arguments);if(v&&v.body)v.body=v.body.replace('<b>Sistemas a monitorear</b><small>Elige los sistemas que supervisas</small>','<b>Sistemas que supervisas</b><small>Cambiar sistemas</small>');return v}}
+
+/* ===== Operador: descarga manual (los asignados se ven siempre; solo baja lo que él confirma) ===== */
+const sysMB=id=>{const s=sys(id);return 1.2+(s&&!mapsOf()[s.distrito]?mapMB(s.distrito):0)};
+const mbTxt=n=>(Math.round(n*10)/10).toFixed(1).replace('.',',')+' MB';
+const opQ=id=>(S.dlQ||[]).includes(id)||UI.dlp[id]!=null;
+function opPendMB(ids){const ds=new Set();let t=0;ids.forEach(id=>{const s=sys(id);t+=1.2;if(!mapsOf()[s.distrito]&&!ds.has(s.distrito)){ds.add(s.distrito);t+=mapMB(s.distrito)}});return t}
+/* avisos: nada «ya está disponible» si no se descargó */
+{const _rN=render;render=function(){try{if(S.user&&isOp()&&S.asgNotice&&!/^Se agregaron|^Te asignaron/.test(S.asgNotice)){const n=dlPend().length;S.asgNotice=S.asgNotice.replace(/ Ya están? disponibles? sin conexión\.$/,n?` Descarga los que vas a usar sin conexión.`:' Ya están disponibles sin conexión.')}}catch(e){}return _rN.apply(this,arguments)}}
+setTimeout(()=>{if(typeof act==='undefined')return;
+ const _dlS=act.dlSys,_oS=act.openSys,_rc=act.refreshCatalog;
+ act.dlSys=function(id){if(!isOp())return _dlS.apply(this,arguments);const s=sys(id);if(!s)return;
+  if(!S.online)return sheet({title:'Sin conexión',html:`<p class="hint" style="margin:0">Conéctate a internet para descargar ${esc(s.nombre)} (${mbTxt(sysMB(id))}) y usarlo sin conexión.</p>`,actions:[{label:'Entendido',act:'closeSheet',primary:true}]});
+  const d=s.distrito,has=!!mapsOf()[d],mm=mapMB(d);UI.dlMap=!has;
+  sheet({title:'¿Descargar '+s.nombre+'?',html:`<p class="hint" style="margin:0 0 12px">Para registrar sin internet en campo.</p><div class="card list dlsum">
+   <div class="row"><div class="ico">${icon('box')}</div><div class="grow"><b>Datos del sistema</b><small>Ficha, reservorios, inventario e historial</small></div><span class="dlmb">1,2 MB</span></div>
+   ${has?`<div class="row"><div class="ico">${icon('map')}</div><div class="grow"><b>Mapa de ${esc(d)}</b><small>Ya está en tu equipo</small></div></div>`:`<div class="row"><div class="ico">${icon('map')}</div><div class="grow"><b>Mapa del distrito de ${esc(d)}</b><small>Sirve para todos tus sistemas de ${esc(d)}</small></div><span class="dlmb">${mm} MB</span><button class="switch on dlmapsw" role="switch" aria-checked="true" aria-label="Incluir mapa" data-act="dlMapTg"></button></div>`}</div>
+   <p class="mini" style="margin:8px 2px 0">${S.mapWifi!==false?'Se descargará solo con wifi.':'Puede usar tus datos móviles.'}</p>`,
+   actions:[{label:icon('download')+` Descargar · <span data-dltot data-a="1,2 MB" data-b="${mbTxt(1.2+(has?0:mm))}">${mbTxt(1.2+(has?0:mm))}</span>`,act:'dlSysGo',arg:id,primary:true},{label:'Ahora no',act:'closeSheet'}]})};
+ const _go=act.dlSysGo;act.dlSysGo=function(id){if(!isOp())return _go.apply(this,arguments);const s=sys(id);UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),id])];if(UI.dlMap!==false&&!mapsOf()[s.distrito]){S.dlMapQ=S.dlMapQ||{};S.dlMapQ[id]=s.distrito}save();renderOverlay();autoDlKick()};
+ const _dA=act.dlAll;act.dlAll=function(){if(!isOp())return _dA.apply(this,arguments);return act.dlTodos()};
+ act.dlTodos=function(){const ids=dlPend().map(s=>s.id).filter(id=>!opQ(id));if(!ids.length)return;if(!S.online)return toast('Necesitas conexión para descargar los sistemas.','bad');
+  const ds=[...new Set(ids.map(id=>sys(id).distrito))].filter(d=>!mapsOf()[d]);
+  sheet({title:`¿Descargar ${ids.length} sistemas?`,html:`<p class="hint" style="margin:0 0 12px">Quedarán en tu equipo para registrar sin internet.</p><div class="card list dlsum">
+   <div class="row"><div class="ico">${icon('box')}</div><div class="grow"><b>Datos de ${ids.length} sistemas</b><small>${ids.map(id=>esc(sys(id).nombre)).join(', ')}</small></div><span class="dlmb">${mbTxt(ids.length*1.2)}</span></div>
+   ${ds.length?`<div class="row"><div class="ico">${icon('map')}</div><div class="grow"><b>Mapa${ds.length>1?'s':''} de ${esc(ds.join(', '))}</b><small>Uno por distrito</small></div><span class="dlmb">${mbTxt(ds.reduce((a,d)=>a+mapMB(d),0))}</span></div>`:''}</div>
+   <p class="mini" style="margin:8px 2px 0">${S.mapWifi!==false?'Se descargará solo con wifi.':'Puede usar tus datos móviles.'}</p>`,
+   actions:[{label:icon('download')+` Descargar todos · ${mbTxt(opPendMB(ids))}`,act:'dlTodosGo',primary:true},{label:'Ahora no',act:'closeSheet'}]})};
+ act.dlTodosGo=function(){const ids=dlPend().map(s=>s.id).filter(id=>!opQ(id));UI.sheet=null;S.dlQ=[...new Set([...(S.dlQ||[]),...ids])];S.dlMapQ=S.dlMapQ||{};ids.forEach(id=>{const d=sys(id).distrito;if(!mapsOf()[d])S.dlMapQ[id]=d});save();renderOverlay();autoDlKick()};
+ if(_rc)act.refreshCatalog=async function(){const r=await _rc.apply(this,arguments);if(isOp()&&S.asgNotice&&/^Se agregaron/.test(S.asgNotice)){const nm=(S.asgNotice.match(/operador: (.*?)\. /)||[])[1]||'',pl=nm.includes(',');S.asgNotice=`Te asignaron ${nm}. Descárgal${pl?'os':'o'} para usarl${pl?'os':'o'} sin conexión.`;save();render()}return r};
+},0);
+/* Perfil: secciones por estado en el equipo (operador: + asignados sin descargar · supervisión: solo en tu equipo) */
+{const _pf=pfSysList;pfSysList=function(sc,p){if(!sc.length||!needsDl())return _pf.apply(this,arguments);
+ const cpN=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
+ const row=s=>{const dl=isDl(s.id),q=opQ(s.id),pc=UI.dlp[s.id];const sub=!dl&&isOp()?(pc!=null?`Descargando · ${Math.round(pc)}%`:q?'Se descargará al tener conexión':(S.online?'Sin descargar':'Conéctate para descargar')):`CP ${esc(s.cpCod||String(s.cp||'').match(/^\s*(\d+)/)?.[1]||'')} · ${esc(cpN(s))}`;
+  const side=!dl&&isOp()&&!q&&S.online?`<button class="pfdl" data-act="dlSys" data-arg="${s.id}" aria-label="Descargar ${esc(s.nombre)}">${icon('download')}</button>`:'';
+  return `<div class="row pfsys ${dl?'':'nodl'}"><button class="pfsm" data-act="openSys" data-arg="${s.id}"><div class="ico ${s.kind==='alc'?'k-alc':'k-sap'}">${icon(s.kind==='alc'?'syssewer':'syswater')}</div><div class="grow"><b>${esc(s.sap)} · ${esc(s.nombre)}</b><small>${sub}</small></div></button>${side}<button class="pfch" data-act="openSys" data-arg="${s.id}" aria-label="Abrir ${esc(s.nombre)}" tabindex="-1">${icon('chev','chev')}</button></div>`};
+ const A=sc.filter(s=>isDl(s.id)),B=isOp()?sc.filter(s=>!isDl(s.id)):[],todo=B.map(s=>s.id).filter(id=>!opQ(id));
+ const lk=todo.length>1&&S.online?`<button class="row pfall" data-act="dlTodos"><div class="ico">${icon('download')}</div><div class="grow"><b>Descargar todos</b><small>${todo.length} sistemas · ${mbTxt(opPendMB(todo))}</small></div></button>`:'';
+ return (A.length||!B.length?`<div class="sectitle">En tu equipo · ${A.length}</div><div class="card list">${A.map(row).join('')||'<div class="row"><div class="grow"><small>Aún no tienes sistemas en el equipo.</small></div></div>'}</div>`:'')+(B.length?`<div class="sectitle">Asignados sin descargar · ${B.length}</div><div class="card list">${lk}${B.map(row).join('')}</div>`:'')}}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
