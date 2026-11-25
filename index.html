@@ -6697,7 +6697,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:04</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 09:10</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6827,6 +6827,18 @@ setTimeout(()=>{if(typeof act==='undefined')return;
  const A=sc.filter(s=>isDl(s.id)),B=isOp()?sc.filter(s=>!isDl(s.id)):[],todo=B.map(s=>s.id).filter(id=>!opQ(id));
  const lk=todo.length>1&&S.online?`<button class="row pfall" data-act="dlTodos"><div class="ico">${icon('download')}</div><div class="grow"><b>Descargar todos</b><small>${todo.length} sistemas · ${mbTxt(opPendMB(todo))}</small></div></button>`:'';
  return (A.length||!B.length?`<div class="sectitle">En tu equipo · ${A.length}</div><div class="card list">${A.map(row).join('')||'<div class="row"><div class="grow"><small>Aún no tienes sistemas en el equipo.</small></div></div>'}</div>`:'')+(B.length?`<div class="sectitle">Asignados sin descargar · ${B.length}</div><div class="card list">${lk}${B.map(row).join('')}</div>`:'')}}
+
+/* ===== Almacenamiento por perfil: quitar con conexión; supervisión lo saca de «Sistemas que supervisas» ===== */
+{const _alm=screens.almacen;screens.almacen=function(){const v=_alm.apply(this,arguments);if(!v||!v.body||!needsDl())return v;
+ const t=isOp()?'Quitar un sistema no borra nada en DATASS ni te lo desasigna: sigue en Mis sistemas y puedes volver a descargarlo con conexión.':'Quitar un sistema no borra nada en DATASS: deja de estar en «Sistemas que supervisas» y puedes volver a elegirlo cuando quieras.';
+ v.body=v.body.replace(/Quitar un sistema no borra nada en DATASS: pasa a «En la nube» y puedes volver a descargarlo con conexión\./,t+(S.online?'':' Para quitar sistemas necesitas conexión.'));return v}}
+setTimeout(()=>{if(typeof act==='undefined')return;const _q=act.almQuitar,_qo=act.almQuitarOk;
+ act.almQuitar=function(id){if(!needsDl())return _q.apply(this,arguments);if(almBusy(id))return act.almLock(id);const s=sys(id),nm=s.sap||s.nombre;
+  if(!S.online)return sheet({title:'Necesitas conexión',html:`<p class="hint" style="margin:0">Para quitar ${esc(nm)} del equipo necesitas conexión, así podrás volver a descargarlo si lo necesitas. Sin conexión, tus sistemas se mantienen en el equipo.</p>`,actions:[{label:'Entendido',act:'closeSheet',primary:true}]});
+  const txt=isOp()?`Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} seguirá en Mis sistemas como «Sin descargar» y podrás volver a descargarlo con conexión. Mientras tanto, sin conexión no podrás registrar en él.`:`Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} dejará de estar en «Sistemas que supervisas». Si lo necesitas otra vez, lo eliges de nuevo y se descarga.`;
+  sheet({title:`¿Quitar ${esc(nm)} del equipo?`,html:`<p class="hint" style="margin:0">${txt}</p>`,actions:[{label:icon('trash')+' Quitar del equipo',act:'almQuitarOk',arg:id,primary:true,danger:true},{label:'Mantener',act:'closeSheet'}]})};
+ act.almQuitarOk=function(id){if(!needsDl())return _qo.apply(this,arguments);if(almBusy(id))return act.almLock(id);if(!S.online)return act.almQuitar(id);const k=S.user.dni;
+  if(!isOp()&&S.sel&&S.sel[k])S.sel[k]=S.sel[k].filter(x=>String(x)!==String(id));if(S.dlQ)S.dlQ=S.dlQ.filter(x=>String(x)!==String(id));return _qo.apply(this,arguments)}},0);
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
