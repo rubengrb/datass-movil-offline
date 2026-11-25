@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#C8102E"><title>Documentación
+técnica · DATASS Móvil Offline</title>
+<link rel="icon" href="../icons/favicon-32-v3.png">
+<style>
+:root{--red:#C8102E;--ink:#1F2328;--mut:#5E6670;--line:#E4E6EA;--bg:#F6F7F9}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+header.top{position:sticky;top:0;z-index:5;background:var(--red);color:#fff;display:flex;align-items:center;gap:12px;padding:12px 18px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+header.top a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;opacity:.95}header.top b{font-size:16px;flex:1}
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;max-width:1180px;margin:0 auto;padding:24px 18px 64px}
+nav#TOC{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 12px}
+nav#TOC ul{list-style:none;margin:0;padding-left:10px}nav#TOC>ul{padding-left:0}nav#TOC a{color:var(--ink);text-decoration:none;display:block;padding:3px 6px;border-radius:6px}nav#TOC a:hover{background:#FBEDEE;color:var(--red)}
+nav#TOC ul ul a{color:var(--mut);font-size:13px}
+main{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 34px;min-width:0}
+h1{font-size:30px;line-height:1.2;margin:0 0 8px}h2{font-size:23px;margin:40px 0 12px;padding-top:8px;border-top:1px solid var(--line)}h3{font-size:18px;margin:28px 0 8px}
+a{color:var(--red)}img{max-width:100%;height:auto;border-radius:12px;display:block;margin:14px auto}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#F3F4F6}
+blockquote{margin:14px 0;padding:10px 16px;background:#FFF7E8;border-left:4px solid #E0A12B;border-radius:8px}blockquote p{margin:4px 0}
+code{background:#F3F4F6;padding:1px 5px;border-radius:5px;font-size:.92em}
+.upd{color:var(--mut);font-size:13px;margin:0 0 18px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;padding:14px 10px 48px}nav#TOC{position:static;max-height:none}main{padding:18px 16px}h1{font-size:25px}}
+</style></head><body>
+<header class="top"><b>Documentación
+técnica</b><a href="../">← Abrir la app</a></header>
+<div class="wrap"><nav id="TOC"><ul>
+<li><a
+href="#rediseño-uxui-del-aplicativo-offline-datass-documentación-técnica"
+id="toc-rediseño-uxui-del-aplicativo-offline-datass-documentación-técnica">Rediseño
+UX/UI del Aplicativo OFFLINE DATASS — Documentación técnica</a>
+<ul>
+<li><a href="#resumen-ejecutivo" id="toc-resumen-ejecutivo">Resumen
+ejecutivo</a></li>
+<li><a href="#diagnóstico-de-la-versión-original"
+id="toc-diagnóstico-de-la-versión-original">Diagnóstico de la versión
+original</a></li>
+<li><a href="#evaluación-de-la-hipótesis-sistema-primero"
+id="toc-evaluación-de-la-hipótesis-sistema-primero">Evaluación de la
+hipótesis «sistema primero»</a></li>
+<li><a href="#arquitectura-de-información-y-navegación"
+id="toc-arquitectura-de-información-y-navegación">Arquitectura de
+información y navegación</a></li>
+<li><a href="#mapa-de-pantallas-y-justificación"
+id="toc-mapa-de-pantallas-y-justificación">Mapa de pantallas y
+justificación</a></li>
+<li><a href="#flujos-por-módulo" id="toc-flujos-por-módulo">Flujos por
+módulo</a></li>
+<li><a href="#perfiles-y-permisos" id="toc-perfiles-y-permisos">Perfiles
+y permisos</a></li>
+<li><a href="#sistema-de-diseño" id="toc-sistema-de-diseño">Sistema de
+diseño</a></li>
+<li><a href="#usabilidad-y-accesibilidad"
+id="toc-usabilidad-y-accesibilidad">Usabilidad y accesibilidad</a></li>
+<li><a href="#offline-y-sincronización"
+id="toc-offline-y-sincronización">Offline y sincronización</a></li>
+<li><a href="#interacción-con-el-módulo-web-datass"
+id="toc-interacción-con-el-módulo-web-datass">Interacción con el módulo
+web DATASS</a></li>
+<li><a href="#supuestos-limitaciones-y-siguientes-pasos"
+id="toc-supuestos-limitaciones-y-siguientes-pasos">Supuestos,
+limitaciones y siguientes pasos</a></li>
+</ul></li>
+</ul></nav><main><p class="upd">Actualizado: 25/11/2026 14:16</p>
+<h1
+id="rediseño-uxui-del-aplicativo-offline-datass-documentación-técnica">Rediseño
+UX/UI del Aplicativo OFFLINE DATASS — Documentación técnica</h1>
+<p>Nov 20, 2026 · @Ruben</p>
+<h2 id="resumen-ejecutivo">Resumen ejecutivo</h2>
+<p>El aplicativo pasa de organizarse por <strong>módulo</strong> a
+organizarse por <strong>sistema</strong>: el usuario abre «Mis
+sistemas», elige un sistema y recién ahí decide qué actividad registrar.
+La hipótesis planteada se valida, con tres matices que están resueltos
+en la demo (sección 3).</p>
+<ul>
+<li><p><strong>Alcance:</strong> demo HTML navegable de un solo archivo,
+con los 5 módulos completos (Monitoreo del servicio de agua, Cloración,
+Limpieza y desinfección, O&amp;M de agua potable y O&amp;M de
+alcantarillado) y los 13 perfiles del original.</p></li>
+<li><p><strong>Lógica preservada:</strong> calculadoras de cloración,
+inventarios O&amp;M, GPS a UTM, fotografías, validaciones y
+sincronización offline no se modificaron; el cambio es de arquitectura
+de información e interfaz.</p></li>
+<li><p><strong>Navegación:</strong> 4 pestañas — Mis sistemas ·
+Registros · Sincronizar · Perfil. Los perfiles de consulta ven Mis
+sistemas · Resumen · Registros · Perfil.</p></li>
+<li><p><strong>Interfaz:</strong> evolución de la marca actual (cabecera
+clara, rojo institucional solo como acento), alto contraste, tema
+Auto/Claro/Oscuro y fuentes del sistema, sin recursos externos.</p></li>
+<li><p><strong>Impacto esperado:</strong> menos pasos para llegar a una
+actividad, menos riesgo de registrar en el sistema equivocado y estado
+de conexión y de envío siempre visible.</p></li>
+</ul>
+<h2 id="diagnóstico-de-la-versión-original">Diagnóstico de la versión
+original</h2>
+<p>La versión original (1.764 líneas) funciona, pero obliga al usuario a
+pensar primero en el módulo y después en el sistema, y repite esa
+elección en cada módulo.</p>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hallazgo</th>
+<th>Efecto en campo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>El inicio listaba módulos; el sistema se eligía dentro de cada uno
+(pantallas clo-sis, mnt-sis, selector de sistema en Monitoreo)</td>
+<td>Selección repetida de lo mismo; mayor número de toques para una
+actividad</td>
+</tr>
+<tr class="even">
+<td>No había un lugar que mostrara «qué me falta hacer hoy en este
+sistema»</td>
+<td>El operador debía recordar qué módulos ya había cubierto</td>
+</tr>
+<tr class="odd">
+<td>El sistema activo no era visible durante el registro</td>
+<td>Riesgo de registrar en un sistema equivocado</td>
+</tr>
+<tr class="even">
+<td>Estado de conexión y de envío disperso (píldora en Sincronizar,
+avisos en el inicio)</td>
+<td>Incertidumbre sobre si el dato ya salió del equipo</td>
+</tr>
+<tr class="odd">
+<td>Cabecera roja de gran tamaño y bloque «hero» en cada pantalla</td>
+<td>Menos espacio útil en pantallas pequeñas; rojo competiendo con
+alertas</td>
+</tr>
+<tr class="even">
+<td>Botones de acción al final del contenido, sin barra fija</td>
+<td>Desplazamiento largo para guardar en formularios extensos</td>
+</tr>
+<tr class="odd">
+<td>Sin indicador uniforme de avance en Cloración y Limpieza</td>
+<td>El usuario no sabe cuántos pasos le quedan</td>
+</tr>
+<tr class="even">
+<td>Un solo tema visual</td>
+<td>Poco legible a pleno sol; sin modo oscuro</td>
+</tr>
+</tbody>
+</table>
+<p>Lo que <strong>no</strong> se tocó por ser correcto: las calculadoras
+de cloración (anexo A5–A11), los inventarios y evaluaciones O&amp;M, la
+captura de coordenadas UTM, las fotografías mínimas, las validaciones y
+el modelo de sincronización.</p>
+<h2 id="evaluación-de-la-hipótesis-sistema-primero">Evaluación de la
+hipótesis «sistema primero»</h2>
+<p>La hipótesis es correcta: el trabajo de campo ocurre <strong>en un
+sistema concreto</strong>, así que el sistema es el objeto principal y
+la actividad es la acción que se aplica sobre él (patrón objeto →
+acción).</p>
+<p><strong>Por qué se valida</strong></p>
+<ul>
+<li><p>Cada registro pertenece a un sistema; elegirlo una sola vez evita
+repetirlo en cinco módulos.</p></li>
+<li><p>El operador piensa en «voy a San Juan», no en «voy a hacer
+Cloración».</p></li>
+<li><p>Permite mostrar por sistema lo pendiente, lo en curso y lo
+observado.</p></li>
+<li><p>Aplica a todos los actores: asignados (operador) o elegidos (ATM)
+llegan al mismo listado.</p></li>
+</ul>
+<p><strong>Matices y cómo se resolvieron</strong></p>
+<ol type="1">
+<li><p><strong>Borradores por actividad, no por sistema.</strong> El
+original guarda un borrador por módulo. Si ya existe uno en otro
+sistema, al iniciar la misma actividad se muestra una hoja con tres
+opciones: continuar ese borrador, descartarlo y empezar aquí, o
+cancelar.</p></li>
+<li><p><strong>Contexto visible dentro del flujo.</strong> Una barra
+«Sistema activo» de solo lectura aparece en cada pantalla de registro;
+el cambio de sistema solo se permite desde el hub, para no mover el
+contexto a mitad de un registro.</p></li>
+<li><p><strong>Sistemas por elegir.</strong> Quien no tiene asignaciones
+(p. ej. ATM) necesita primero escoger sistemas; la pantalla vacía de Mis
+sistemas lo guía con «Elegir sistemas».</p></li>
+</ol>
+<p><strong>Riesgos que se mantienen</strong></p>
+<ul>
+<li><p>Con muchos sistemas asignados hace falta búsqueda y filtros
+(incluidos: texto, tipo, «Con pendientes» y «Cerca de mí»).</p></li>
+<li><p>Algunas actividades podrían abarcar varios sistemas a la vez; la
+demo asume una actividad por sistema (ver supuestos).</p></li>
+</ul>
+<h2 id="arquitectura-de-información-y-navegación">Arquitectura de
+información y navegación</h2>
+<p>La jerarquía tiene cuatro niveles: <strong>Sistema → Hub del sistema
+→ Actividad → Confirmación</strong>. Las cuatro pestañas inferiores son
+transversales y siempre visibles fuera de los flujos de registro.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 33%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Nivel</th>
+<th>Pantalla</th>
+<th>Qué resuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pestaña 1</td>
+<td>Mis sistemas</td>
+<td>Lista de sistemas con estado (en curso, por enviar, observado),
+filtros y búsqueda; bloque «Para continuar» con borradores y
+observados</td>
+</tr>
+<tr class="even">
+<td>Hub</td>
+<td>Sistema (Actividades · Ficha · Historial)</td>
+<td>Elegir la actividad sobre el sistema; ver datos del sistema y sus
+registros</td>
+</tr>
+<tr class="odd">
+<td>Flujo</td>
+<td>Actividad (pasos con encabezado de avance)</td>
+<td>Registrar con el sistema fijado en la barra de contexto</td>
+</tr>
+<tr class="even">
+<td>Cierre</td>
+<td>Confirmación</td>
+<td>Registro guardado en el equipo; siguiente paso sugerido (Volver al
+sistema, Ir a Sincronizar, Ver mis registros)</td>
+</tr>
+<tr class="odd">
+<td>Pestaña 2</td>
+<td>Registros</td>
+<td>Historial de todo el equipo, filtrable por sistema y estado,
+agrupado por fecha</td>
+</tr>
+<tr class="even">
+<td>Pestaña 3</td>
+<td>Sincronizar</td>
+<td>Pendientes de envío, fotografías en espera, enviados recientes</td>
+</tr>
+<tr class="odd">
+<td>Pestaña 4</td>
+<td>Perfil</td>
+<td>Datos del usuario, tema, sincronización automática, modo
+demostración</td>
+</tr>
+</tbody>
+</table>
+<p>El contexto de sistema se deriva de la ruta y del borrador activo
+(ctxSid()), de modo que no hay un «estado global de sistema» que pueda
+quedar desactualizado. El botón Atrás siempre regresa por la pila Mis
+sistemas › Sistema › pantalla anterior.</p>
+<p><strong>Perfiles de consulta</strong> (tablero): mismas pestañas,
+pero Sincronizar se reemplaza por Resumen y todas las pantallas de
+registro quedan bloqueadas.</p>
+<h2 id="mapa-de-pantallas-y-justificación">Mapa de pantallas y
+justificación</h2>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 21%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pantalla</th>
+<th>Estado</th>
+<th>Justificación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mis sistemas</td>
+<td><strong>Nueva</strong> (reemplaza el inicio por módulos)</td>
+<td>Es la entrada única; materializa la hipótesis sistema-primero.
+Incluye «Para continuar», filtros y «Cerca de mí»</td>
+</tr>
+<tr class="even">
+<td>Hub del sistema</td>
+<td><strong>Nueva</strong></td>
+<td>Punto donde se elige la actividad; tres pestañas internas evitan
+mezclar acciones con consulta</td>
+</tr>
+<tr class="odd">
+<td>Cambiar de sistema (hoja)</td>
+<td><strong>Nueva</strong></td>
+<td>Cambio rápido entre sistemas sin volver a la lista; solo en el
+hub</td>
+</tr>
+<tr class="even">
+<td>Conflicto de borrador (hoja)</td>
+<td><strong>Nueva</strong></td>
+<td>Evita perder o mezclar un borrador de otra ubicación; tres salidas
+claras</td>
+</tr>
+<tr class="odd">
+<td>Registros</td>
+<td><strong>Nueva</strong> (absorbe «Guardados»)</td>
+<td>Un solo historial con filtro por sistema, chips de estado y
+agrupación por fecha</td>
+</tr>
+<tr class="even">
+<td>Resumen (consulta)</td>
+<td><strong>Nueva</strong> para perfiles de tablero</td>
+<td>Avance del mes por módulo y registros por módulo sin exponer
+formularios</td>
+</tr>
+<tr class="odd">
+<td>Barra «Sistema activo»</td>
+<td><strong>Nuevo componente</strong></td>
+<td>Previene registrar en el sistema equivocado</td>
+</tr>
+<tr class="even">
+<td>Encabezado de pasos</td>
+<td><strong>Nuevo componente</strong></td>
+<td>Avance uniforme en todos los flujos (Cloración, Limpieza,
+Monitoreo)</td>
+</tr>
+<tr class="odd">
+<td>Franja de conexión</td>
+<td><strong>Nuevo componente</strong></td>
+<td>Un solo lugar para sin conexión / por enviar; se oculta dentro de
+flujos cuando hay red</td>
+</tr>
+<tr class="even">
+<td>Monitoreo › Sistema</td>
+<td><strong>Modificada</strong></td>
+<td>Ya no pide elegir sistema; solo reservorio y mapa</td>
+</tr>
+<tr class="odd">
+<td>Limpieza › Verificación previa</td>
+<td><strong>Modificada</strong></td>
+<td>Sin selector de SAP; usa el sistema del hub</td>
+</tr>
+<tr class="even">
+<td>Cloración › contexto</td>
+<td><strong>Modificada</strong></td>
+<td>Solo punto, equipo y método; el sistema ya está en la barra</td>
+</tr>
+<tr class="odd">
+<td>Confirmaciones</td>
+<td><strong>Modificadas</strong></td>
+<td>Botones que llevan al hub, a Sincronizar o a Registros</td>
+</tr>
+<tr class="even">
+<td>Perfil</td>
+<td><strong>Modificada</strong></td>
+<td>Tema, sincronización automática y modo demostración separado del
+resto de opciones</td>
+</tr>
+<tr class="odd">
+<td>Elegir sistemas (ATM)</td>
+<td><strong>Conservada</strong>, reubicada</td>
+<td>Se accede desde el estado vacío de Mis sistemas</td>
+</tr>
+<tr class="even">
+<td>Selectores de sistema por módulo (clo-sis, mnt-sis)</td>
+<td><strong>Eliminadas</strong></td>
+<td>Redundantes con el hub</td>
+</tr>
+<tr class="odd">
+<td>Descargar sistemas (acción)</td>
+<td><strong>Vigente, con confirmación</strong></td>
+<td>La ficha de operador determina qué sistemas tiene asignados; el
+operador decide cuáles descargar y cada descarga se confirma con su
+tamaño. Se mantiene «Consultar nuevas asignaciones»</td>
+</tr>
+<tr class="even">
+<td>Ficha del sistema</td>
+<td>Nueva (dos pestañas)</td>
+<td>Mapa: pines por estado, distancia y todo el inventario por
+categorías de componentes. Datos: código, tipo, centro poblado, distrito
+y departamento. El reservorio es un componente más del inventario</td>
+</tr>
+<tr class="odd">
+<td>Mapa del sistema</td>
+<td>Nuevo componente</td>
+<td>Un solo estilo en todas las pantallas; el icono de pantalla completa
+abre el mapa grande (con nota de uso sin conexión) y reemplaza al botón
+«Ver mapa ampliado»; en la Ficha agranda en su lugar</td>
+</tr>
+<tr class="even">
+<td>Hojas de diálogo</td>
+<td>Modificadas</td>
+<td>Cabecera y pie fijos con scroll interno; botón destructivo en rojo y
+Cancelar en gris</td>
+</tr>
+<tr class="odd">
+<td>Formularios</td>
+<td>Modificados</td>
+<td>Etiqueta dentro de la caja, unidad dentro del campo, listas de
+opciones en una sola tarjeta y controles segmentados</td>
+</tr>
+</tbody>
+</table>
+<h2 id="flujos-por-módulo">Flujos por módulo</h2>
+<p>Todos los módulos arrancan desde el hub del sistema (tarjeta de
+actividad → Registrar) y terminan en una confirmación con el siguiente
+paso.</p>
+<table>
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Módulo</th>
+<th>Flujo en la demo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Monitoreo del servicio de agua</td>
+<td>Sistema (reservorio y mapa) → puntos de monitoreo → viviendas →
+confirmación</td>
+</tr>
+<tr class="even">
+<td>Cloración</td>
+<td>Contexto (punto, equipo, método) → caudal → cálculos → confirmación.
+Los resultados coinciden con el anexo (p. ej. 1.296 g en el caso de
+prueba)</td>
+</tr>
+<tr class="odd">
+<td>Limpieza y desinfección</td>
+<td>Verificación previa (población informada, EPP, insumos) con
+coordenadas UTM → componentes → unidades → insumos y fotografías (mín.
+4) → guardar unidad</td>
+</tr>
+<tr class="even">
+<td>O&amp;M agua potable</td>
+<td>Historial de visitas → Nueva visita → verificar inventario →
+componentes → registrar condiciones (estado, entorno, mejoras,
+fotografías) → revisar visita</td>
+</tr>
+<tr class="odd">
+<td>O&amp;M alcantarillado</td>
+<td>Mismo flujo que O&amp;M agua, con catálogo por tipología; se llega
+desde el salto «Alcantarillado» del hub</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cambios transversales en los flujos</strong></p>
+<ul>
+<li><p>Encabezado de pasos con segmentos de progreso (p. ej. «Unidad 1
+de 1 · Limpieza y desinfección»).</p></li>
+<li><p>Barra de acción fija al pie (Guardar unidad, Continuar
+registrando, Confirmar inventario).</p></li>
+<li><p>Mensajes de éxito breves tras cada componente («Captación:
+componente completado»).</p></li>
+<li><p>Borrador automático por actividad; reanudación desde «Para
+continuar» en Mis sistemas.</p></li>
+<li><p>Subsanación: un registro observado aparece en Mis sistemas y en
+Registros con plazo propuesto de 30 días desde la observación (valor
+propuesto, por validar).</p></li>
+<li><p>Descartar un borrador o una visita en curso: deslizar la fila en
+«Para continuar» (con el dedo o el cursor) y confirmar en una hoja con
+botón rojo. Cada pendiente es una tarjeta propia.</p></li>
+<li><p>El hub del sistema se muestra sin la barra inferior de pestañas,
+para no mezclar navegación general con el trabajo dentro del
+sistema.</p></li>
+<li><p>Monitoreo: cada reservorio es una tarjeta con código y nombre
+(«RES-01 · Reservorio …») y, debajo, ubigeo y centro poblado; con varios
+reservorios se elige tocando una tarjeta.</p></li>
+<li><p>La lista se titula siempre «Mis sistemas · N»; las tarjetas de
+sistema no llevan íconos pequeños (la nube aparece solo si falta
+descargar).</p></li>
+<li><p>Perfil: los botones de cierre de sesión y restablecimiento van al
+final del contenido, sin fijarse sobre él.</p></li>
+<li><p>Datos de prueba: SAP San Juan con 3 reservorios y SAP La Unión
+con 2, para probar la selección.</p></li>
+<li><p>Mapa de Monitoreo: muestra un pin por reservorio del sistema, con
+el elegido resaltado; las coordenadas del recuadro son las del
+reservorio seleccionado y cambian al elegir otro (tocando la tarjeta o
+el pin). Las coordenadas por reservorio son de ejemplo y deben
+reemplazarse por las del catálogo.</p></li>
+<li><p>Selectores segmentados de hasta tres opciones (p. ej. Tema):
+columnas de igual ancho y etiqueta centrada, sin marca de verificación;
+la opción activa se distingue por el color.</p></li>
+</ul>
+<h2 id="perfiles-y-permisos">Perfiles y permisos</h2>
+<p>Se mantienen los 13 perfiles del original; el cambio es qué ven en
+Mis sistemas y qué acciones tienen en el hub.</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 34%" />
+<col style="width: 15%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo de perfil</th>
+<th>Mis sistemas</th>
+<th>Hub</th>
+<th>Pestañas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Registrador con ficha de operador (p. ej. Operador A)</td>
+<td>Sistemas de su ficha, ya disponibles sin conexión</td>
+<td>Actividades con botón Registrar</td>
+<td>Mis sistemas · Registros · Sincronizar · Perfil</td>
+</tr>
+<tr class="even">
+<td>Registrador que elige sistemas (p. ej. Responsable del ATM)</td>
+<td>Estado vacío con «Elegir sistemas»; luego búsqueda por ámbito,
+centro poblado y prestador</td>
+<td>Igual</td>
+<td>Igual</td>
+</tr>
+<tr class="odd">
+<td>Consulta / tablero (p. ej. Jefe inmediato del ATM)</td>
+<td>Todos los sistemas del ámbito, solo lectura</td>
+<td>Actividades con botón Consultar</td>
+<td>Mis sistemas · Resumen · Registros · Perfil</td>
+</tr>
+</tbody>
+</table>
+<p>Las rutas permitidas para consulta son inicio, sistema, tablero,
+registros y perfil (VIEW_OK); cualquier otra ruta se redirige al hub. La
+etiqueta de cada tarjeta cambia de <strong>Registrar</strong> a
+<strong>Consultar</strong> para que el permiso sea evidente antes de
+tocar.</p>
+<h2 id="sistema-de-diseño">Sistema de diseño</h2>
+<p>La dirección visual adopta un estilo institucional del Estado peruano
+(referencial, por validar contra el Manual de Identidad Gráfica del
+MVCS, RM 134-2025-VIVIENDA): cabecera clara con franja roja superior,
+azul como color de acción y rojo institucional como acento.</p>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Elemento</th>
+<th>Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Color de acción</td>
+<td>--primary #00478F (claro) y #2A74D6 (oscuro); valores referenciales,
+por validar</td>
+</tr>
+<tr class="even">
+<td>Acento de marca</td>
+<td>--brand #CC1F1A (claro) y #E5483C (oscuro): marca, franja superior,
+alertas y acciones destructivas; valores referenciales, por validar</td>
+</tr>
+<tr class="odd">
+<td>Temas</td>
+<td>Auto, Claro y Oscuro, con tokens propios para cada uno</td>
+</tr>
+<tr class="even">
+<td>Tipografía</td>
+<td>Pila de fuentes del sistema; sin fuentes externas para que funcione
+sin conexión. Pendiente: tipografía oficial del manual (si se adopta,
+incrustarla en el aplicativo)</td>
+</tr>
+<tr class="odd">
+<td>Tamaño base</td>
+<td>16 px en cuerpo; mínimo 14 px en textos auxiliares (excepción frente
+a los 16 px de Gob.pe, a validar)</td>
+</tr>
+<tr class="even">
+<td>Controles</td>
+<td>Botones y campos de 52 px de alto (uso con guantes o a pleno
+sol)</td>
+</tr>
+<tr class="odd">
+<td>Acción principal</td>
+<td>Barra fija al pie en formularios (.pad &gt; .btns)</td>
+</tr>
+<tr class="even">
+<td>Componentes nuevos</td>
+<td>Barra de app clara, franja de conexión, barra de contexto,
+encabezado de pasos, tarjeta de sistema, tarjeta de actividad, pestañas
+del hub, hojas inferiores</td>
+</tr>
+<tr class="odd">
+<td>Barra de pestañas</td>
+<td>Píldora flotante centrada, solo íconos (Phosphor) con indicador
+deslizante, nombre en tooltip al pasar el cursor o pulsar prolongado,
+insignia de pendientes en Sincronizar</td>
+</tr>
+<tr class="even">
+<td>Cabecera institucional</td>
+<td>Franja «PERÚ» (rojo) + «Vivienda · DATASS» (gris) en Mis sistemas, y
+borde rojo de 3 px sobre la barra de app</td>
+</tr>
+<tr class="odd">
+<td>Movimiento</td>
+<td>Transiciones horizontales según dirección, microinteracciones en
+botones y tarjetas; respeta prefers-reduced-motion</td>
+</tr>
+<tr class="even">
+<td>Escalas normalizadas</td>
+<td>Tokens de texto (14–32 px), íconos (16–48 px), alturas (44/52 px) y
+radios; verificado de 320 px a tableta</td>
+</tr>
+</tbody>
+</table>
+<p>Se conservaron los nombres de clase del original para facilitar el
+traspaso al desarrollo.</p>
+<h2 id="usabilidad-y-accesibilidad">Usabilidad y accesibilidad</h2>
+<table>
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Heurística (Nielsen)</th>
+<th>Cómo se aplicó</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Visibilidad del estado</td>
+<td>Franja de conexión, insignias de pendientes, «Sistema activo»,
+avance por pasos y por unidades</td>
+</tr>
+<tr class="even">
+<td>Correspondencia con el mundo real</td>
+<td>El sistema es lo primero, como en la visita de campo; «Cerca de mí»
+para llegar al sistema donde se está</td>
+</tr>
+<tr class="odd">
+<td>Control y libertad</td>
+<td>Guardar y salir, borradores, Atrás coherente, opción de cancelar en
+la hoja de conflicto</td>
+</tr>
+<tr class="even">
+<td>Consistencia</td>
+<td>Mismas tarjetas, mismos pasos y misma barra de acción en los 5
+módulos</td>
+</tr>
+<tr class="odd">
+<td>Prevención de errores</td>
+<td>Contexto de solo lectura en flujos; conflicto de borrador; botones
+destructivos en rojo y separados</td>
+</tr>
+<tr class="even">
+<td>Reconocer antes que recordar</td>
+<td>«Para continuar» y el estado de hoy por actividad en cada tarjeta de
+sistema</td>
+</tr>
+<tr class="odd">
+<td>Diseño minimalista</td>
+<td>Se eliminó el bloque «hero» y la cabecera roja de gran tamaño</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Accesibilidad y uso en campo</strong></p>
+<ul>
+<li><p>Objetivos táctiles de 52 px; separación suficiente entre
+acciones.</p></li>
+<li><p>Alto contraste en tema claro y oscuro; el estado nunca depende
+solo del color (siempre hay ícono y texto: Pendiente, Sincronizado,
+Observado).</p></li>
+<li><p>Texto base de 16 px; el aplicativo real debe respetar el tamaño
+de fuente del sistema operativo.</p></li>
+<li><p>Etiquetas visibles en la barra de pestañas y en todos los
+campos.</p></li>
+</ul>
+<h2 id="offline-y-sincronización">Offline y sincronización</h2>
+<p>El modelo del original se conserva: todo se guarda en el equipo y se
+envía cuando hay conexión. Lo que cambia es la visibilidad.</p>
+<ul>
+<li><p><strong>Un solo lugar para el estado de red:</strong> la franja
+bajo la cabecera muestra «Sin conexión» y los registros por enviar;
+dentro de un flujo se oculta si hay red, para no apilarse con la barra
+de contexto.</p></li>
+<li><p><strong>Pestaña Sincronizar:</strong> pendientes de envío, aviso
+de fotografías en espera (con tamaño referencial) y enviados recientes
+con su código DAT.</p></li>
+<li><p><strong>Mensajes de garantía:</strong> tras guardar, «la
+información está guardada en este dispositivo»; un reintento no duplica
+registros.</p></li>
+<li><p><strong>Sistemas disponibles sin conexión:</strong> los de la
+ficha de operador ya están en el equipo; «Consultar nuevas asignaciones»
+requiere conexión.</p></li>
+<li><p><strong>Modo demostración</strong> (Perfil): permite simular
+conexión, falla de envío y restablecer datos para presentar los casos
+sin red real.</p></li>
+</ul>
+<h3 id="descarga-y-eliminación-de-sistemas-en-el-equipo">Descarga y
+eliminación de sistemas en el equipo</h3>
+<p>Principio: <strong>nada se descarga ni se quita sin que el usuario lo
+sepa y lo confirme</strong>. Las reglas son las mismas en todas las
+pantallas (Inicio, Perfil, Almacenamiento y Sistemas que
+supervisas).</p>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 41%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situación</th>
+<th>Operador</th>
+<th>Supervisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Origen de la lista</td>
+<td>Sistemas asignados en su ficha (web DATASS). Se ven siempre en Mis
+sistemas, descargados o no; el equipo guarda solo sus datos
+básicos.</td>
+<td>Elige en «Sistemas que supervisas» (filtro por distrito; secciones
+Elegidos / Disponibles). Elegir solo arma la lista: no descarga. Los
+elegidos se ven siempre en Mis sistemas, descargados o no.</td>
+</tr>
+<tr class="even">
+<td>Descargar</td>
+<td>Enlace «Descargar» en la tarjeta o «Descargar todos». Hoja de
+confirmación con datos del sistema, mapa del distrito si falta
+(opcional) y total en MB.</td>
+<td>Al tocar «Guardar · N sistemas» la app pregunta «¿Descargar ahora
+los nuevos? · X MB» (Descargar ahora / Más tarde). Después, igual que el
+operador: «Descargar» en la tarjeta o «Descargar todos», con
+confirmación.</td>
+</tr>
+<tr class="odd">
+<td>Sistema nuevo</td>
+<td>Etiqueta «Nuevo» (3 días) y aviso «Te asignaron…». No se descarga
+solo.</td>
+<td>No aplica.</td>
+</tr>
+<tr class="even">
+<td>Progreso y fallo</td>
+<td>«Descargando · NN %». Si se corta la conexión: «Descarga incompleta»
+con reintentar; se reanuda al volver la conexión porque ya fue
+aceptada.</td>
+<td>Igual.</td>
+</tr>
+<tr class="odd">
+<td>Perfil</td>
+<td>Secciones En tu equipo y Asignados sin descargar, con descarga
+individual y «Descargar todos».</td>
+<td>En tu equipo y Elegidos sin descargar.</td>
+</tr>
+<tr class="even">
+<td>Quitar del equipo</td>
+<td>Desde Almacenamiento, con confirmación (Quitar del equipo /
+Mantener). Sigue asignado y vuelve a «Sin descargar».</td>
+<td>Igual: sigue en «Sistemas que supervisas» como «Sin descargar». Para
+sacarlo de la lista se desmarca allí; si estaba descargado, pide
+confirmar que también se quita del equipo.</td>
+</tr>
+<tr class="odd">
+<td>Bloqueos al quitar</td>
+<td>Con conexión solamente. Nunca con actividad en curso, registros por
+enviar u observado por corregir (candado con el motivo y acceso para
+resolverlo).</td>
+<td>Igual; en la selección esos sistemas se marcan «se mantiene».</td>
+</tr>
+<tr class="even">
+<td>Sugerencia de 30 días</td>
+<td>«Puedes liberar X MB» con «Revisar»: solo resalta los sistemas sin
+actividad; nunca quita nada por su cuenta.</td>
+<td>Igual.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interacción-con-el-módulo-web-datass">Interacción con el módulo
+web DATASS</h2>
+<p>El aplicativo offline registra en campo; la supervisión, la
+validación y la administración ocurren en la web DATASS. En la app el
+operador solo ve el resultado de esas acciones (estados, observaciones,
+nuevas asignaciones). Esta sección mapea cada punto de contacto entre
+ambos.</p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 24%" />
+<col style="width: 26%" />
+<col style="width: 18%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Función</th>
+<th>En el aplicativo (operador)</th>
+<th>En la web DATASS</th>
+<th>Quién actúa en la web</th>
+<th>Plazo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Validación de registros</td>
+<td>Envía el registro; ve el estado «En validación»</td>
+<td>El registro entra a la bandeja de validación; se valida u observa
+con un comentario</td>
+<td>Supervisor (ATM)</td>
+<td>48 h para validar</td>
+</tr>
+<tr class="even">
+<td>Subsanación</td>
+<td>Corrige el registro observado y lo reenvía</td>
+<td>Vuelve a la bandeja con estado «Subsanado»</td>
+<td>Supervisor (ATM)</td>
+<td>30 días para subsanar</td>
+</tr>
+<tr class="odd">
+<td>Plazo de subsanación vencido</td>
+<td>Ve el estado «Vencido»; ya no puede reenviar</td>
+<td>El supervisor decide cómo proceder</td>
+<td>Supervisor (ATM)</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Anulación de un registro enviado</td>
+<td>Solicita la anulación con un motivo (duplicado, sistema equivocado,
+datos erróneos, otro)</td>
+<td>Se aprueba o rechaza; mientras tanto el registro sigue vigente</td>
+<td>ATM</td>
+<td>Sin plazo definido</td>
+</tr>
+<tr class="odd">
+<td>Ficha de operador y sistemas asignados</td>
+<td>«Consultar nuevas asignaciones» trae los sistemas agregados</td>
+<td>Se registra la ficha del operador y sus sistemas (hasta 3, en
+distintos centros poblados)</td>
+<td>ATM</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Corrección del catálogo (sistemas, componentes)</td>
+<td>No se corrige en la app; se indica que se solicite en la web</td>
+<td>Se corrige el dato del catálogo</td>
+<td>ATM / PNSR</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Titular nuevo registrado en campo</td>
+<td>Lo registra como titular nuevo</td>
+<td>Genera una alerta para revisión</td>
+<td>ATM</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Piletas de un registro ya enviado</td>
+<td>No se eliminan desde la app</td>
+<td>El supervisor las observa o anula</td>
+<td>Supervisor (ATM)</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Perfiles de supervisión (ATM, PNSR, RVCS)</td>
+<td>Solo consultan el tablero</td>
+<td>Supervisan, validan y gestionan usuarios</td>
+<td>ATM, PNSR, RVCS</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Parámetros del proceso</td>
+<td>Lee los plazos al sincronizar</td>
+<td>Se configuran los días de subsanación y las horas de validación</td>
+<td>Administrador</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ubicación imprecisa (GPS en rojo).</strong> Si la precisión
+del GPS es peor que el límite rojo (±50 m por defecto) y no mejora en 15
+segundos, el operador puede guardar el punto indicando un motivo (sin
+cobertura, árboles o techos cerca, quebrada o cerro cercano, u otro con
+descripción). El registro llega con la línea «Ubicación imprecisa
+(revisar en web)», que indica el punto, la precisión y el motivo. En la
+bandeja de validación de la web conviene resaltar estos registros para
+que el supervisor (ATM) decida si los valida o los observa.</p>
+<h3 id="ciclo-de-validación">Ciclo de validación</h3>
+<p><img src="media/image1.jpg"
+style="width:6in;height:2.66964in"
+alt="ciclo de validación de un registro · app y web DATASS" /></p>
+<p>ciclo de validación de un registro · app y web DATASS</p>
+<p>El operador solo actúa en la columna del aplicativo; validar,
+observar y cerrar por vencimiento ocurren en la web.</p>
+<h3 id="estados-que-ve-el-operador-en-la-app">Estados que ve el operador
+en la app</h3>
+<ul>
+<li><p><strong>Por enviar:</strong> guardado en el equipo, aún no llega
+a DATASS.</p></li>
+<li><p><strong>En validación (web):</strong> recibido; espera revisión
+del supervisor (48 h).</p></li>
+<li><p><strong>Validado:</strong> aprobado en la web.</p></li>
+<li><p><strong>Observado · por subsanar:</strong> el supervisor dejó un
+comentario; aparece en «Por corregir» del inicio con los días
+restantes.</p></li>
+<li><p><strong>Subsanado:</strong> reenviado tras corregir; vuelve a
+validación.</p></li>
+<li><p><strong>Vencido:</strong> pasó el plazo de 30 días sin
+subsanar.</p></li>
+<li><p><strong>Anulación solicitada / Anulado:</strong> el ATM revisa la
+solicitud; si la aprueba, el registro queda anulado.</p></li>
+</ul>
+<h3 id="lo-que-simula-la-demo">Lo que simula la demo</h3>
+<p>La demo no se conecta a la web: los registros observados y validados
+vienen precargados, la anulación se aprueba sola a los pocos segundos y
+«Consultar nuevas asignaciones» agrega un sistema de prueba (SAP El
+Mirador). Los plazos de 30 días y 48 h están fijos en el código como si
+vinieran de parámetros.</p>
+<h3 id="por-definir-con-el-equipo-del-módulo-web">Por definir con el
+equipo del módulo web</h3>
+<ul>
+<li><p>Cómo se avisa al operador de una observación nueva (al
+sincronizar o con notificación push).</p></li>
+<li><p>Qué ve el operador cuando el ATM rechaza una anulación y con qué
+motivo.</p></li>
+<li><p>Si la subsanación de un registro vencido se puede reabrir desde
+la web.</p></li>
+<li><p>Qué perfil configura los parámetros del proceso y si pueden
+variar por región.</p></li>
+<li><p>Cómo envía la API la marca de <strong>ubicación
+imprecisa</strong>: hoy llega como una línea de texto del registro
+(«Ubicación imprecisa (revisar en web)»). Para filtrar y resaltar estos
+registros en la bandeja de validación, la API debería enviarla como un
+campo propio por punto, con la precisión en metros, el motivo elegido y
+el nombre del punto.</p></li>
+<li><p>Si la institución exige precisión del GPS (en rojo, esperar 15 s
+y pedir el motivo) o solo marca el punto como <strong>ubicación
+imprecisa</strong>. En la demo la exigencia está apagada por defecto y
+se activa en Perfil → Modo demostración («Exigir precisión del GPS»);
+apagada, el punto en rojo se guarda al instante y queda marcado sin
+motivo.</p></li>
+</ul>
+<h2 id="supuestos-limitaciones-y-siguientes-pasos">Supuestos,
+limitaciones y siguientes pasos</h2>
+<p><strong>Supuestos y limitaciones de la demo</strong></p>
+<ul>
+<li><p>Un borrador por actividad (no por sistema); si hay otro en un
+sistema distinto se pregunta qué hacer.</p></li>
+<li><p>«Cerca de mí» usa ubicación simulada; la versión real debe usar
+el GPS del equipo.</p></li>
+<li><p>Plazo de subsanación de 30 días: valor propuesto, por confirmar
+con el negocio.</p></li>
+<li><p>Las fotografías son marcadores de posición; no se usa la
+cámara.</p></li>
+<li><p>Los datos son de demostración y se guardan en el navegador (clave
+propia del rediseño); no hay servidor.</p></li>
+<li><p>Se verificó con pruebas automatizadas en Monitoreo, Cloración y
+los flujos principales de Limpieza y O&amp;M sin errores de consola. Los
+casos largos de Limpieza (todas las unidades) y de subsanación completa
+se recorrieron solo parcialmente.</p></li>
+</ul>
+<p><strong>Siguientes pasos sugeridos</strong></p>
+<ol type="1">
+<li><p>Validar la demo con 3 a 5 operadores y ATM en campo (tareas:
+registrar una cloración, retomar un borrador, enviar con red
+intermitente).</p></li>
+<li><p>Decidir si algunas actividades deben admitir varios sistemas o un
+borrador por sistema.</p></li>
+<li><p>Confirmar el plazo de subsanación y la regla de
+«Observado».</p></li>
+<li><p>Probar con tamaños de fuente ampliados y en exteriores.</p></li>
+<li><p>Trasladar tokens y componentes al aplicativo real conservando los
+nombres de clase.</p></li>
+</ol>
+</main></div><script>document.querySelectorAll('main img').forEach(i=>{i.style.cursor='zoom-in';i.title='Toca para ampliar';i.onclick=()=>window.open(i.src,'_blank')})</script></body></html>

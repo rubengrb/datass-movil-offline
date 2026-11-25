@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#C8102E"><title>Manual de
+usuario · DATASS Móvil Offline</title>
+<link rel="icon" href="../icons/favicon-32-v3.png">
+<style>
+:root{--red:#C8102E;--ink:#1F2328;--mut:#5E6670;--line:#E4E6EA;--bg:#F6F7F9}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+header.top{position:sticky;top:0;z-index:5;background:var(--red);color:#fff;display:flex;align-items:center;gap:12px;padding:12px 18px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+header.top a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;opacity:.95}header.top b{font-size:16px;flex:1}
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;max-width:1180px;margin:0 auto;padding:24px 18px 64px}
+nav#TOC{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 12px}
+nav#TOC ul{list-style:none;margin:0;padding-left:10px}nav#TOC>ul{padding-left:0}nav#TOC a{color:var(--ink);text-decoration:none;display:block;padding:3px 6px;border-radius:6px}nav#TOC a:hover{background:#FBEDEE;color:var(--red)}
+nav#TOC ul ul a{color:var(--mut);font-size:13px}
+main{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 34px;min-width:0}
+h1{font-size:30px;line-height:1.2;margin:0 0 8px}h2{font-size:23px;margin:40px 0 12px;padding-top:8px;border-top:1px solid var(--line)}h3{font-size:18px;margin:28px 0 8px}
+a{color:var(--red)}img{max-width:100%;height:auto;border-radius:12px;display:block;margin:14px auto}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#F3F4F6}
+blockquote{margin:14px 0;padding:10px 16px;background:#FFF7E8;border-left:4px solid #E0A12B;border-radius:8px}blockquote p{margin:4px 0}
+code{background:#F3F4F6;padding:1px 5px;border-radius:5px;font-size:.92em}
+.upd{color:var(--mut);font-size:13px;margin:0 0 18px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;padding:14px 10px 48px}nav#TOC{position:static;max-height:none}main{padding:18px 16px}h1{font-size:25px}}
+</style></head><body>
+<header class="top"><b>Manual de
+usuario</b><a href="../">← Abrir la app</a></header>
+<div class="wrap"><nav id="TOC"><ul>
+<li><a href="#manual-de-usuario-datass-móvil-offline"
+id="toc-manual-de-usuario-datass-móvil-offline">Manual de usuario ·
+DATASS Móvil Offline</a>
+<ul>
+<li><a href="#antes-de-empezar" id="toc-antes-de-empezar">1. Antes de
+empezar</a></li>
+<li><a href="#moverse-por-la-app" id="toc-moverse-por-la-app">2. Moverse
+por la app</a></li>
+<li><a href="#trabajar-sin-conexión-y-enviar"
+id="toc-trabajar-sin-conexión-y-enviar">3. Trabajar sin conexión y
+enviar</a></li>
+<li><a href="#mis-sistemas" id="toc-mis-sistemas">4. Mis
+sistemas</a></li>
+<li><a href="#registrar-actividades" id="toc-registrar-actividades">5.
+Registrar actividades</a></li>
+<li><a href="#borradores-y-para-continuar"
+id="toc-borradores-y-para-continuar">6. Borradores y «Para
+continuar»</a></li>
+<li><a href="#después-de-enviar-validación-observaciones-y-anulación"
+id="toc-después-de-enviar-validación-observaciones-y-anulación">7.
+Después de enviar: validación, observaciones y anulación</a></li>
+<li><a href="#almacenamiento-ver-y-liberar-espacio"
+id="toc-almacenamiento-ver-y-liberar-espacio">8. Almacenamiento: ver y
+liberar espacio</a></li>
+<li><a href="#ajustes" id="toc-ajustes">9. Ajustes</a></li>
+<li><a href="#las-reglas-en-una-página"
+id="toc-las-reglas-en-una-página">10. Las reglas en una página</a></li>
+<li><a href="#preguntas-frecuentes"
+id="toc-preguntas-frecuentes">Preguntas frecuentes</a></li>
+</ul></li>
+</ul></nav><main><p class="upd">Actualizado: 25/11/2026 14:16</p>
+<h1 id="manual-de-usuario-datass-móvil-offline">Manual de usuario ·
+DATASS Móvil Offline</h1>
+<p>Nov 24, 2026 · @Ruben</p>
+<h2 id="antes-de-empezar">1. Antes de empezar</h2>
+<p><strong>DATASS Móvil Offline</strong> es la aplicación para registrar
+en campo las actividades de los sistemas de agua y saneamiento:
+monitoreo del servicio, cloración, limpieza y desinfección, y operación
+y mantenimiento (O&amp;M). Funciona <strong>sin internet</strong>:
+guardas todo en el celular y lo envías a DATASS cuando tengas señal.</p>
+<blockquote>
+<p>Este manual describe la demo navegable. Los nombres, DNI y sistemas
+que verás son datos de prueba.</p>
+</blockquote>
+<h3 id="quién-la-usa">¿Quién la usa?</h3>
+<table>
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Perfil</th>
+<th>Qué hace en la app</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Operador</strong> (JASS, municipalidad, prestador)</td>
+<td>Registra las actividades de los sistemas que tiene asignados (hasta
+3).</td>
+</tr>
+<tr class="even">
+<td><strong>Supervisión</strong> (ATM, PNSR, RVCS)</td>
+<td>Consulta el tablero y el historial. Valida y observa los registros
+en la <strong>web DATASS</strong>, no en la app.</td>
+</tr>
+</tbody>
+</table>
+<p>Lo que no puedes hacer, lo verás bloqueado o con la palabra
+<strong>Consultar</strong> en lugar de <strong>Registrar</strong>.</p>
+<h3 id="instalar-la-app-en-el-celular">Instalar la app en el
+celular</h3>
+<ol type="1">
+<li><p>Abre en Chrome el enlace que te compartió tu
+coordinador.</p></li>
+<li><p>Toca el menú ⋮ y elige <strong>Instalar app</strong> (o
+<strong>Agregar a la pantalla principal</strong>).</p></li>
+<li><p>Aparecerá el ícono del celular con la gota en tu pantalla de
+inicio.</p></li>
+<li><p>Ábrela <strong>una vez con conexión</strong>: desde ese momento
+funciona sin internet.</p></li>
+</ol>
+<p>En iPhone: abre el enlace en Safari → Compartir → <strong>Agregar a
+inicio</strong>.</p>
+<h3 id="iniciar-sesión">Iniciar sesión</h3>
+<p>Ingresa con tu <strong>DNI</strong> y tu contraseña. La primera vez
+necesitas conexión para descargar tus sistemas asignados.</p>
+<blockquote>
+<p><strong>Ejemplo:</strong> Juan Pérez (Operador A) entra con su DNI y
+ve en el inicio sus sistemas SAP San Juan y SAP La Unión.</p>
+</blockquote>
+<p><strong>Paso a paso</strong></p>
+<ol type="1">
+<li><p>Toca <strong>Iniciar sesión</strong> e ingresa tu DNI y
+contraseña en la página segura de DATASS (<strong><u>para la demo solo
+Toque “Usuarios de demostración”, elija un perfil y entre con el botón
+iniciar sesión</u></strong>).</p></li>
+<li><p>Llegas a <strong>Inicio</strong>: tu semana, los accesos para
+registrar, lo que tienes por corregir y tus sistemas.</p></li>
+</ol>
+<p><img src="media/image1.jpg"
+style="width:6in;height:5.89336in" alt="Iniciar sesión e Inicio" /></p>
+<h2 id="moverse-por-la-app">2. Moverse por la app</h2>
+<h3 id="las-tres-páginas-principales">Las tres páginas principales</h3>
+<p>La barra flotante de abajo tiene tres botones:</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Botón</th>
+<th>Página</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>💧 (gota)</td>
+<td><strong>Inicio · Mis sistemas</strong></td>
+<td>Ver tus sistemas, lo que tienes por continuar y lo que debes
+corregir.</td>
+</tr>
+<tr class="even">
+<td>🕒 (reloj)</td>
+<td><strong>Historial</strong></td>
+<td>Ver tus registros del mes y su estado.</td>
+</tr>
+<tr class="odd">
+<td>☁️ (nube)</td>
+<td><strong>Sincronizar</strong></td>
+<td>Enviar a DATASS lo que tienes guardado. Un punto naranja indica
+pendientes.</td>
+</tr>
+</tbody>
+</table>
+<p>En la imagen: 1 Inicio, 2 Historial (en calendario) y 3
+Sincronizar.</p>
+<p><img src="media/image2.jpg"
+style="width:6in;height:3.97284in"
+alt="Inicio, Historial y Sincronizar" /></p>
+<h3 id="gestos">Gestos</h3>
+<ul>
+<li><p><strong>Deslizar a los lados</strong> sobre el contenido cambia
+entre Inicio, Historial y Sincronizar.</p></li>
+<li><p>No cambia de página si deslizas sobre una fila que se mueve de
+lado (filtros, «Registrar», «Por corregir») ni sobre una tarjeta que se
+desliza para descartar.</p></li>
+<li><p><strong>Deslizar desde el borde izquierdo</strong> hacia la
+derecha regresa a la pantalla anterior, igual que la flecha ←.</p></li>
+<li><p>Dentro de un sistema, deslizar a los lados cambia entre
+<strong>Actividades</strong>, <strong>Ficha</strong> e
+<strong>Historial</strong>.</p></li>
+</ul>
+<h3 id="cabeceras">Cabeceras</h3>
+<ul>
+<li><p>Dentro de un sistema, la cabecera muestra el
+<strong>código</strong> (por ejemplo, SAP-003), el nombre y el centro
+poblado. Al bajar en la página, se compacta para dejar más
+espacio.</p></li>
+<li><p>En las actividades por pasos, la cabecera muestra la
+<strong>barra de pasos</strong> (ver sección 5).</p></li>
+<li><p>El ícono de wifi arriba a la derecha indica si tienes conexión.
+Tócalo para ver el detalle.</p></li>
+</ul>
+<h2 id="trabajar-sin-conexión-y-enviar">3. Trabajar sin conexión y
+enviar</h2>
+<p>Todo lo que registras se guarda primero <strong>en el
+celular</strong>. Llega a DATASS solo cuando lo envías con conexión.</p>
+<h3 id="estados-de-un-registro">Estados de un registro</h3>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 48%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estado</th>
+<th>Qué significa</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Por enviar</strong></td>
+<td>Está guardado solo en tu celular.</td>
+<td>Envíalo cuando tengas señal.</td>
+</tr>
+<tr class="even">
+<td><strong>Enviando…</strong></td>
+<td>Se está subiendo a DATASS.</td>
+<td>Espera; no cierres la app.</td>
+</tr>
+<tr class="odd">
+<td><strong>Sincronizado</strong></td>
+<td>DATASS lo recibió y te dio un <strong>código de recepción</strong>
+(por ejemplo, DAT-2026-000003).</td>
+<td>Nada. Ya está seguro.</td>
+</tr>
+<tr class="even">
+<td><strong>Error de envío</strong></td>
+<td>Falló la conexión a mitad del envío.</td>
+<td>Toca <strong>Reintentar</strong>. El registro no se pierde.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cómo-enviar">Cómo enviar</h3>
+<ul>
+<li><p><strong>Automático:</strong> si en Ajustes tienes activada la
+<strong>Sincronización automática</strong>, la app envía los pendientes
+apenas recupera señal.</p></li>
+<li><p><strong>Manual:</strong> ve a <strong>Sincronizar</strong> y toca
+<strong>Enviar todos</strong>, o desliza un registro en la lista y toca
+<strong>Enviar</strong>.</p></li>
+</ul>
+<p>En <strong>Sincronizar</strong> ves lo que está por enviar y el botón
+<strong>Enviar ahora</strong> (imagen de la sección 2, pantalla 3).</p>
+<h3 id="fotografías">Fotografías</h3>
+<ul>
+<li><p>Las fotos ocupan la mayor parte del envío (unos 0,35 MB cada
+una). Si puedes, envía con wifi.</p></li>
+<li><p>Las fotos se borran del celular solas cuando DATASS confirma que
+las recibió.</p></li>
+<li><p>Mantén al menos <strong>500 MB libres</strong> en el celular para
+trabajar tranquilo.</p></li>
+</ul>
+<blockquote>
+<p><strong>Regla de oro:</strong> un registro «Por enviar» solo existe
+en tu celular. No desinstales la app ni borres sus datos hasta que todo
+esté sincronizado.</p>
+</blockquote>
+<h2 id="mis-sistemas">4. Mis sistemas</h2>
+<h3 id="en-el-equipo-o-en-la-nube">En el equipo o en la nube</h3>
+<ul>
+<li><p><strong>En el equipo:</strong> el sistema ya está descargado.
+Puedes registrar en él sin conexión.</p></li>
+<li><p><strong>En la nube</strong>: está asignado a ti, pero aún no está
+en tu celular. Toca <strong>Descargar</strong> en su tarjeta (con
+conexión): la app te muestra qué va a bajar (datos del sistema y, si
+falta, el mapa del distrito) y cuánto pesa, y descarga solo cuando
+confirmas. <strong>Descargar todos</strong> baja los que faltan de una
+vez, también con confirmación.</p></li>
+</ul>
+<p>Usa los filtros de arriba de la lista (<strong>Todos</strong>,
+<strong>En el equipo</strong>, <strong>En la nube</strong>,
+<strong>Agua</strong>, <strong>Alcantarillado</strong>) para encontrar
+uno rápido, o el buscador por código, nombre o centro poblado.</p>
+<p>Nada se descarga sin que lo confirmes: ni al iniciar sesión ni cuando
+te asignan un sistema nuevo. Mientras baja verás «Descargando · %» en la
+tarjeta. Si se corta la conexión aparece «Descarga incompleta» y la
+descarga continúa sola al volver la señal, porque ya la habías
+aceptado.</p>
+<p><strong>Paso a paso: descargar un sistema</strong></p>
+<ol type="1">
+<li><p>En la tarjeta del sistema, toca <strong>Descargar</strong> (con
+conexión).</p></li>
+<li><p>Revisa qué se descargará y cuánto pesa. Si ya tienes el mapa del
+distrito, no se vuelve a bajar. Toca <strong>Descargar · X
+MB</strong>.</p></li>
+<li><p>La tarjeta muestra el avance. Al terminar, verás «Todo al día» y
+el sistema queda listo para usarlo sin internet.</p></li>
+</ol>
+<p><img src="media/image3.jpg"
+style="width:6in;height:3.97284in" alt="Descargar un sistema" /></p>
+<h3 id="sistemas-asignados">Sistemas asignados</h3>
+<ul>
+<li><p>Tus sistemas los registra el ATM en tu ficha de operador, en la
+web DATASS. Un operador puede tener <strong>hasta 3 sistemas</strong>,
+en distintos centros poblados.</p></li>
+<li><p>Cuando el ATM te asigna uno nuevo, aparece en Mis sistemas con la
+etiqueta <strong>Nuevo</strong> y un aviso («Te asignaron…»). No se
+descarga solo: descárgalo cuando lo vayas a usar. Para consultar
+asignaciones al momento, ve a Ajustes → Consultar nuevas asignaciones
+(con conexión).</p></li>
+</ul>
+<h3 id="en-tu-perfil">En tu Perfil</h3>
+<p>En <strong>Perfil</strong> tus sistemas se agrupan en <strong>En tu
+equipo</strong> (ya descargados) y <strong>Asignados sin
+descargar</strong>. Desde ahí también puedes descargar uno o todos, con
+la misma confirmación. Cada sistema conserva su ícono de agua o
+alcantarillado.</p>
+<p>En la imagen, la sección <strong>En tu equipo</strong> del Perfil;
+debajo aparecen los <strong>Asignados sin descargar</strong> con su
+botón de descarga.</p>
+<p><img src="media/image4.jpg"
+style="width:4.31267in;height:8.2in" alt="Sistemas en el Perfil" /></p>
+<h3 id="si-supervisas-sistemas">Si supervisas sistemas</h3>
+<p>Los perfiles de supervisión no tienen sistemas asignados: eligen los
+que van a supervisar en <strong>Sistemas que supervisas</strong> (botón
+Cambiar sistemas en Inicio, o desde Ajustes).</p>
+<ul>
+<li><p><strong>Elegir no es descargar.</strong> Las casillas solo arman
+tu lista: puedes tener 10 o 20 sistemas en distintos lugares sin ocupar
+espacio. La lista se filtra por distrito y se divide en
+<strong>Elegidos</strong> y <strong>Disponibles</strong>.</p></li>
+<li><p>Cada sistema indica qué pasará: «En tu equipo», «Sin descargar»,
+«Se quitará de tu lista», «Se quitará del equipo» o «… · se mantiene» si
+tiene trabajo pendiente.</p></li>
+<li><p>Al marcar un sistema nuevo, su línea del centro poblado cambia a
+«+ Se agregará a tu lista». Al tocar <strong>Guardar · N
+sistemas</strong> la app te pregunta si quieres descargar ahora los
+nuevos, con su tamaño: <strong>Descargar ahora</strong> o <strong>Más
+tarde</strong>. Si desmarcaste uno que ya estaba en tu equipo, primero
+pide confirmar, con la opción Mantener.</p></li>
+<li><p>En Inicio y en Perfil ves todos tus elegidos; los que faltan
+aparecen como en la nube, con <strong>Descargar</strong> (en Perfil, en
+Elegidos sin descargar).</p></li>
+</ul>
+<p><strong>Paso a paso: armar tu lista</strong></p>
+<ol type="1">
+<li><p>En Inicio toca <strong>Cambiar sistemas</strong>.</p></li>
+<li><p>Marca los sistemas que vas a supervisar (puedes filtrar por
+distrito) y toca <strong>Guardar · N sistemas</strong>.</p></li>
+<li><p>La app te pregunta si quieres descargar ahora los nuevos. Toca
+<strong>Descargar ahora</strong> o <strong>Más tarde</strong>.</p></li>
+</ol>
+<p><img src="media/image5.jpg"
+style="width:6in;height:3.97284in" alt="Sistemas que supervisas" /></p>
+<h3 id="dentro-de-un-sistema">Dentro de un sistema</h3>
+<p>Al tocar un sistema entras a su página, con tres pestañas:</p>
+<ul>
+<li><p><strong>Actividades:</strong> las actividades que puedes
+registrar, con su estado del día (por ejemplo, «Hoy:
+pendiente»).</p></li>
+<li><p><strong>Ficha:</strong> el mapa con los componentes (reservorios,
+captación, etc.) y sus datos. Toca el mapa para ampliarlo; toca un
+componente de la lista para que el mapa vuele hasta él.</p></li>
+<li><p><strong>Historial:</strong> los registros de ese
+sistema.</p></li>
+</ul>
+<blockquote>
+<p>Si un dato del sistema está mal (nombre, ubicación de un componente),
+no se corrige en la app: pídelo a tu ATM para que lo corrija en la web
+DATASS.</p>
+</blockquote>
+<h2 id="registrar-actividades">5. Registrar actividades</h2>
+<p>Para registrar, entra al sistema → pestaña
+<strong>Actividades</strong> → <strong>Registrar</strong> en la
+actividad que corresponda. También puedes empezar desde
+<strong>Registrar</strong> en el inicio y elegir el sistema.</p>
+<h3 id="monitoreo-del-servicio-de-agua">5.1 Monitoreo del servicio de
+agua</h3>
+<p>El monitoreo es un <strong>recorrido</strong>: empiezas en el
+reservorio y sigues por la vivienda intermedia y las piletas, en el
+orden establecido en tu comunidad.</p>
+<ol type="1">
+<li><p>Elige el <strong>reservorio</strong> de partida. El mapa vuela
+hasta él y te muestra la distancia y el tiempo caminando.</p></li>
+<li><p>Toca <strong>Iniciar recorrido</strong>.</p></li>
+<li><p>En cada punto: confirma tu ubicación, mide el <strong>cloro
+residual</strong>, toma las fotos y guarda.</p></li>
+<li><p>Al terminar todos los puntos, revisa el resumen y
+envíalo.</p></li>
+</ol>
+<p><strong>Paso a paso</strong></p>
+<ol type="1">
+<li><p>Abre el sistema y, en <strong>Monitoreo del servicio de
+agua</strong>, toca <strong>Registrar</strong>.</p></li>
+<li><p>Elige el reservorio y toca <strong>Iniciar monitoreo
+diario</strong>.</p></li>
+<li><p>En el mapa, toca <strong>Registrar este punto</strong> en el
+punto que corresponde.</p></li>
+<li><p>Completa el cloro y las fotos del reservorio y toca
+<strong>Guardar punto</strong>.</p></li>
+<li><p>En cada vivienda, completa las preguntas y toca
+<strong>Siguiente</strong>; luego cloro y fotos, y <strong>Guardar
+punto</strong>.</p></li>
+<li><p>Con todos los puntos registrados, toca <strong>Revisar resumen
+del monitoreo</strong>.</p></li>
+<li><p>Revisa los resultados y toca <strong>Sincronizar con
+DATASS</strong> (o <strong>Guardar y enviar después</strong> si no
+tienes señal).</p></li>
+</ol>
+<p><img src="media/image6.jpg"
+style="width:6in;height:3.97284in" alt="Monitoreo: pasos 1 a 3" /></p>
+<p><img src="media/image7.jpg"
+style="width:6in;height:3.97284in" alt="Monitoreo: pasos 4 a 6" /></p>
+<p><img src="media/image8.jpg"
+style="width:4.31267in;height:8.2in"
+alt="Monitoreo: resumen y envío (paso 7)" /></p>
+<p><strong>Cloro residual:</strong></p>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Lectura</th>
+<th>Qué pasa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entre <strong>0,5 y 1,5 mg/L</strong></td>
+<td>Dentro del rango recomendado (verde).</td>
+</tr>
+<tr class="even">
+<td>Menos de 0,5 o más de 1,5 mg/L</td>
+<td>Se guarda igual, pero queda registrada como <strong>alerta</strong>
+para la JASS.</td>
+</tr>
+<tr class="odd">
+<td>Menos de 0 o más de 5 mg/L</td>
+<td>Valor fuera de escala: revisa la lectura del comparador.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Semáforo del GPS</strong> (la precisión aparece como un punto
+de color junto a tu ubicación):</p>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 27%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Color</th>
+<th>Precisión</th>
+<th>Qué puedes hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>🟢 Verde</td>
+<td>Hasta ±20 m</td>
+<td>Guardar normalmente.</td>
+</tr>
+<tr class="even">
+<td>🟡 Ámbar</td>
+<td>Entre ±20 y ±50 m</td>
+<td>Guardar, con aviso. Si puedes, espera unos segundos o muévete a un
+lugar abierto.</td>
+</tr>
+<tr class="odd">
+<td>🔴 Rojo</td>
+<td>Más de ±50 m</td>
+<td><strong>Primero el botón muestra «Esperando señal». Si a los 15
+segundos no mejora, aparece «Guardar igual»: eliges el motivo y el punto
+queda marcado como «Ubicación imprecisa» para que tu supervisor lo
+revise en la web.</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Los límites de 20 y 50 m se pueden ajustar en <strong>Ajustes →
+Precisión del GPS</strong>.</p>
+<p>En la imagen, el aviso de precisión baja en el mapa. Puedes guardar
+el punto igual; quedará marcado «Ubicación imprecisa» para que tu
+supervisor lo revise.</p>
+<p><img src="media/image9.jpg"
+style="width:4.31267in;height:8.2in"
+alt="Aviso de precisión baja del GPS" /></p>
+<p><strong>Distancia al punto anterior:</strong> cada punto muestra
+cuántos metros hay desde el último punto que registraste. Si estás
+<strong>muy cerca</strong> (menos de 20 m, o menos que la suma de las
+precisiones del GPS), la app te pregunta si ya te moviste. Puedes
+guardar igual: la distancia queda en el registro.</p>
+<blockquote>
+<p><strong>Ejemplo:</strong> registras la Pileta 2 a 8 m de la Pileta 1.
+La app te avisa «Estás muy cerca de Pileta 1. ¿Ya te moviste a esta
+vivienda?». Si es correcto, guardas y listo.</p>
+</blockquote>
+<h3 id="cloración">5.2 Cloración</h3>
+<p>La cloración se registra <strong>por pasos</strong>. La cantidad
+depende del equipo y del método:</p>
+<table>
+<colgroup>
+<col style="width: 63%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Caso</th>
+<th>Pasos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Método de preparación A</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>Método de preparación B (agrega la preparación previa)</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>Equipo «Otros» (clorinador en línea, clorogás)</td>
+<td>4, sin calculadora guiada</td>
+</tr>
+</tbody>
+</table>
+<p>Los pasos son: punto de cloración → equipo instalado → medición de
+caudal → método de preparación → (preparación previa) → dosis → cálculo
+→ preparación → calibración → resumen.</p>
+<p><strong>Barra de pasos</strong> (en la cabecera):</p>
+<p><img src="media/image10.jpg"
+style="width:6in;height:1.78571in"
+alt="barra de pasos · cinco estados de los puntos" /></p>
+<p>barra de pasos · cinco estados de los puntos</p>
+<p>En la app los colores siguen la paleta elegida; la forma de cada
+punto es la misma en todas.</p>
+<p><strong>Reglas de la barra y la flecha:</strong></p>
+<ul>
+<li><p>La flecha ← va al <strong>paso anterior</strong>. Desde el paso
+1, vuelve al sistema. Lo llenado no se pierde.</p></li>
+<li><p>Toca un punto ya llenado para ir directo a ese paso, hacia atrás
+o hacia adelante, hasta tu avance máximo.</p></li>
+<li><p>Si al regresar cambias el <strong>método</strong> o el
+<strong>equipo</strong>, los pasos siguientes cambian y el avance máximo
+se reinicia en el paso donde estás.</p></li>
+</ul>
+<p><strong>Puntos de cloración creados en campo:</strong> si el punto no
+está en la lista, toca <strong>Agregar otro punto de cloración</strong>
+(caseta de bombeo, planta de tratamiento, captación o línea de
+distribución). Mientras el registro no se envíe, el punto aparece como
+<strong>«Nuevo · por enviar»</strong> y puedes <strong>editarlo</strong>
+o <strong>eliminarlo</strong>. Una vez enviado, ya no se edita desde la
+app.</p>
+<p><strong>Equipos:</strong> cada tarjeta muestra una descripción corta.
+Toca la <strong>ⓘ</strong> junto al nombre para ver la descripción
+completa y un dibujo grande del equipo.</p>
+<p><strong>Medición de caudal con recipiente:</strong> elige el volumen
+del recipiente (10 L, 20 L u otro), toca <strong>Iniciar</strong> cuando
+empieza a llenarse y <strong>Detener y registrar</strong> cuando se
+llena. Haz al menos 3 mediciones; la app calcula el caudal con ellas. Si
+el sistema tiene caudalímetro u otro instrumento, elige «Lectura de
+instrumento» y anota la lectura con su unidad.</p>
+<p><strong>Paso a paso</strong></p>
+<ol type="1">
+<li><p>Elige el punto donde está el equipo y toca
+<strong>Continuar</strong>.</p></li>
+<li><p>Confirma o elige el equipo instalado y toca
+<strong>Continuar</strong>.</p></li>
+<li><p>Mide el caudal y toca <strong>Usar este caudal</strong>.</p></li>
+<li><p>Revisa la capacidad del tanque y la dosis, y toca
+<strong>Calcular preparación</strong>.</p></li>
+<li><p>Revisa la cantidad de hipoclorito y toca <strong>Ver pasos de
+preparación</strong>.</p></li>
+<li><p>Completa la preparación y la calibración. En el resumen toca
+<strong>Guardar y sincronizar</strong> o <strong>Guardar en el
+equipo</strong>.</p></li>
+<li><p>Verás la confirmación con todos los datos del registro.</p></li>
+</ol>
+<p><img src="media/image11.jpg"
+style="width:6in;height:3.97284in" alt="Cloración: pasos 1 a 3" /></p>
+<p><img src="media/image12.jpg"
+style="width:6in;height:5.89336in" alt="Cloración: pasos 4 y 5" /></p>
+<p><img src="media/image13.jpg"
+style="width:6in;height:5.89336in" alt="Cloración: pasos 6 y 7" /></p>
+<h3 id="limpieza-y-desinfección">5.3 Limpieza y desinfección</h3>
+<p>Registra la limpieza de cada unidad del sistema (reservorio,
+captación, etc.) con sus fotos. La app te muestra cuántas unidades
+llevas (por ejemplo, «7 de 7»).</p>
+<p><strong>Paso a paso</strong></p>
+<ol type="1">
+<li><p>Confirma la verificación previa (población informada, EPP e
+insumos) y toca <strong>Seleccionar componentes</strong>.</p></li>
+<li><p>Elige el componente que vas a limpiar.</p></li>
+<li><p>Registra el método, los insumos y las 4 fotos (antes, durante,
+después e insumos) y toca <strong>Guardar unidad</strong>.</p></li>
+</ol>
+<p><img src="media/image14.jpg"
+style="width:6in;height:3.97284in" alt="Limpieza y desinfección" /></p>
+<h3 id="operación-y-mantenimiento-agua-potable-y-alcantarillado">5.4
+Operación y mantenimiento (agua potable y alcantarillado)</h3>
+<p>Registra una visita al sistema: su situación y el estado de cada
+componente. Si encuentras un componente adicional en campo, puedes
+agregarlo; quedará para revisión en la web.</p>
+<p><strong>Paso a paso</strong></p>
+<ol type="1">
+<li><p>Toca <strong>Nueva visita</strong>.</p></li>
+<li><p>Verifica el inventario de componentes y toca <strong>Confirmar
+inventario</strong>.</p></li>
+<li><p>Registra las condiciones de cada componente con su foto y toca
+<strong>Guardar</strong>.</p></li>
+</ol>
+<p><img src="media/image15.jpg"
+style="width:6in;height:3.97284in"
+alt="Operación y mantenimiento" /></p>
+<h2 id="borradores-y-para-continuar">6. Borradores y «Para
+continuar»</h2>
+<p>La app <strong>guarda sola</strong> mientras registras. Si sales a la
+mitad (regresas al inicio, cierras la app o se apaga el celular), el
+registro queda como <strong>borrador</strong>.</p>
+<ul>
+<li><p>Los borradores aparecen en el inicio, en <strong>Para
+continuar</strong>, con la actividad, el sistema, hace cuánto lo tocaste
+y tu avance (por ejemplo, «1 de 4 puntos»).</p></li>
+<li><p>Toca la tarjeta o <strong>Continuar</strong> para seguir donde te
+quedaste.</p></li>
+<li><p>Puedes tener un borrador por actividad en cada sistema.</p></li>
+</ul>
+<h3 id="descartar-un-borrador">Descartar un borrador</h3>
+<p>Si ya no lo necesitas, <strong>desliza la tarjeta hacia la
+izquierda</strong> y toca <strong>Descartar</strong>. La app te pide
+confirmar, porque lo descartado no se puede recuperar.</p>
+<blockquote>
+<p><strong>Ejemplo:</strong> empezaste un monitoreo en SAP San Juan,
+registraste el reservorio y tuviste que irte. Al día siguiente, en el
+inicio verás «Monitoreo · SAP San Juan · 1 de 4 puntos». Lo tocas y
+sigues con la vivienda intermedia.</p>
+</blockquote>
+<h2 id="después-de-enviar-validación-observaciones-y-anulación">7.
+Después de enviar: validación, observaciones y anulación</h2>
+<p>Cuando un registro llega a DATASS, un supervisor (ATM) lo revisa en
+la <strong>web DATASS</strong>. En la app solo ves el resultado.</p>
+<p><img src="media/image16.jpg"
+style="width:6in;height:2.66964in"
+alt="ciclo de validación de un registro · celular y web" /></p>
+<p>ciclo de validación de un registro · celular y web</p>
+<p>Tú solo actúas en la columna de la izquierda; aprobar, observar y
+cerrar por vencimiento ocurre en la web.</p>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 50%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estado en la app</th>
+<th>Qué significa</th>
+<th>Plazo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>En validación</strong></td>
+<td>El supervisor todavía no lo revisa.</td>
+<td>El supervisor tiene 48 h.</td>
+</tr>
+<tr class="even">
+<td><strong>Validado</strong></td>
+<td>Aprobado. No tienes que hacer nada.</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td><strong>Observado · por subsanar</strong></td>
+<td>El supervisor dejó un comentario (por ejemplo, «Falta la fotografía
+de insumos»).</td>
+<td>Tienes <strong>30 días</strong> para corregir.</td>
+</tr>
+<tr class="even">
+<td><strong>Subsanado</strong></td>
+<td>Lo corregiste y reenviaste; vuelve a validación.</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td><strong>Vencido</strong></td>
+<td>Pasaron los 30 días sin corregir. Ya no se puede reenviar desde la
+app.</td>
+<td>Coordina con tu supervisor.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="corregir-un-registro-observado">Corregir un registro
+observado</h3>
+<ol type="1">
+<li><p>En el inicio, en <strong>Por corregir</strong>, verás la tarjeta
+con los días que te quedan («Vence en 26 días») o si ya venció.</p></li>
+<li><p>Tócala, lee la observación del supervisor y toca
+<strong>Corregir</strong>.</p></li>
+<li><p>Cambia lo que pide la observación y reenvía.</p></li>
+</ol>
+<p>En la imagen: 1 el registro observado en <strong>Pendientes</strong>
+del sistema, 2 el detalle con la observación y el botón <strong>Corregir
+y reenviar</strong>, 3 la pantalla de corrección con <strong>Reenviar a
+validación</strong>.</p>
+<p><img src="media/image17.jpg"
+style="width:6in;height:3.97284in"
+alt="Corregir un registro observado" /></p>
+<h3 id="pedir-la-anulación-de-un-registro-ya-enviado">Pedir la anulación
+de un registro ya enviado</h3>
+<p>Un registro <strong>sincronizado</strong> ya no se puede borrar desde
+la app. Si te equivocaste:</p>
+<ol type="1">
+<li><p>Abre el registro en <strong>Historial</strong> y toca
+<strong>Solicitar anulación</strong>.</p></li>
+<li><p>Elige el motivo: registro duplicado, sistema equivocado, datos
+erróneos u otro.</p></li>
+<li><p>El ATM revisa la solicitud en la web. Mientras tanto, el registro
+sigue vigente.</p></li>
+</ol>
+<p>Un registro <strong>por enviar</strong> sí se puede eliminar, porque
+todavía no está en DATASS: deslízalo en la lista y toca
+<strong>Eliminar</strong>.</p>
+<h2 id="almacenamiento-ver-y-liberar-espacio">8. Almacenamiento: ver y
+liberar espacio</h2>
+<p>En <strong>Ajustes → Almacenamiento</strong> ves cuánto ocupa DATASS
+en tu celular:</p>
+<ul>
+<li><p>Una barra de colores con lo que ocupan los
+<strong>mapas</strong>, los <strong>sistemas</strong> y las
+<strong>fotos por enviar</strong>, y el espacio libre del
+celular.</p></li>
+<li><p>Una sugerencia cuando tienes sistemas sin actividad en los
+últimos 30 días que podrías quitar. Solo te avisa: con
+<strong>Revisar</strong> se resaltan esos sistemas, pero nunca se quita
+nada por su cuenta.</p></li>
+<li><p>La lista de sistemas descargados, de mapas y de fotos por enviar,
+cada uno con su tamaño.</p></li>
+</ul>
+<p>Lo que más ocupa suelen ser los mapas (decenas de MB por distrito) y
+las fotos. Cada sistema ocupa alrededor de 1 MB.</p>
+<h3 id="quitar-un-sistema-del-equipo">Quitar un sistema del equipo</h3>
+<p>Toca la papelera junto al sistema. La app te dice cuánto espacio
+liberas y qué pasará, y te deja elegir <strong>Quitar del
+equipo</strong> o <strong>Mantener</strong>. No se borra nada en
+DATASS.</p>
+<ul>
+<li><p><strong>Operador</strong>: el sistema sigue asignado. Queda «Sin
+descargar» en Mis sistemas (y en Perfil, en Asignados sin descargar) y
+puedes volver a descargarlo con conexión. Mientras tanto, sin conexión
+no podrás registrar en él.</p></li>
+<li><p><strong>Supervisión</strong>: igual que el operador, el sistema
+sigue en Sistemas que supervisas como «Sin descargar» y puedes volver a
+descargarlo con conexión. Para sacarlo de tu lista, desmárcalo en
+Sistemas que supervisas.</p></li>
+</ul>
+<p>Para quitar un sistema necesitas conexión. Sin señal, tus sistemas se
+mantienen en el equipo.</p>
+<p>En la imagen: 1 Almacenamiento con la papelera junto al sistema, 2 la
+confirmación con <strong>Quitar del equipo</strong> o
+<strong>Mantener</strong>.</p>
+<p><img src="media/image18.jpg"
+style="width:6in;height:5.89336in"
+alt="Quitar un sistema del equipo" /></p>
+<h3 id="cuándo-no-se-puede-quitar-un-sistema">Cuándo NO se puede quitar
+un sistema</h3>
+<p>Para que no pierdas trabajo, la papelera se cambia por un
+<strong>candado</strong> 🔒 en estos casos:</p>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 43%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Motivo</th>
+<th>Por qué</th>
+<th>Qué te ofrece la app</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Tiene una actividad en curso</strong></td>
+<td>Hay un borrador sin terminar en ese sistema.</td>
+<td><strong>Continuar registro</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Tiene registros por enviar</strong></td>
+<td>Esos registros solo están en tu celular.</td>
+<td><strong>Enviar ahora</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Tiene un registro observado por corregir</strong></td>
+<td>Para corregirlo necesitas los datos del sistema.</td>
+<td><strong>Ir a corregir</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Al tocar el candado, la app explica el motivo y te lleva a
+resolverlo. Cuando el sistema queda sin pendientes, ya puedes
+quitarlo.</p>
+<blockquote>
+<p><strong>¿Y si quiero borrar un borrador que ya no sirve?</strong>
+Descártalo a propósito desde <strong>Para continuar</strong> (sección
+6). Después podrás quitar el sistema. No hay un botón de «borrar de
+todos modos», para evitar perder trabajo por accidente.</p>
+</blockquote>
+<h3 id="mapas">Mapas</h3>
+<p>Desde <strong>Gestionar mapas por distrito</strong> puedes descargar,
+actualizar o quitar el mapa de cada distrito. Un mapa sirve para todos
+tus sistemas de esa zona y se sugiere actualizarlo cada 6 meses. Sin
+mapa descargado, sin señal verás el mapa ilustrado.</p>
+<h2 id="ajustes">9. Ajustes</h2>
+<p>Toca tu foto o tus iniciales (arriba a la izquierda en el inicio)
+para abrir tu Perfil y entra a <strong>Ajustes</strong>.</p>
+<table>
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Opción</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Tema</strong></td>
+<td>Claro, oscuro o automático (sigue al celular).</td>
+</tr>
+<tr class="even">
+<td><strong>Apariencia</strong></td>
+<td>La paleta de colores de la app, el tamaño de las tarjetas (compacta
+o amplia) y las sombras. La paleta por defecto es
+<strong>Institucional</strong> (rojo).</td>
+</tr>
+<tr class="odd">
+<td><strong>Vistas</strong></td>
+<td>Cómo ver el Historial (resumen o calendario) y el recorrido de
+monitoreo (mapa o lista).</td>
+</tr>
+<tr class="even">
+<td><strong>Almacenamiento</strong></td>
+<td>Cuánto ocupa la app y cómo liberar espacio (sección 8).</td>
+</tr>
+<tr class="odd">
+<td><strong>Precisión del GPS</strong></td>
+<td>Los límites del semáforo: verde hasta ±20 m y rojo desde ±50 m
+(sección 5.1).</td>
+</tr>
+<tr class="even">
+<td><strong>Sincronización automática</strong></td>
+<td>Si está activada, envía los pendientes apenas recuperas señal.</td>
+</tr>
+<tr class="odd">
+<td><strong>Consultar nuevas asignaciones</strong></td>
+<td>Trae los sistemas que el ATM te agregó en la web. Necesita
+conexión.</td>
+</tr>
+<tr class="even">
+<td><strong>Permisos</strong></td>
+<td>Qué actividades puede registrar tu perfil.</td>
+</tr>
+</tbody>
+</table>
+<p>Al final de Ajustes está la <strong>versión de la app</strong> (por
+ejemplo, «Versión 24/11 · 22:00»). Úsala para comprobar que tienes la
+última versión.</p>
+<h3 id="recibir-una-versión-nueva">Recibir una versión nueva</h3>
+<p>Cuando se publica una versión nueva, la app la descarga sola al
+abrirla con conexión. Para usarla: ciérrala por completo y ábrela otra
+vez.</p>
+<h2 id="las-reglas-en-una-página">10. Las reglas en una página</h2>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tema</th>
+<th>Regla</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sistemas asignados</td>
+<td>Hasta 3 por operador, en distintos centros poblados. Los asigna el
+ATM en la web.</td>
+</tr>
+<tr class="even">
+<td>Trabajo sin conexión</td>
+<td>Solo en sistemas <strong>en el equipo</strong>. Nada se descarga sin
+tu confirmación: descárgalos antes de ir a campo.</td>
+</tr>
+<tr class="odd">
+<td>Envío</td>
+<td>Un registro «Por enviar» solo existe en tu celular hasta que se
+sincroniza.</td>
+</tr>
+<tr class="even">
+<td>GPS</td>
+<td>Verde hasta ±20 m, ámbar hasta ±50 m, rojo desde ±50 m. En rojo se
+puede guardar y el punto queda marcado «Ubicación imprecisa» para
+revisión. En la demo, con «Exigir precisión del GPS» (Perfil → Modo
+demostración) se espera 15 segundos y se pide el motivo.</td>
+</tr>
+<tr class="odd">
+<td>Distancia entre puntos</td>
+<td>Aviso si estás a menos de 20 m del punto anterior. Puedes guardar
+igual.</td>
+</tr>
+<tr class="even">
+<td>Cloro residual</td>
+<td>Rango recomendado 0,5 a 1,5 mg/L. Fuera de rango se registra como
+alerta.</td>
+</tr>
+<tr class="odd">
+<td>Cloración por pasos</td>
+<td>9 pasos (método A), 10 (método B) o 4 (equipo «Otros»). La flecha va
+al paso anterior; desde el paso 1, al sistema.</td>
+</tr>
+<tr class="even">
+<td>Puntos creados en campo</td>
+<td>Se editan o eliminan mientras el registro no se envíe.</td>
+</tr>
+<tr class="odd">
+<td>Borradores</td>
+<td>La app guarda sola. Un borrador por actividad en cada sistema. Se
+descartan deslizando la tarjeta.</td>
+</tr>
+<tr class="even">
+<td>Validación</td>
+<td>La hace el supervisor en la web, en un plazo de 48 h.</td>
+</tr>
+<tr class="odd">
+<td>Observaciones</td>
+<td>30 días para corregir y reenviar. Después queda «Vencido».</td>
+</tr>
+<tr class="even">
+<td>Anulación</td>
+<td>Un registro enviado no se borra: se pide la anulación al ATM. Uno
+por enviar sí se elimina.</td>
+</tr>
+<tr class="odd">
+<td>Quitar un sistema</td>
+<td>Siempre con confirmación y con conexión. No se puede con actividad
+en curso, registros por enviar o un observado por corregir.</td>
+</tr>
+<tr class="even">
+<td>Fotos</td>
+<td>Se borran del celular cuando DATASS confirma la recepción. Mantén al
+menos 500 MB libres.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="preguntas-frecuentes">Preguntas frecuentes</h2>
+<p><strong>Registré todo sin señal. ¿Se perdió?</strong> No. Está
+guardado en tu celular como «Por enviar». Se enviará cuando tengas
+conexión (solo, si tienes la sincronización automática activada, o desde
+<strong>Sincronizar</strong>).</p>
+<p><strong>El botón dice «Esperando señal» y no me deja
+guardar.</strong> El GPS está en rojo (precisión peor que ±50 m). Sal a
+un lugar abierto, lejos de techos y árboles, y espera unos segundos. Ese
+bloqueo solo aparece si está activo «Exigir precisión del GPS» (Perfil →
+Modo demostración): si a los 15 segundos no mejora, toca «Guardar
+igual», elige el motivo y guarda. Si no está activo, verás el aviso pero
+puedes guardar al instante. Tu supervisor verá la marca «Ubicación
+imprecisa» al validar.</p>
+<p><strong>Me equivoqué en un registro que ya envié.</strong> Ábrelo en
+Historial y toca <strong>Solicitar anulación</strong>. Si el supervisor
+lo observa, podrás corregirlo desde <strong>Por corregir</strong>.</p>
+<p><strong>No aparece un sistema que me asignaron.</strong> Con
+conexión, ve a <strong>Ajustes → Consultar nuevas asignaciones</strong>.
+Si sigue sin aparecer, consulta con tu ATM.</p>
+<p><strong>No me deja quitar un sistema del equipo.</strong> Tiene algo
+pendiente: una actividad en curso, registros por enviar o un registro
+observado. Toca el candado para ver cuál y resolverlo.</p>
+<p><strong>¿Cómo sé si tengo la última versión?</strong> Mira el número
+de versión al final de <strong>Ajustes</strong> y compáralo con el que
+te indique tu coordinador.</p>
+</main></div><script>document.querySelectorAll('main img').forEach(i=>{i.style.cursor='zoom-in';i.title='Toca para ampliar';i.onclick=()=>window.open(i.src,'_blank')})</script></body></html>
