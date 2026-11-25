@@ -5421,12 +5421,14 @@ function cpNice(s){const raw=(s.cpCod?s.cpCod+' - ':'')+String(s.cp||''),m=raw.m
 
 /* ===== Deslizar entre pestañas (pestañas del sistema y barra inferior) ===== */
 (function(){
- const E='cubic-bezier(.2,0,0,1)',SKIP='.hqa.hqs,.swrow,.mapx,.chips,.fchips,.hchips,.hchips2,.hobs,.hcal,.hhweek,input,textarea,select,[contenteditable],.sheet,.drawer';
- const tabsNow=()=>{/* solo las pestañas superiores de un sistema; la barra inferior se cambia tocando */const h=document.querySelectorAll('#app .hubtabs [data-act="hubTab"]');if(h.length)return {list:[...h].map(b=>b.dataset.arg),cur:[...h].findIndex(b=>b.classList.contains('on')),go:k=>act.hubTab(k)};return null};
+ const E='cubic-bezier(.2,0,0,1)',SKIP='.hqa.hqs,.swrow,.swrap,.mapx,.chips,.fchips,.hchips,.hchips2,.hobs,.hcal,.hhweek,input,textarea,select,[contenteditable],.sheet,.drawer';
+ const tabsNow=()=>{/* pestañas superiores de un sistema, o páginas principales de la barra inferior (solo en la página raíz de cada una) */const h=document.querySelectorAll('#app .hubtabs [data-act="hubTab"]');if(h.length)return {list:[...h].map(b=>b.dataset.arg),cur:[...h].findIndex(b=>b.classList.contains('on')),go:k=>act.hubTab(k)};
+  const tb=[...document.querySelectorAll('#app .tabbar [data-act="tab"]')].map(b=>b.dataset.arg);if(tb.length>1&&tb.includes(S.nav.route)&&!(S.nav.stack||[]).length)return {list:tb,cur:tb.indexOf(S.nav.route),go:k=>tab(k),bar:1};return null};
+ /* filas que se desplazan de lado por sí mismas (filtros, carruseles): su gesto tiene prioridad */
+ const hscroll=t=>{for(let el=t;el&&el.id!=='scroll';el=el.parentElement){if(el.scrollWidth>el.clientWidth+2){const o=getComputedStyle(el).overflowX;if(o==='auto'||o==='scroll')return true}}return false};
  let g=null;
- document.addEventListener('touchstart',e=>{g=null;if(e.touches.length!==1||UI.sheet||UI.drawer||UI.sync)return;const t=e.touches[0],sc=document.getElementById('scroll');if(!sc||!sc.contains(e.target)||e.target.closest(SKIP))return;
-  const a=document.getElementById('app').getBoundingClientRect();if(t.clientX-a.left<=24&&document.querySelector('#app .appbar [data-act="back"]'))return;
-  const T=tabsNow();if(!T||T.cur<0)return;g={sc,T,x0:t.clientX,y0:t.clientY,dx:0,t0:performance.now(),w:a.width,live:false}},{passive:true});
+ document.addEventListener('touchstart',e=>{g=null;if(e.touches.length!==1||UI.sheet||UI.drawer||UI.sync)return;const t=e.touches[0],sc=document.getElementById('scroll');if(!sc||!sc.contains(e.target)||e.target.closest(SKIP)||hscroll(e.target))return;
+  const a=document.getElementById('app').getBoundingClientRect();const T=tabsNow();if(!T||T.cur<0)return;if(t.clientX-a.left<=24&&(T.bar||document.querySelector('#app .appbar [data-act="back"]')))return;if(T.bar&&e.target.closest('.mapcv,.fmap,.rpscr,.mpwrap,[data-swipe]'))return;g={sc,T,x0:t.clientX,y0:t.clientY,dx:0,t0:performance.now(),w:a.width,live:false}},{passive:true});
  document.addEventListener('touchmove',e=>{if(!g)return;const t=e.touches[0],dx=t.clientX-g.x0,dy=t.clientY-g.y0;
   if(!g.live){if(Math.abs(dx)<10&&Math.abs(dy)<10)return;if(Math.abs(dy)>Math.abs(dx)*.8){g=null;return}g.live=true;g.sc.style.transition='none';g.sc.style.willChange='transform'}
   if(e.cancelable)e.preventDefault();const next=g.T.cur+(dx<0?1:-1),has=next>=0&&next<g.T.list.length;g.dx=has?dx:dx*.25;g.sc.style.transform=`translateX(${g.dx}px)`;g.sc.style.opacity=String(1-Math.min(.5,Math.abs(g.dx)/g.w*.6))},{passive:false});
@@ -6660,7 +6662,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 24/11 · 18:19</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 24/11 · 20:20</p></div>');return v}}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
