@@ -3411,6 +3411,8 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 .seg button{flex-direction:column;gap:2px}.seg button .segl{display:inline-flex;align-items:center;gap:8px}
 .segdef{display:block;font-size:11px;font-weight:600;opacity:.75;letter-spacing:.01em}
 .shopt .shl{display:flex;flex-direction:column;gap:1px}
+.selamb button{display:inline-flex;align-items:center;gap:4px}.selamb button svg.i{width:16px;height:16px}
+.ambl .row{width:100%;text-align:left;display:flex;align-items:center;gap:12px;min-height:48px}.ambl .row .cnt{color:var(--muted);font-weight:600}.ambl .row.on b{color:var(--primary)}.ambl .row svg.i{color:var(--primary)}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6185,14 +6187,14 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
 {const cpNm=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
  const selChanged=()=>{const d=P_().draft||[];return JSON.stringify([...d].sort())!==JSON.stringify([...scopeIds()].sort())};
  const selList=()=>{const n=P_(),d=n.draft||[],q=(n.q||'').toLowerCase().trim(),fk=n.fk||'all',fcp=n.fcp||'',fpr=n.fpr||'';
-  return ambito().filter(x=>(!q||(x.nombre+' '+x.sap+' '+x.cp+' '+x.prest).toLowerCase().includes(q))&&(!fcp||x.cp===fcp)&&(!fpr||x.prest===fpr)&&(fk==='all'||(fk.startsWith('d:')?x.distrito===fk.slice(2):fk==='on'?d.includes(x.id):fk==='alc'?x.kind==='alc':x.kind!=='alc')))};
- LIVE.sel=()=>{const d=P_().draft||[],L=selList();const n0=P_(),act0=!!((n0.q||'').trim()||n0.fcp||n0.fpr||(n0.fk&&n0.fk!=='all')),tot=ambito().length;
+  return ambito().filter(x=>(!n.fdep||x.dep===n.fdep)&&(!n.fprov||x.provincia===n.fprov)&&(!n.fdis||x.distrito===n.fdis)&&(!q||(x.nombre+' '+x.sap+' '+x.cp+' '+x.prest).toLowerCase().includes(q))&&(!fcp||x.cp===fcp)&&(!fpr||x.prest===fpr)&&(fk==='all'||(fk.startsWith('d:')?x.distrito===fk.slice(2):fk==='on'?d.includes(x.id):fk==='alc'?x.kind==='alc':x.kind!=='alc')))};
+ LIVE.sel=()=>{const d=P_().draft||[],L=selList();const n0=P_(),act0=!!((n0.q||'').trim()||n0.fcp||n0.fpr||n0.fdep||n0.fprov||n0.fdis||(n0.fk&&n0.fk!=='all')),tot=ambito().length;
   if(!L.length)return fltEmpty('No hay sistemas con esos filtros.',act0,'selClear');
   const fl=act0?`<div class="fltl" role="status"><span>Mostrando <b>${L.length} de ${tot}</b></span><button data-act="selClear">${icon('x')}Limpiar filtros</button></div>`:'';
-  const dlL=dlOf(),sv=scopeIds();
+  const dlL=dlOf(),sv=scopeIds(),_md=new Set(ambito().map(z=>z.distrito)).size>1;
   const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
    const was=sv.includes(x.id),tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):(on?`<span class="sltg dl">${icon('plus')}Se agregará a tu lista</span>`:'');
-   return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.nombre)}</b><small>${esc(x.sap)} · ${esc(cpNm(x))}${x.distrito?' · '+esc(x.distrito):''}</small>${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
+   return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.sap)} · ${esc(x.nombre)}</b><small>CP ${cpNice(x)}${x.distrito&&_md&&!P_().fdis?' · '+esc(x.distrito):''}</small>${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
   return [['el','Elegidos'],['av','Disponibles']].map(([k,t])=>{const G=L.filter(x=>(sv.includes(x.id)?'el':'av')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
    return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='av'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
  screens.sel=()=>{const p=prof();if(!p.sel)return screens.home();const n=P_();const d=n.draft||(n.draft=[...scopeIds()]);
@@ -6204,14 +6206,14 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
   <div class="hhsrch">${icon('search')}<input class="inp" placeholder="Buscar sistema, código o centro poblado" data-bind="nav.p.q" data-live enterkeyhint="search" value="${esc(n.q||'')}" aria-label="Buscar sistema"><button class="hsx" data-act="srchClear" data-arg="q" aria-label="Borrar búsqueda" ${(n.q||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
   const body=`${hero}<div class="pad hhpad selpad">
   ${S.online?'':`<div class="note warn" style="margin:0 0 12px">${icon('wifioff')}<div>Necesitas conexión para elegir o quitar sistemas. Los ya elegidos siguen disponibles sin conexión.</div></div>`}
-  <div class="chips selch" role="group" aria-label="Filtrar por distrito">${chips.map(([k,t,c])=>`<button class="${fk===k?'on':''}" aria-pressed="${fk===k}" data-act="selFk" data-arg="${k}">${t} · ${c}</button>`).join('')}</div>
+  ${selAmbBar()}
   ${more?`<div class="grid2 selmore">${selectF('nav.p.fcp',[['','Todos los centros poblados'],...cps],n.fcp||'')}${selectF('nav.p.fpr',[['','Todos los prestadores'],...prs],n.fpr||'')}</div>`:''}
   <div id="live">${LIVE.sel()}</div></div>
   <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${icon('check')} Guardar · ${d.length} sistema${d.length===1?'':'s'}</button></div>`;
   return {title:'Sistemas que supervisas',back:true,nobar:true,tabs:false,body}};
  setTimeout(()=>{
   act.selFk=k=>{P_().fk=k;save();render()};
-  act.selClear=()=>{const n=P_();n.q='';n.fcp='';n.fpr='';n.fk='all';UI.selMore=0;save();render()};
+  act.selClear=()=>{const n=P_();n.q='';n.fcp='';n.fpr='';n.fk='all';n.fdep='';n.fprov='';n.fdis='';UI.selMore=0;save();render()};
   act.selGrp=k=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const n=P_(),d=n.draft,G=selList().filter(x=>k==='av'?!scopeIds().includes(x.id):k==='nodl'?!dlOf().includes(x.id):k==='eq'?dlOf().includes(x.id):(x.kind==='alc'?'alc':'sap')===k),full=G.every(x=>d.includes(x.id));
    if(!full){G.forEach(x=>{if(!d.includes(x.id))d.push(x.id)})}else{const busy=id=>(S.mon&&S.mon.sysIdx===id)||(S.lyd&&S.lyd.sysIdx===id)||(S.clo&&S.clo.sysId===id)||S.visits.some(v=>v.sysId===id&&!v.saved&&v.dni===S.user.dni)||myUnsynced().some(r=>r.sysId===id);let kept=0;G.forEach(x=>{if(busy(x.id)){kept++;return}const i=d.indexOf(x.id);if(i>=0)d.splice(i,1)});if(kept)toast(`${kept} sistema${kept>1?'s':''} con trabajo pendiente se mantiene${kept>1?'n':''}. Quítalo${kept>1?'s':''} uno por uno.`,'warn')}
    selRefresh()};
@@ -6703,7 +6705,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 11:42</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 13:19</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6858,6 +6860,20 @@ setTimeout(()=>{if(typeof act==='undefined')return;act.toggleGpsReq=function(){S
 
 /* valores por defecto: inicio de sesión con color e Historial en calendario */
 {const _rD=render;render=function(){try{if(S.loginStyle==null)S.loginStyle='rojo';if(S.histView==null)S.histView='cal'}catch(e){}return _rD.apply(this,arguments)}}
+
+/* Sistemas que supervisas: filtro por ámbito en cascada (departamento → provincia → distrito) */
+const AMB_LV={dep:['Departamento','fdep','dep'],prov:['Provincia','fprov','provincia'],dis:['Distrito','fdis','distrito']};
+function selLevels(){const a=prof().amb;return a==='pais'?['dep','prov','dis']:a==='dep'?['prov','dis']:a==='prov'?['dis']:[]}
+function selAmbBase(lv){const n=P_(),L=selLevels(),i=L.indexOf(lv);return ambito().filter(x=>L.slice(0,i).every(k=>{const f=AMB_LV[k][1],fld=AMB_LV[k][2];return !n[f]||x[fld]===n[f]}))}
+function selAmbOpts(k){const fld=AMB_LV[k][2],B=selAmbBase(k),m={};B.forEach(x=>{const v=x[fld];if(v)m[v]=(m[v]||0)+1});return Object.keys(m).sort((a,b)=>a.localeCompare(b,'es')).map(v=>[v,m[v]])}
+function selAmbBar(){const L=selLevels();if(!L.length)return '';const n=P_();
+ return `<div class="chips selch selamb" role="group" aria-label="Filtrar por ámbito">${L.map(k=>{const lab=AMB_LV[k][0],v=n[AMB_LV[k][1]];
+  return `<button class="${v?'on':''}" aria-pressed="${!!v}" data-act="selAmb" data-arg="${k}">${esc(v||lab)}${icon('down')}</button>`}).join('')}</div>`}
+setTimeout(()=>{if(typeof act==='undefined')return;
+ act.selAmb=function(k){const lab=AMB_LV[k][0],f=AMB_LV[k][1],n=P_(),O=selAmbOpts(k),tot=selAmbBase(k).length,cur=n[f]||'';
+  sheet({title:lab,html:`<div class="card list ambl">${[['','Todos',tot],...O.map(([v,c])=>[v,v,c])].map(([v,t,c])=>`<button class="row ${cur===v?'on':''}" data-act="selAmbSet" data-arg="${k}|${esc(v)}"><div class="grow"><b>${esc(t)}</b></div><span class="cnt">${c}</span>${cur===v?icon('check'):''}</button>`).join('')}</div>`,actions:[]})};
+ act.selAmbSet=function(a){const i=a.indexOf('|'),k=a.slice(0,i),v=a.slice(i+1),n=P_(),L=selLevels();n[AMB_LV[k][1]]=v;L.slice(L.indexOf(k)+1).forEach(x=>n[AMB_LV[x][1]]='');UI.sheet=null;save();render()};
+},0);
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
