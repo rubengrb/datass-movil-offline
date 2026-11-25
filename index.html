@@ -3419,6 +3419,7 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 @keyframes dlbout{0%{opacity:1;max-height:90px}60%{opacity:0;max-height:90px;margin-bottom:16px;padding-top:12px;padding-bottom:12px}100%{opacity:0;max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}}
 .slr .grow small.sladd{display:flex;align-items:center;gap:4px;color:var(--primary);font-weight:700}.slr .grow small.sladd svg.i{width:14px;height:14px;flex:none}
 .slr .grow small.tgin{animation:tgin .22s ease-out}
+.lgdemo{justify-content:space-between!important;text-align:left}.lgdemo svg.i{margin-left:auto;flex:none}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5996,7 +5997,7 @@ screens.login=()=>{const demo=UI.demo?`<div class="card list" style="margin-top:
   <p class="lgacc">¿Necesitas una cuenta? <button class="lglink" data-act="lgSoon" data-arg="Solicitud de cuenta">Solicitar aquí</button></p>
   </div><hr class="lghr"><div class="lghelp"><button data-act="lgSoon" data-arg="Manuales">${icon('file')}Manuales</button><button data-act="lgSoon" data-arg="Cuestionarios">${icon('clip')}Cuestionarios</button></div><p class="lgsup">Soporte técnico: <b>datass@vivienda.gob.pe</b></p>
   <p class="lgcopy">© 2026 Ministerio de Vivienda, Construcción y Saneamiento<br><span>gob.pe/vivienda</span></p>
-  <button class="linkbtn lgdemo" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración</button>${demo}
+  <button class="linkbtn lgdemo" data-act="toggleDemo" aria-expanded="${!!UI.demo}"><span>Usuarios de demostración</span>${icon(UI.demo?'down':'chev')}</button>${demo}
  </div></div>`}};
 setTimeout(()=>{if(typeof act!=='undefined')act.lgSoon=a=>toast(a+': disponible en la versión final','info')},0);
 
@@ -6711,7 +6712,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 14:16</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 14:17</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
