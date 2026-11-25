@@ -6670,7 +6670,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 24/11 · 22:09</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 24/11 · 22:13</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6696,7 +6696,7 @@ screens.almacen=()=>{const ids=almIds(),M=mapsOf(),L=mapDistritos(),maps=L.filte
  <div class="card" style="padding:16px"><div class="mpuse"><b style="font-size:15px">DATASS usa ${f1(tot)} MB</b><span>${f1(free/1000)} GB libres en el equipo</span></div>
   <div class="albar" role="img" aria-label="Mapas ${f1(mapT)} MB, sistemas ${f1(sysMB)} MB, fotos por enviar ${f1(phMB)} MB">${seg(mapT,'var(--primary)')}${seg(sysMB,'#6B7280')}${seg(phMB,'var(--amber)')}</div>
   <div class="algs">${leg('var(--primary)','Mapas',mapT)}${leg('#6B7280','Sistemas',sysMB)}${leg('var(--amber)','Fotos por enviar',phMB)}</div></div>
- ${idle.length?`<div class="card alsug"><div class="row"><div class="ico">${icon('spark')}</div><div class="grow"><b>Puedes liberar ${f1(idleMB)} MB</b><small>${idle.length} sistema${idle.length>1?'s':''} sin actividad en los últimos 30 días</small></div><button class="btn sm ghost" data-act="almVer" data-arg="${idle[0]}">Revisar</button></div></div>`:''}
+ ${idle.length?`<div class="card alsug"><div class="row"><div class="ico">${icon('spark')}</div><div class="grow"><b>Puedes liberar ${f1(idleMB)} MB</b><small>${idle.length} sistema${idle.length>1?'s':''} sin actividad en los últimos 30 días</small></div><button class="btn sm ghost" data-act="almVer" data-arg="${idle.join(',')}">Revisar</button></div></div>`:''}
  <div class="sectitle" style="margin-top:16px">Sistemas descargados · ${ids.length}</div>
  <div class="card mplist">${ids.map(sysRow).join('')||'<p class="hint" style="padding:16px">No tienes sistemas descargados en este equipo.</p>'}</div>
  <div class="sectitle" style="margin-top:16px">Mapas sin conexión · ${maps.length}</div>
@@ -6709,7 +6709,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;
  act.almGo=function(id){const b=almBusy(id);UI.sheet=null;renderOverlay();if(b&&act[b.act])act[b.act](b.arg)};
  act.almQuitar=function(id){if(almBusy(id))return act.almLock(id);const s=sys(id);sheet({title:`¿Quitar ${s.sap||s.nombre} del equipo?`,html:`<p class="hint" style="margin:0">Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} pasará a «En la nube». Sin conexión no podrás registrar en este sistema hasta volver a descargarlo.</p>`,actions:[{label:'Quitar del equipo',act:'almQuitarOk',arg:id,primary:true,danger:true},{label:'Cancelar',act:'closeSheet'}]})};
  act.almQuitarOk=function(id){if(almBusy(id))return act.almLock(id);const s=sys(id),mb=almSz(id),k=S.user.dni;S.dl=S.dl||{};S.dl[k]=(S.dl[k]||[]).filter(x=>String(x)!==String(id));UI.sheet=null;save();renderOverlay();render();toast(`${s.sap||s.nombre} se quitó del equipo · ${f1(mb)} MB liberados`,'ok')};
- act.almVer=function(id){const el=document.getElementById('alm-'+id);if(el){el.scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'});el.classList.add('alhl');setTimeout(()=>el.classList.remove('alhl'),1600)}}},0);
+ act.almVer=function(ids){const L=String(ids).split(',').map(id=>document.getElementById('alm-'+id)).filter(Boolean);if(!L.length)return;L[0].scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'});L.forEach(el=>el.classList.add('alhl'));setTimeout(()=>L.forEach(el=>el.classList.remove('alhl')),2600)}},0);
 /* Ajustes: «Mapas sin conexión» pasa a «Almacenamiento» */
 {const _ajA=screens.ajustes;screens.ajustes=function(){const v=_ajA.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/(<button class="row" data-act="go" data-arg=")mapas("[^>]*>[\s\S]*?<b>)Mapas sin conexión(<\/b><small>)[^<]*(<\/small>)/,(m,a,b,c,d)=>(a+'almacen'+b).replace(icon('map'),icon('db'))+'Almacenamiento'+c+'Usando '+f1(almTot())+' MB'+d);return v}}
 /* ================= Eventos ================= */
