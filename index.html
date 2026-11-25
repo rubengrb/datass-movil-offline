@@ -6197,7 +6197,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
   const fl=act0?`<div class="fltl" role="status"><span>Mostrando <b>${L.length} de ${tot}</b></span><button data-act="selClear">${icon('x')}Limpiar filtros</button></div>`:'';
   const dlL=dlOf(),sv=scopeIds(),_md=new Set(ambito().map(z=>z.distrito)).size>1;
   const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
-   const was=sv.includes(x.id),tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):(on?`<span class="sltg dl">${icon('plus')}Se agregará a tu lista</span>`:'');
+   const was=sv.includes(x.id),tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('cloudok')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):'';
    return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.sap)} · ${esc(x.nombre)}</b><small>CP ${cpNice(x)}${x.distrito&&_md&&!P_().fdis?' · '+esc(x.distrito):''}</small>${tag}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
   return [['el','Elegidos'],['av','Disponibles']].map(([k,t])=>{const G=L.filter(x=>(sv.includes(x.id)?'el':'av')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
    return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='av'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
@@ -6213,7 +6213,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
   ${selAmbBar()}
   ${more?`<div class="grid2 selmore">${selectF('nav.p.fcp',[['','Todos los centros poblados'],...cps],n.fcp||'')}${selectF('nav.p.fpr',[['','Todos los prestadores'],...prs],n.fpr||'')}</div>`:''}
   <div id="live">${LIVE.sel()}</div></div>
-  <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${icon('check')} Guardar · ${d.length} sistema${d.length===1?'':'s'}</button></div>`;
+  <div class="selbar"><button class="btn" data-act="selGuardar" ${selChanged()&&S.online?'':'disabled'}>${icon('check')} ${selBtnTxt(d)}</button></div>`;
   return {title:'Sistemas que supervisas',back:true,nobar:true,tabs:false,body}};
  setTimeout(()=>{
   act.selFk=k=>{P_().fk=k;save();render()};
@@ -6232,7 +6232,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
    const c=document.querySelector('.selch [data-arg="on"]');if(c)c.textContent='Elegidos · '+d.length;
    const hb=document.querySelector('#scroll section.hhome .hhbig');if(hb)hb.innerHTML=`<span data-count="${d.length}">${d.length}</span> de ${t}`;
    const bs=document.querySelector('#app>.hcbar .hhwho span');if(bs)bs.textContent=`${d.length} de ${t} elegido${t===1?'':'s'}`;
-   const sb=document.querySelector('#app>.selbar .btn');if(sb){sb.innerHTML=`${icon('check')} Guardar · ${d.length} sistema${d.length===1?'':'s'}`;sb.disabled=!(selChanged()&&S.online)}save()};
+   const sb=document.querySelector('#app>.selbar .btn');if(sb){sb.innerHTML=`${icon('check')} ${selBtnTxt(d)}`;sb.disabled=!(selChanged()&&S.online)}save()};
   act.selToggle=id=>{if(!S.online)return toast('Necesitas conexión para elegir sistemas.','bad');const d=P_().draft;const i=d.indexOf(id);if(i<0){d.push(id);return selRefresh()}if(selBusy(id)&&!P_().force)return act.selQuitar(id);d.splice(i,1);selRefresh()};
   const _bk=act.back;act.back=function(...a){if(S.nav.route==='sel'&&selChanged()&&!P_().leaveOK){return sheet({title:'¿Salir sin guardar?',body:'Tienes cambios en tu selección de sistemas que aún no guardas.',actions:[{label:'Seguir eligiendo',act:'closeSheet',primary:true},{label:'Salir sin guardar',act:'selLeave'}]})}return _bk.apply(this,a)};
   act.selLeave=()=>{UI.sheet=null;renderOverlay();P_().leaveOK=1;UI.selMore=0;act.back()};
@@ -6709,7 +6709,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 13:36</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 13:41</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6887,6 +6887,8 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _st=act.selToggle;
   if(Math.abs(h1-h0)<1)return r;n.style.height=h0+'px';n.style.overflow='hidden';n.getBoundingClientRect();
   n.style.transition='height .22s cubic-bezier(.2,.7,.2,1)';n.style.height=h1+'px';
   const end=()=>{n.style.height='';n.style.overflow='';n.style.transition='';n.removeEventListener('transitionend',end)};n.addEventListener('transitionend',end);setTimeout(end,320);return r}},0);
+
+function selBtnTxt(d){const sv=scopeIds(),k=d.filter(id=>!sv.includes(id)).length;return `Guardar · ${d.length} sistema${d.length===1?'':'s'}${k?` (+${k} nuevo${k>1?'s':''})`:''}`}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
