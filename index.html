@@ -3534,7 +3534,7 @@ const CAT={
  BOM:{n:'Caseta y equipo de bombeo',ic:'gear',nota:'Se registra como unidad funcional conjunta (caseta, bomba, motor y tablero).'},
  IMP:{n:'Línea de impulsión',ic:'pipe'},LDA:{n:'Línea de distribución y aducción',ic:'net'},
  ENE:{n:'Sistema de energía eléctrica para bombeo',ic:'bolt',nota:'Registra condiciones observadas. No incluye mediciones de tensión, amperaje ni pruebas eléctricas.'},
- PTAP:{n:'Planta de tratamiento de agua potable',ic:'plant',nota:'Supuesto de la demo: la PTAP se evalúa como componente general hasta contar con su arquitectura funcional.'},
+ PTAP:{n:'Planta de tratamiento de agua potable',ic:'plant',nota:'Supuesto de esta demostración: la PTAP se evalúa como componente general hasta contar con su arquitectura funcional.'},
  CDA:{n:'Conexiones domiciliarias de alcantarillado',ic:'home',nota:'Registro agregado: cada unidad representa un grupo de conexiones. Usa registro individual solo cuando una conexión requiere seguimiento propio.'},
  RAL:{n:'Red de alcantarillado',ic:'pipe',nota:'Cada unidad es un tramo identificable de la red.'},
  BUZ:{n:'Cámaras de inspección (buzones)',ic:'sewer'},
@@ -3790,7 +3790,7 @@ screens.login=()=>{
  <div class="btns" style="margin-top:24px"><button class="btn" data-act="login">Ingresar</button></div>
  <div class="note">${icon('wifioff')}<div>El primer ingreso requiere conexión. Después puedes ingresar sin internet con los datos ya descargados en este equipo.</div></div>
  ${UI.err.off?`<div class="note bad">${icon('alert')}<div>${UI.err.off}</div></div>`:''}
- <button class="linkbtn" style="margin-top:16px;display:flex;gap:8px;align-items:center" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración (solo demo)</button>
+ <button class="linkbtn" style="margin-top:16px;display:flex;gap:8px;align-items:center" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración</button>
  ${UI.demo?`<div class="card list" style="margin-top:8px">${Object.entries(PROFILES).map(([d,p])=>`<button class="row" data-act="fillDni" data-arg="${d}"><div class="ico">${icon(p.tablero?'chart':'user')}</div><div class="grow"><b>${p.cargo}</b><small>${p.tipo} · DNI ${d}</small></div>${S.login.dni===d?icon('check'):''}</button>`).join('')}</div>`:''}
  </div>`};
 };
@@ -3811,7 +3811,7 @@ screens.login=()=>{
  <div class="btns" style="margin-top:24px"><button class="btn" data-act="login">Ingresar</button></div>
  <div class="note">${icon('wifioff')}<div>El primer ingreso requiere conexión. Después puedes ingresar sin internet con los datos ya descargados en este equipo.</div></div>
  ${UI.err.off?`<div class="note bad">${icon('alert')}<div>${UI.err.off}</div></div>`:''}
- <button class="linkbtn" style="margin-top:16px;display:flex;gap:8px;align-items:center" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración (solo demo)</button>
+ <button class="linkbtn" style="margin-top:16px;display:flex;gap:8px;align-items:center" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración</button>
  ${UI.demo?`<div class="card list" style="margin-top:8px">${Object.entries(PROFILES).map(([d,p])=>`<button class="row" data-act="fillDni" data-arg="${d}"><div class="ico">${icon(p.tablero?'chart':'user')}</div><div class="grow"><b>${p.cargo}</b><small>${p.tipo} · DNI ${d}</small></div>${S.login.dni===d?icon('check'):''}</button>`).join('')}</div>`:''}
  </div>`};
 };
@@ -4180,10 +4180,10 @@ screens.perfil=()=>{const u=S.user||{},p=prof();const ini=(u.nombre||'?').split(
  <h3 class="sub">${icon('refresh')} Sincronización</h3>
  <div class="card"><div class="row"><div class="ico">${icon('refresh')}</div><div class="grow"><b>Enviar al recuperar conexión</b><small>Sincroniza los pendientes de forma automática</small></div><button class="switch ${S.autoSync?'on':''}" role="switch" aria-checked="${S.autoSync}" aria-label="Sincronización automática" data-act="toggleAuto"></button></div></div>
  <div class="btns static">${isOp()?`<button class="btn soft" data-act="refreshCatalog">${icon('refresh')} Consultar nuevas asignaciones</button>`:p.sel?`<button class="btn soft" data-act="go" data-arg="sel">${icon('grid')} Sistemas a monitorear</button>`:''}</div><button class="btn danger logoutb" data-act="logout">${icon('logout')} Cerrar sesión</button>
- <h3 class="sub">${icon('gear')} Modo demostración <span class="badge warn" style="margin-left:4px">Solo demo</span></h3>
+ <h3 class="sub">${icon('gear')} Modo demostración</h3>
  <div class="card"><div class="row"><div class="ico">${icon(S.online?'wifi':'wifioff')}</div><div class="grow"><b>Conexión a internet</b><small>Simula campo sin señal</small></div><button class="switch ${S.online?'on':''}" role="switch" aria-checked="${S.online}" aria-label="Conexión a internet" data-act="toggleNet"></button></div>
  <div class="row" style="border-top:1px solid var(--line)"><div class="ico">${icon('alert')}</div><div class="grow"><b>Simular fallo de envío</b><small>Para probar el error y el reintento</small></div><button class="switch ${S.failSync?'on':''}" role="switch" aria-checked="${S.failSync}" aria-label="Simular fallo de envío" data-act="toggleFail"></button></div></div>
- <div class="btns static"><button class="btn ghost danger" data-act="resetAsk">${icon('trash')} Restablecer datos de la demo</button></div></div>`}};
+ <div class="btns static"><button class="btn ghost danger" data-act="resetAsk">${icon('trash')} Restablecer datos de demostración</button></div></div>`}};
 
 /* ================= Monitoreo: inicio de jornada (el sistema ya viene del hub) ================= */
 function resPts(s){return (s.puntos||[]).filter(p=>p.tipo==='Reservorio')}
@@ -4915,7 +4915,7 @@ screens['mnt-home']=()=>{const s=sys(P_().sid),mod=modOf(s),inv=invOf(s),u=units
  const sh=sharedWith(s.id);
  return {title:MODS[mod].n,sub:'Visitas, inventario e historial',body:`<div class="pad">${sh.length?`<div class="note" style="margin-top:0">${icon('users')}<div>También en la ficha de: ${esc(sh.join(', '))}</div></div>`:''}
  <div class="card row" style="margin-top:12px"><div class="ico">${icon('box')}</div><div class="grow"><b>Inventario vigente</b><small>${inv.ver?`${u.length} unidades · verificado el ${inv.fecha}`:'Por verificar en campo (catálogo de la tipología)'}</small></div><button class="btn soft" style="width:auto;min-height:38px" data-act="go" data-arg="mnt-inv">Ver</button></div>
- ${TIPOL[s.tip].supuesto?`<div class="note warn">${icon('info')}<div>Supuesto de la demo: el catálogo ${s.tip} reutiliza los componentes de ${s.tip==='SGCT'?'SGST':'SBST'} y agrega la planta de tratamiento de agua potable como componente general.</div></div>`:''}
+ ${TIPOL[s.tip].supuesto?`<div class="note warn">${icon('info')}<div>Supuesto de esta demostración: el catálogo ${s.tip} reutiliza los componentes de ${s.tip==='SGCT'?'SGST':'SBST'} y agrega la planta de tratamiento de agua potable como componente general.</div></div>`:''}
  ${canReg(mod)?`<div class="btns"><button class="btn" data-act="mntNueva">${icon('plus')} Nueva visita</button></div>`:''}
  ${open.length?`<h3 class="sub">Visitas en curso</h3><div style="display:grid;gap:8px">${open.map(v=>{const pr=visitProg(v);return `<button class="card row" style="width:100%;text-align:left" data-act="openVisit" data-arg="${v.id}"><div class="sitic" style="background:${SITS.find(x=>x[0]===v.sit)[4]};color:${SITS.find(x=>x[0]===v.sit)[3]}">${icon(SITS.find(x=>x[0]===v.sit)[2])}</div><div class="grow"><b>${SITN[v.sit]}</b><small>${isoToDmy(v.fecha)} · ${pr.ok} de ${pr.tot} unidades completas</small></div><span class="badge warn">Guardado localmente</span>${icon('chev','chev')}</button>`}).join('')}</div>`:''}
  <h3 class="sub">${icon('history')} Historial de visitas</h3>
@@ -5802,11 +5802,11 @@ screens.perfil=()=>{const u=S.user||{},p=prof();const ini=(u.nombre||'?').split(
  ${pfSysList(sc,p)}
  ${isOp()?'<p class="mini" style="margin-top:8px">Tu ficha de operador la registra el ATM en la web DATASS.</p>':''}
  <button class="btn danger logoutb" data-act="logout">${icon('logout')} Cerrar sesión</button>
- <h3 class="sub">${icon('gear')} Modo demostración <span class="badge warn" style="margin-left:4px">Solo demo</span></h3>
+ <h3 class="sub">${icon('gear')} Modo demostración</h3>
  <div class="card"><div class="row"><div class="ico">${icon(S.online?'wifi':'wifioff')}</div><div class="grow"><b>Conexión a internet</b><small>Simula campo sin señal</small></div><button class="switch ${S.online?'on':''}" role="switch" aria-checked="${S.online}" aria-label="Conexión a internet" data-act="toggleNet"></button></div>
  <div class="row" style="border-top:1px solid var(--line)"><div class="ico">${icon('alert')}</div><div class="grow"><b>Simular fallo de envío</b><small>Para probar el error y el reintento</small></div><button class="switch ${S.failSync?'on':''}" role="switch" aria-checked="${S.failSync}" aria-label="Simular fallo de envío" data-act="toggleFail"></button></div>
  <div class="row" style="border-top:1px solid var(--line)"><div class="ico">${icon('pin')}</div><div class="grow"><b>Exigir precisión del GPS</b><small>Con precisión baja, espera 15 s y pide el motivo antes de guardar</small></div><button class="switch ${S.gpsReq?'on':''}" role="switch" aria-checked="${!!S.gpsReq}" aria-label="Exigir precisión del GPS" data-act="toggleGpsReq"></button></div></div>
- <div class="btns static"><button class="btn ghost danger" data-act="resetAsk">${icon('trash')} Restablecer datos de la demo</button></div></div></div>`}};
+ <div class="btns static"><button class="btn ghost danger" data-act="resetAsk">${icon('trash')} Restablecer datos de demostración</button></div></div></div>`}};
 screens.ajustes=()=>{const p=prof();const r=(ic,t,s,act,arg,extra)=>`<button class="row" data-act="${act}" ${arg?`data-arg="${arg}"`:''}><div class="ico">${icon(ic)}</div><div class="grow"><b>${t}</b><small>${s}</small></div>${extra||icon('chev','chev')}</button>`;
  const nPerm=ALLM.filter(m=>canReg(m)).length;
  return {title:'Ajustes',nobar:true,tabs:false,body:`<div class="pfscr">${ftop('Ajustes')}<div class="pad">
@@ -5984,7 +5984,7 @@ screens.login=()=>{const demo=UI.demo?`<div class="card list" style="margin-top:
   <p class="lgacc">¿Necesitas una cuenta? <button class="lglink" data-act="lgSoon" data-arg="Solicitud de cuenta">Solicitar aquí</button></p>
   </div><hr class="lghr"><div class="lghelp"><button data-act="lgSoon" data-arg="Manuales">${icon('file')}Manuales</button><button data-act="lgSoon" data-arg="Cuestionarios">${icon('clip')}Cuestionarios</button></div><p class="lgsup">Soporte técnico: <b>datass@vivienda.gob.pe</b></p>
   <p class="lgcopy">© 2026 Ministerio de Vivienda, Construcción y Saneamiento<br><span>gob.pe/vivienda</span></p>
-  <button class="linkbtn lgdemo" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración (solo demo)</button>${demo}
+  <button class="linkbtn lgdemo" data-act="toggleDemo" aria-expanded="${!!UI.demo}">${icon(UI.demo?'down':'chev')} Usuarios de demostración</button>${demo}
  </div></div>`}};
 setTimeout(()=>{if(typeof act!=='undefined')act.lgSoon=a=>toast(a+': disponible en la versión final','info')},0);
 
@@ -6699,7 +6699,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 11:25</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 11:28</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6938,7 +6938,7 @@ const act={
   if(send==='1'&&!S.online){toast('Sin conexión: la corrección queda guardada y se enviará al sincronizar.');tab('home');return}
   S.nav.stack=[];S.nav.route='confirm';S.nav.p={rid:r.id};save();render(true);if(send==='1')await syncRecs([r]);else toast('Corrección guardada. Pendiente de sincronización.')},
  dismissAsg(){S.asgNotice=null;save();render()},
- resetAsk(){sheet({title:'Restablecer datos de la demo',body:'Se borrarán los registros, borradores, inventarios y la sesión guardados en este navegador, y se cargarán los datos de ejemplo.',actions:[{label:'Restablecer',act:'doReset',primary:true},{label:'Cancelar',act:'closeSheet'}]})},
+ resetAsk(){sheet({title:'Restablecer datos de demostración',body:'Se borrarán los registros, borradores, inventarios y la sesión guardados en este navegador, y se cargarán los datos de ejemplo.',actions:[{label:'Restablecer',act:'doReset',primary:true},{label:'Cancelar',act:'closeSheet'}]})},
  doReset(){UI.sheet=null;S=defaults();save();render(true)},
  syncAll(){syncRecs(myUnsynced())},
  async syncOne(id){UI.sheet=null;renderOverlay();await syncRecs([S.records.find(x=>x.id===id)])},
