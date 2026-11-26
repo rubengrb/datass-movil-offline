@@ -3596,6 +3596,8 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .pfsys .pfch{padding:0 12px 0 2px}
 .pfsys .pfcap.ok,.pfsys .pfcap.ok span{color:var(--ok,#1E7B3A)!important}
 
+.pfsys .pfsm .grow .dlbar{width:100%;margin-top:4px}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -6909,7 +6911,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 16:02</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 16:17</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6968,7 +6970,7 @@ UI.dlp=UI.dlp||{};UI.dlFail=UI.dlFail||{};
 function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null&&(S.dlQ||[]).includes(id));if(!pend.length)return;
  pend.forEach(id=>{UI.dlp[id]=0;delete UI.dlFail[id]});render();
  UI.dlT=setInterval(()=>{const ids=Object.keys(UI.dlp);if(!S.online){ids.forEach(id=>{UI.dlFail[id]=1;delete UI.dlp[id]});clearInterval(UI.dlT);UI.dlT=null;render();return}
-  const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}if(UI.dlp[id]>=100)done.push(id)});
+  const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}{const pr=document.querySelector(`#scroll .pfsys[data-sid="${id}"]`);if(pr){const t2=pr.querySelector('.dlpct'),b2=pr.querySelector('.dlbar i'),pb=pr.querySelector('.dlbar');if(t2)t2.textContent=Math.round(UI.dlp[id])+'%';if(b2)b2.style.width=UI.dlp[id]+'%';if(pb)pb.setAttribute('aria-valuenow',Math.round(UI.dlp[id]))}}if(UI.dlp[id]>=100)done.push(id)});
   if(done.length){const l=dlOf();done.forEach(id=>{delete UI.dlp[id];if(!l.includes(id))l.push(id);if(S.dlQ)S.dlQ=S.dlQ.filter(x=>x!==id);const md=(S.dlMapQ||{})[id];if(md){if(!mapsOf()[md])mapsOf()[md]={ts:Date.now(),mb:mapMB(md)};delete S.dlMapQ[id]}});save()}
   if(!Object.keys(UI.dlp).length){clearInterval(UI.dlT);UI.dlT=null;const nv=done.filter(id=>sysNew(id)),all=Object.keys(S.newSys||{});
    const fin=UI.dlBatch||[];UI.dlBatch=null;if(fin.length){S.asgNotice=fin.length===1?`${sys(fin[0]).nombre} ya está disponible sin conexión.`:`${fin.length} sistemas ya están disponibles sin conexión.`}save();render()}
@@ -7031,9 +7033,9 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 /* Perfil: una sola lista «Mis sistemas» (operador) / «Sistemas a tu cargo» (supervisión); estado en la tarjeta */
 {const _pf=pfSysList;pfSysList=function(sc,p){if(!sc.length||!needsDl())return _pf.apply(this,arguments);
  const cpN=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
- const row=s=>{const dl=isDl(s.id),q=opQ(s.id),pc=UI.dlp[s.id];const sub=!dl&&(pc!=null||q)?(pc!=null?`Descargando · ${Math.round(pc)}%`:'Se descargará al tener conexión'):`CP ${esc(s.cpCod||String(s.cp||'').match(/^\s*(\d+)/)?.[1]||'')} · ${esc(cpN(s))}`;
+ const row=s=>{const dl=isDl(s.id),q=opQ(s.id),pc=UI.dlp[s.id];const sub=!dl&&(pc!=null||q)?(pc!=null?`Descargando · <span class="dlpct">${Math.round(pc)}%</span>`:'Se descargará al tener conexión'):`CP ${esc(s.cpCod||String(s.cp||'').match(/^\s*(\d+)/)?.[1]||'')} · ${esc(cpN(s))}`;
   const side=dl?`<div class="pfcap ok" aria-label="En tu equipo">${icon('devphone')}<span>En equipo</span></div>`:!q?`<button class="pfdl pfcap dn${S.online?'':' off'}" data-act="dlSys" data-arg="${s.id}" aria-label="Descargar ${esc(s.nombre)}"${S.online?'':' aria-disabled="true"'}><i class="pfdlc">${icon('download')}</i><span>Descargar</span></button>`:'';
-  return `<div class="row pfsys ${dl?'':'nodl'}"><button class="pfsm" data-act="openSys" data-arg="${s.id}"><div class="ico ${s.kind==='alc'?'k-alc':'k-sap'}">${icon(s.kind==='alc'?'syssewer':'syswater')}</div><div class="grow"><b>${esc(s.sap)} · ${esc(s.nombre)}</b><small>${sub}</small></div></button>${side}<button class="pfch" data-act="openSys" data-arg="${s.id}" aria-label="Abrir ${esc(s.nombre)}" tabindex="-1">${icon('chev','chev')}</button></div>`};
+  return `<div class="row pfsys ${dl?'':'nodl'}" data-sid="${s.id}"><button class="pfsm" data-act="openSys" data-arg="${s.id}"><div class="ico ${s.kind==='alc'?'k-alc':'k-sap'}">${icon(s.kind==='alc'?'syssewer':'syswater')}</div><div class="grow"><b>${esc(s.sap)} · ${esc(s.nombre)}</b><small>${sub}</small>${pc!=null?`<div class="dlbar" role="progressbar" aria-label="Descargando ${esc(s.nombre)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pc)}"><i style="width:${pc}%"></i></div>`:''}</div></button>${side}<button class="pfch" data-act="openSys" data-arg="${s.id}" aria-label="Abrir ${esc(s.nombre)}" tabindex="-1">${icon('chev','chev')}</button></div>`};
  const A=sc.filter(s=>isDl(s.id)),B=sc.filter(s=>!isDl(s.id)),todo=B.map(s=>s.id).filter(id=>!opQ(id));
  const lk=todo.length>1?`<button class="row pfall${S.online?'':' off'}" data-act="dlTodos"><div class="ico">${icon('download')}</div><div class="grow"><b>Descargar todos</b><small>${todo.length} sistemas · ${mbTxt(opPendMB(todo))}</small></div></button>`:'';
  return `<div class="sectitle">${isOp()?'Mis sistemas':'Sistemas a tu cargo'} · ${sc.length}</div><div class="card list">${A.map(row).join('')}${B.map(row).join('')}${lk}</div>`}}
