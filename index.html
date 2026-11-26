@@ -3598,6 +3598,8 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 
 .pfsys .pfsm .grow .dlbar{width:100%;margin-top:4px}
 
+.hpd .dlbar{width:100%;margin-top:8px}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -4291,9 +4293,13 @@ function hubHistBody(recs){if(!recs.length)return `<div class="pad"><div class="
 
 /* Hub: «Pendientes» — descarga (una sola vez) + observados del sistema, como tarjetas */
 function hubPend(s){const now=Date.now(),cards=[];
- if(!isDl(s.id)&&needsDl())cards.push((UI.dling||[]).includes&&(UI.dling||[]).includes(s.id)
+ if(!isDl(s.id)&&needsDl()){const pc=UI.dlp&&UI.dlp[s.id],q=(S.dlQ||[]).includes(s.id);
+  cards.push(pc!=null
+  ?`<div class="hoc hpd" data-sid="${s.id}"><span class="tbd a">${icon('clouddl')}<span class="dlpct">${Math.round(pc)}%</span></span><b>Descargando el sistema</b><small>Para registrar sin internet</small><div class="dlbar" role="progressbar" aria-label="Descargando ${esc(s.nombre)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pc)}"><i style="width:${pc}%"></i></div></div>`
+  :q?`<div class="hoc hpd"><span class="tbd a">${icon('clouddl')}En cola</span><b>Descarga el sistema</b><small>Se descargará al tener conexión</small></div>`
+  :(UI.dling||[]).includes&&(UI.dling||[]).includes(s.id)
   ?`<div class="hoc hpd"><span class="tbd a">${icon('clouddl')}Descargando…</span><b>Descarga el sistema</b><small>Para registrar sin internet</small></div>`
-  :`<button class="hoc hpd" data-act="dlSys" data-arg="${s.id}"><span class="tbd a">${icon('clouddl')}Sin descargar</span><b>Descarga el sistema</b><small>Para registrar sin internet</small><span class="hpl">${icon('download')}Descargar</span></button>`);
+  :`<button class="hoc hpd" data-act="dlSys" data-arg="${s.id}"><span class="tbd a">${icon('clouddl')}Sin descargar</span><b>Descarga el sistema</b><small>Para registrar sin internet</small><span class="hpl">${icon('download')}Descargar</span></button>`)}
  visibleRecs().filter(r=>r.sysId===s.id&&['observado','vencido'].includes(valState(r))).map(r=>{const lim=r.val&&r.val.limite,d=lim?Math.ceil((lim-now)/864e5):null,ven=valState(r)==='vencido'||(d!=null&&d<0),k=Math.abs(d||0);return {r,ven,txt:ven?(k?`Venció hace ${k} d`:'Venció hoy'):d===0?'Vence hoy':d==null?'Observado':`Vence en ${d} d`}})
   .sort((a,b)=>b.ven-a.ven).forEach(o=>cards.push(`<button class="hoc" data-act="recDetail" data-arg="${o.r.id}"><span class="tbd ${o.ven?'r':'a'}">${o.txt}</span><b>${esc(MODS[o.r.modulo].n)}</b><small>Observado · ${relT(o.r.val&&o.r.val.fecha||o.r.ts)}</small><span class="hpl">Corregir ${icon('chev')}</span></button>`));
  {const U=(typeof myUnsynced==='function'?myUnsynced():[]).filter(x=>x.sysId===s.id).sort((a,b)=>b.ts-a.ts),mb=n=>fmt(n*FOTO_MB,1);
@@ -6911,7 +6917,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 16:17</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 16:21</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6970,7 +6976,7 @@ UI.dlp=UI.dlp||{};UI.dlFail=UI.dlFail||{};
 function autoDlKick(){if(UI.dlT||!S.user||!needsDl()||!S.online)return;const pend=dlPend().map(s=>s.id).filter(id=>UI.dlp[id]==null&&(S.dlQ||[]).includes(id));if(!pend.length)return;
  pend.forEach(id=>{UI.dlp[id]=0;delete UI.dlFail[id]});render();
  UI.dlT=setInterval(()=>{const ids=Object.keys(UI.dlp);if(!S.online){ids.forEach(id=>{UI.dlFail[id]=1;delete UI.dlp[id]});clearInterval(UI.dlT);UI.dlT=null;render();return}
-  const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}{const pr=document.querySelector(`#scroll .pfsys[data-sid="${id}"]`);if(pr){const t2=pr.querySelector('.dlpct'),b2=pr.querySelector('.dlbar i'),pb=pr.querySelector('.dlbar');if(t2)t2.textContent=Math.round(UI.dlp[id])+'%';if(b2)b2.style.width=UI.dlp[id]+'%';if(pb)pb.setAttribute('aria-valuenow',Math.round(UI.dlp[id]))}}if(UI.dlp[id]>=100)done.push(id)});
+  const done=[];ids.forEach(id=>{UI.dlp[id]=Math.min(100,UI.dlp[id]+(RM()?50:4+Math.random()*7));const c=document.querySelector(`#scroll .sysc[data-arg="${id}"]`);if(c){const t=c.querySelector('.dlpct'),b=c.querySelector('.dlbar i');if(t)t.textContent=Math.round(UI.dlp[id])+'%';if(b)b.style.width=UI.dlp[id]+'%'}{const pr=document.querySelector(`#scroll .pfsys[data-sid="${id}"]`);if(pr){const t2=pr.querySelector('.dlpct'),b2=pr.querySelector('.dlbar i'),pb=pr.querySelector('.dlbar');if(t2)t2.textContent=Math.round(UI.dlp[id])+'%';if(b2)b2.style.width=UI.dlp[id]+'%';if(pb)pb.setAttribute('aria-valuenow',Math.round(UI.dlp[id]))}}{const hc=document.querySelector(`#scroll .hpd[data-sid="${id}"]`);if(hc){const t3=hc.querySelector('.dlpct'),b3=hc.querySelector('.dlbar i'),pb3=hc.querySelector('.dlbar');if(t3)t3.textContent=Math.round(UI.dlp[id])+'%';if(b3)b3.style.width=UI.dlp[id]+'%';if(pb3)pb3.setAttribute('aria-valuenow',Math.round(UI.dlp[id]))}}if(UI.dlp[id]>=100)done.push(id)});
   if(done.length){const l=dlOf();done.forEach(id=>{delete UI.dlp[id];if(!l.includes(id))l.push(id);if(S.dlQ)S.dlQ=S.dlQ.filter(x=>x!==id);const md=(S.dlMapQ||{})[id];if(md){if(!mapsOf()[md])mapsOf()[md]={ts:Date.now(),mb:mapMB(md)};delete S.dlMapQ[id]}});save()}
   if(!Object.keys(UI.dlp).length){clearInterval(UI.dlT);UI.dlT=null;const nv=done.filter(id=>sysNew(id)),all=Object.keys(S.newSys||{});
    const fin=UI.dlBatch||[];UI.dlBatch=null;if(fin.length){S.asgNotice=fin.length===1?`${sys(fin[0]).nombre} ya está disponible sin conexión.`:`${fin.length} sistemas ya están disponibles sin conexión.`}save();render()}
