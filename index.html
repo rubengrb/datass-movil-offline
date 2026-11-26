@@ -3620,6 +3620,8 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .fmsheet.min .fmlist{max-height:0;opacity:0;overflow:hidden;pointer-events:none}
 .fmsheet.min .fmhd{margin-bottom:0}
 
+.fmsheet{touch-action:none}.fmsheet .fmlist{touch-action:pan-y}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -6938,7 +6940,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 18:02</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 18:08</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7218,10 +7220,19 @@ function entStagger(back){
 
 setTimeout(()=>{
 act.fmToggle=()=>{UI.fmMin=!UI.fmMin;const sh=document.querySelector('.fmsheet');if(!sh){render();return}sh.classList.toggle('min',UI.fmMin);const g=sh.querySelector('.mgrab');if(g){g.setAttribute('aria-expanded',String(!UI.fmMin));g.setAttribute('aria-label',(UI.fmMin?'Mostrar':'Ocultar')+' la lista de componentes')}};
-{let d=null;document.addEventListener('pointerdown',e=>{const h=e.target.closest&&e.target.closest('.fmsheet .mgrab,.fmsheet .fmhd');d=h?{y:e.clientY,m:false}:null});
-document.addEventListener('pointermove',e=>{if(d&&Math.abs(e.clientY-d.y)>14)d.m=true});
-document.addEventListener('pointerup',e=>{if(!d)return;const dy=e.clientY-d.y,m=d.m;d=null;if(m){const want=dy>0;if(want!==!!UI.fmMin)act.fmToggle();window._fmSw=Date.now()}});
-document.addEventListener('click',e=>{if(window._fmSw&&Date.now()-window._fmSw<400&&e.target.closest&&e.target.closest('.fmsheet .mgrab,.fmsheet .fmhd')){e.stopPropagation();e.preventDefault()}},true)}
+{let d=null;const inH=e=>e.target.closest&&e.target.closest('.fmsheet .mgrab,.fmsheet .fmhd');
+const sw=dy=>{const want=dy>0;if(want!==!!UI.fmMin)act.fmToggle();window._fmSw=Date.now()};
+document.addEventListener('touchstart',e=>{const sh=e.target.closest&&e.target.closest('.fmsheet');if(!sh||e.touches.length!==1){d=null;return}const l=sh.querySelector('.fmlist');d={y:e.touches[0].clientY,sh,l,top:l?l.scrollTop:0,done:false}},{passive:true});
+document.addEventListener('touchmove',e=>{if(!d||d.done)return;const dy=e.touches[0].clientY-d.y;if(Math.abs(dy)<16)return;const inList=e.target.closest&&e.target.closest('.fmlist');
+ if(!UI.fmMin&&inList&&dy<0){d=null;return}
+ if(!UI.fmMin&&inList&&dy>0&&d.l.scrollTop>0){d=null;return}
+ if(UI.fmMin&&dy>0){d=null;return}
+ d.done=true;sw(dy)},{passive:true});
+document.addEventListener('touchend',()=>{d=null},{passive:true});
+let m=null;document.addEventListener('pointerdown',e=>{m=(e.pointerType==='mouse'&&inH(e))?{y:e.clientY,mv:false}:null});
+document.addEventListener('pointermove',e=>{if(m&&Math.abs(e.clientY-m.y)>14)m.mv=true});
+document.addEventListener('pointerup',e=>{if(!m)return;const dy=e.clientY-m.y,mv=m.mv;m=null;if(mv)sw(dy)});
+document.addEventListener('click',e=>{if(window._fmSw&&Date.now()-window._fmSw<500&&inH(e)){e.stopPropagation();e.preventDefault()}},true)}
 },0);
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
