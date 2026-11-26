@@ -6362,7 +6362,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
   const fl=act0?`<div class="fltl" role="status"><span>Mostrando <b>${L.length} de ${tot}</b></span><button data-act="selClear">${icon('x')}Limpiar filtros</button></div>`:'';
   const dlL=dlOf(),sv=scopeIds(),_md=new Set(ambito().map(z=>z.distrito)).size>1;
   const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
-   const was=sv.includes(x.id),tag=lk?`<span class="sltg lk">${icon('lock')}${bz.t} · se mantiene</span>`:inEq?(on?`<span class="sltg ok">${icon('devphone')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):'';
+   const was=sv.includes(x.id),tag=lk?`<span class="sltg ok">${icon('devphone')}En tu equipo</span>`:inEq?(on?`<span class="sltg ok">${icon('devphone')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):'';
    return `<button class="slr ${on?'on':''} ${lk?'lk':''}" role="checkbox" aria-checked="${on}" data-act="selToggle" data-arg="${x.id}" ${S.online?'':'aria-disabled="true"'}><span class="ico ${a?'k-alc':'k-sap'}" aria-hidden="true">${icon(a?'syssewer':'syswater')}</span><span class="grow"><b>${esc(x.sap)} · ${esc(x.nombre)}</b>${!was&&on&&!inEq?`<small class="sladd">${icon('plus')}Se agregará a tu lista</small>`:`<small>CP ${cpNice(x)}</small>`}${(x.distrito&&_md&&!P_().fdis)||tag?`<span class="sltgs">${x.distrito&&_md&&!P_().fdis?`<span class="sltg pin">${icon('pin')}${esc(x.distrito)}</span>`:''}${tag}</span>`:''}</span><span class="slc" aria-hidden="true">${icon(lk?'lock':'check')}</span></button>`};
   return [['el','Elegidos'],['av','Disponibles']].map(([k,t])=>{const G=L.filter(x=>(sv.includes(x.id)?'el':'av')===k);if(!G.length)return '';const full=G.every(x=>d.includes(x.id));
    return `<div class="sectitle slgh"><span>${t} · ${G.length}</span>${S.online&&k==='av'?`<button class="stlink" data-act="selGrp" data-arg="${k}">${full?'Quitar todos':'Elegir todos'}</button>`:''}</div><div class="card list sll">${G.map(row).join('')}</div>`}).join('').replace(/^/,fl)};
@@ -6874,7 +6874,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:40</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:52</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7055,7 +7055,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 
 /* elegir/quitar: la fila cambia de alto con suavidad cuando aparece o se va la etiqueta */
 setTimeout(()=>{if(typeof act==='undefined')return;const _st=act.selToggle;
- act.selToggle=function(id){const q=`.slr[data-arg="${CSS.escape(String(id))}"]`,o=document.querySelector(q),h0=o?o.getBoundingClientRect().height:0,hadTag=!!(o&&o.querySelector('.sltg'));
+ act.selToggle=function(id){const q=`.slr[data-arg="${CSS.escape(String(id))}"]`,o=document.querySelector(q);if(o&&o.classList.contains('lk')){const bz=almBusy(id);return toast((bz?bz.t:'Tiene una actividad en curso')+' · se mantiene')}const h0=o?o.getBoundingClientRect().height:0,hadTag=!!(o&&o.querySelector('.sltg'));
   const r=_st.apply(this,arguments);const n=document.querySelector(q);if(!n||!h0||RM())return r;
   const h1=n.getBoundingClientRect().height,tg=n.querySelector('.sltg');if(tg&&!hadTag)tg.classList.add('tgin');const sm=n.querySelector('.grow small');if(sm)sm.classList.add('tgin');
   if(Math.abs(h1-h0)<1)return r;n.style.height=h0+'px';n.style.overflow='hidden';n.getBoundingClientRect();
