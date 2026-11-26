@@ -4191,7 +4191,7 @@ function fichaBody(s,p){
   ${compList(s,pts,sel)}`}
  else{
   const sh=isOp()?sharedWith(s.id):[];
-  h=`<div class="card kvlist"><div><span>Código</span><b>${s.sap}</b></div><div><span>Nombre</span><b>${esc(s.nombre)}</b></div><div><span>Tipología</span><b>${TIPOL[s.tip].largo}</b></div><div><span>Prestador</span><b>${esc(s.prest)}</b></div><div><span>Centro poblado</span><b>${cpLabel(s)}</b></div><div><span>Distrito</span><b>${esc(s.distrito)}</b></div><div><span>Provincia</span><b>${esc(s.provincia)}</b></div><div><span>Departamento</span><b>${esc(s.dep)}</b></div>${s.pob?`<div><span>Población atendida</span><b>${s.pob}</b></div>`:''}${s.sid?`<div><span>Sistema ID</span><b>${s.sid}</b></div>`:''}</div>
+  h=`<div class="card kvlist"><div><span>Código</span><b>${s.sap}</b></div><div><span>Nombre</span><b>${esc(s.nombre)}</b></div><div><span>Tipología</span><b>${TIPOL[s.tip].largo}</b></div>${s.prest?`<div><span>Prestador</span><b>${esc(s.prest)}</b></div>`:''}<div><span>Centro poblado</span><b>${cpLabel(s)}</b></div><div><span>Distrito</span><b>${esc(s.distrito)}</b></div><div><span>Provincia</span><b>${esc(s.provincia)}</b></div><div><span>Departamento</span><b>${esc(s.dep)}</b></div>${s.pob?`<div><span>Población atendida</span><b>${s.pob}</b></div>`:''}${sysIdRow(s)}</div>
   ${sh.length?`<div class="note">${icon('users')}<div>También en la ficha de: ${esc(sh.join(', '))}</div></div>`:''}
   ${isDl(s.id)?`<div class="note ok">${icon('checkc')}<div>Todos los datos de este sistema están guardados en el equipo y se usan sin conexión.</div></div>`:`<div class="note warn">${icon('clouddl')}<div>Este sistema aún no está descargado en el equipo.</div></div>`}`}
  return `<div class="pad" style="padding-top:12px">${seg}${h}</div>`}
@@ -6731,7 +6731,7 @@ fichaBody=function(s,p){p.ft='all';const pts=fichaPts(s),ft='all',kinds=[...new 
 `;
  const chips=kinds.length>1?`<div class="chips fchips" role="group" aria-label="Filtrar componentes"><button class="${ft==='all'?'on':''}" aria-pressed="${ft==='all'}" data-act="fichaType" data-arg="all">Todos · ${pts.length}</button>${kinds.map(k=>`<button class="${ft===k?'on':''}" aria-pressed="${ft===k}" data-act="fichaType" data-arg="${k}">${icon(PT_ICON[k])} ${PT_TYPE[k]} · ${pts.filter(x=>x.k===k).length}</button>`).join('')}</div>`:'';
  const sel=vis.find(x=>x.pt.id===p.fsel)||null,sh=isOp()?sharedWith(s.id):[];
- const datos=`<div class="sectitle" style="margin-top:16px">Datos del sistema</div><div class="card kvlist"><div><span>Código</span><b>${s.sap}</b></div><div><span>Nombre</span><b>${esc(s.nombre)}</b></div><div><span>Tipología</span><b>${TIPOL[s.tip].largo}</b></div><div><span>Prestador</span><b>${esc(s.prest)}</b></div><div><span>Centro poblado</span><b>${cpLabel(s)}</b></div><div><span>Distrito</span><b>${esc(s.distrito)}</b></div><div><span>Provincia</span><b>${esc(s.provincia)}</b></div><div><span>Departamento</span><b>${esc(s.dep)}</b></div>${s.pob?`<div><span>Población atendida</span><b>${s.pob}</b></div>`:''}${s.sid?`<div><span>Sistema ID</span><b>${s.sid}</b></div>`:''}</div>
+ const datos=`<div class="sectitle" style="margin-top:16px">Datos del sistema</div><div class="card kvlist"><div><span>Código</span><b>${s.sap}</b></div><div><span>Nombre</span><b>${esc(s.nombre)}</b></div><div><span>Tipología</span><b>${TIPOL[s.tip].largo}</b></div>${s.prest?`<div><span>Prestador</span><b>${esc(s.prest)}</b></div>`:''}<div><span>Centro poblado</span><b>${cpLabel(s)}</b></div><div><span>Distrito</span><b>${esc(s.distrito)}</b></div><div><span>Provincia</span><b>${esc(s.provincia)}</b></div><div><span>Departamento</span><b>${esc(s.dep)}</b></div>${s.pob?`<div><span>Población atendida</span><b>${s.pob}</b></div>`:''}${sysIdRow(s)}</div>
   ${sh.length?`<div class="note">${icon('users')}<div>También en la ficha de: ${esc(sh.join(', '))}</div></div>`:''}
   ${isDl(s.id)?`<div class="note ok">${icon('checkc')}<div>Todos los datos de este sistema están guardados en el equipo y se usan sin conexión.</div></div>`:`<div class="note warn">${icon('clouddl')}<div>Este sistema aún no está descargado en el equipo.</div></div>`}`;
  return `<div class="fwrap">${map}<div class="fpanel pad">${fCompList(s,pts,sel)}${datos}</div></div>`};
@@ -6940,7 +6940,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 18:22</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 18:27</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7234,6 +7234,8 @@ document.addEventListener('pointermove',e=>{if(m&&Math.abs(e.clientY-m.y)>14)m.m
 document.addEventListener('pointerup',e=>{if(!m)return;const dy=e.clientY-m.y,mv=m.mv;m=null;if(mv)sw(dy)});
 document.addEventListener('click',e=>{if(window._fmSw&&Date.now()-window._fmSw<500&&inH(e)){e.stopPropagation();e.preventDefault()}},true)}
 },0);
+
+function sysIdRow(s){const A={A1:'480121',A2:'480122',A3:'480123'};const id=s.sid||(s.kind==='alc'?A[s.id]:'');return id?`<div><span>${s.kind==='alc'?'Alcantarillado ID':'Sistema ID'}</span><b>${id}</b></div>`:''}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
