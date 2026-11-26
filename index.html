@@ -3552,6 +3552,26 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .sltg.pin svg{color:var(--primary-ink,var(--primary))}
 /* Historial: botones de filtro (mismo estilo que los de ámbito) */
 .hflt{margin:2px 0 8px}
+/* ===== Barra inferior con nombres cortos (ícono activo en cápsula) ===== */
+.tabbar{--tbw:68px;padding:4px 8px}
+.tabbar button,.tabbar button.on{flex-direction:column;justify-content:flex-start;gap:2px;width:var(--tbw)!important;height:56px;padding:8px 0 0!important}
+.tabbar svg.tph{width:24px;height:24px}
+.tabbar button .tl,.tabbar button.on .tl{display:block!important;font-size:11px;font-weight:600;line-height:1.15;color:var(--muted);letter-spacing:0}
+.tabbar button.on .tl{color:var(--text);font-weight:800}
+.tabbar button.on svg{color:var(--on-primary)!important}
+.tabbar button::after,.tabbar button.on::after{display:none!important}
+.tabbar .tabind{top:7px;height:30px;padding:0 12px;box-sizing:border-box;background-clip:content-box;border-radius:999px}
+.tabbar .tbadge{top:2px;right:12px}
+/* Deslizar tarjetas: el borde que se oculta se desvanece suave en vez de cortar el texto */
+.swrap{position:relative}
+.swrap::before{content:'';position:absolute;top:0;bottom:0;width:30px;z-index:2;pointer-events:none;opacity:0;transition:opacity .15s}
+.swrap:has(>.swrow.open)::before,.swrap:has(>.swrow[style*="translateX(-"])::before{left:0;right:auto;opacity:1;background:linear-gradient(90deg,var(--card) 25%,color-mix(in srgb,var(--card) 0%,transparent))}
+.swrap:has(>.swrow.openl)::before{right:0;left:auto;opacity:1;background:linear-gradient(270deg,var(--card) 25%,color-mix(in srgb,var(--card) 0%,transparent))}
+.swrap:has(>.swrow[style*="translateX("]:not([style*="translateX(-"]):not([style*="translateX(0"]))::before{right:0;left:auto;opacity:1;background:linear-gradient(270deg,var(--card) 25%,color-mix(in srgb,var(--card) 0%,transparent))}
+.tabbar .tabind{background:transparent!important;padding:0!important;background-clip:border-box}
+.tabbar .tabind::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:52px;margin-left:-24px;border-radius:999px;background:var(--primary)}
+.tabbar button:not(.on):hover{background:transparent!important}
+@media (hover:hover) and (pointer:fine){.tabbar button:not(.on):hover .tl{color:var(--text)}}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5237,7 +5257,7 @@ function render(top){
  ${v.nobar||cs?'':netStrip(S.nav.route)}
  ${v.hub?'':(v.sticky||'')}
  <main class="scroll" id="scroll">${v.body}</main>
- ${showTabs?`<nav class="tabbar" aria-label="Navegación principal" data-n="${pend}"><i class="tabind" aria-hidden="true"></i>${tabs.map(([r,t,ic])=>`<button class="${tabOf(S.nav.route)===r?'on':''}" data-act="tab" data-arg="${r}" data-tip="${esc(t)}" aria-label="${esc(t)}${r==='sync'&&pend?', '+pend+' pendientes':''}" aria-current="${tabOf(S.nav.route)===r}">${phIcon(ic)}<span class="tl">${esc(t)}</span>${r==='sync'&&pend?`<span class="tbadge ${UI.tbN!==pend?'pulse':''}" aria-hidden="true">${pend}</span>`:''}</button>`).join('')}</nav>`:''}
+ ${showTabs?`<nav class="tabbar" aria-label="Navegación principal" data-n="${pend}"><i class="tabind" aria-hidden="true"></i>${tabs.map(([r,t,ic])=>`<button class="${tabOf(S.nav.route)===r?'on':''}" data-act="tab" data-arg="${r}" data-tip="${esc(t)}" aria-label="${esc(t)}${r==='sync'&&pend?', '+pend+' pendientes':''}" aria-current="${tabOf(S.nav.route)===r}">${phIcon(ic)}<span class="tl">${esc(({home:'Sistemas',guardados:'Historial',sync:'Enviar',tablero:'Resumen'})[r]||t)}</span>${r==='sync'&&pend?`<span class="tbadge ${UI.tbN!==pend?'pulse':''}" aria-hidden="true">${pend}</span>`:''}</button>`).join('')}</nav>`:''}
  ${S.user&&(!v.nobar||v.keepTabs)?drawerHtml(tabs):''}
  <div id="ovl"></div>`;
  {/* aplicar el espacio de la cabecera flotante antes de restaurar el scroll, para que la página no salte al marcar opciones */const hb=document.querySelector('#app .appbar.hero'),sc1=document.getElementById('scroll');if(hb&&sc1&&UI.heroH)sc1.style.paddingTop=UI.heroH+'px'}
@@ -6864,7 +6884,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 20:44</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 20:56</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
