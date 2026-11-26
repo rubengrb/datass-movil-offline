@@ -3542,6 +3542,9 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .mpin.sel .mh{box-shadow:0 0 0 5px color-mix(in srgb,var(--primary) 28%,transparent),0 2px 6px rgba(0,0,0,.28)!important}
 .fmz .fzone{border-color:color-mix(in srgb,var(--primary) 55%,transparent)!important;background:color-mix(in srgb,var(--primary) 5%,transparent)!important}
 .rpscr .rpzone{border-color:color-mix(in srgb,var(--primary) 50%,transparent)!important;background:color-mix(in srgb,var(--primary) 6%,transparent)!important}
+/* Selección única (filtros): el círculo usa el texto de acento de la paleta, legible en todas */
+.ropt.on .rdo{border-color:var(--primary-ink,var(--primary))!important}
+.ropt.on .rdo::after{background:var(--primary-ink,var(--primary))!important}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5553,8 +5556,8 @@ function cpNice(s){const raw=(s.cpCod?s.cpCod+' - ':'')+String(s.cp||''),m=raw.m
 /* ===== Gestos: deslizar abajo cierra hojas, deslizar desde el borde regresa, atrás del sistema ===== */
 (function(){
  const RED=()=>matchMedia('(prefers-reduced-motion: reduce)').matches,E='cubic-bezier(.2,0,0,1)';
- const canBack=()=>!!document.querySelector('#app .appbar [data-act="back"],#app .mtop [data-act="back"],#app .ftop [data-act="back"],#app .rphead [data-act="back"],#app .cftop [data-act]');
- const goBackUI=()=>{const b=document.querySelector('#app .appbar [data-act="back"],#app .mtop [data-act="back"],#app .ftop [data-act="back"],#app .rphead [data-act="back"],#app .cftop [data-act]');if(b)b.click();else back()};
+ const canBack=()=>!!document.querySelector('#app .appbar [data-act="back"],#app .mtop [data-act="back"],#app .ftop [data-act="back"],#app .rphead [data-act="back"],#app .cftop [data-act],#app .hhome [data-act="back"],#app .hcbar [data-act="back"]');
+ const goBackUI=()=>{const b=document.querySelector('#app .appbar [data-act="back"],#app .mtop [data-act="back"],#app .ftop [data-act="back"],#app .rphead [data-act="back"],#app .cftop [data-act],#app .hhome [data-act="back"],#app .hcbar [data-act="back"]');if(b)b.click();else back()};
  const blocking=()=>!!(UI.sheet||UI.drawer||UI.sync);
  /* --- 1. Hoja inferior: arrastrar hacia abajo --- */
  let sh=null;
@@ -6854,7 +6857,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 19:29</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 20:25</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7019,8 +7022,17 @@ function selAmbBar(){const L=selLevels();if(!L.length)return '';const n=P_();
  return `<div class="chips selch selamb" role="group" aria-label="Filtrar por ámbito">${L.map(k=>{const lab=AMB_LV[k][0],v=n[AMB_LV[k][1]];
   return `<button class="${v?'on':''}" aria-pressed="${!!v}" data-act="selAmb" data-arg="${k}">${esc(v||lab)}${icon('down')}</button>`}).join('')}</div>`}
 setTimeout(()=>{if(typeof act==='undefined')return;
- act.selAmb=function(k){const lab=AMB_LV[k][0],f=AMB_LV[k][1],n=P_(),O=selAmbOpts(k),tot=selAmbBase(k).length,cur=n[f]||'';
-  sheet({title:lab,html:`<div class="card list ambl">${[['','Todos',tot],...O.map(([v,c])=>[v,v,c])].map(([v,t,c])=>`<button class="row ${cur===v?'on':''}" data-act="selAmbSet" data-arg="${k}|${esc(v)}"><div class="grow"><b>${esc(t)}</b></div><span class="cnt">${c}</span>${cur===v?icon('check'):''}</button>`).join('')}</div>`,actions:[]})};
+ act.selAmb=function(k){const lab=AMB_LV[k][0],f=AMB_LV[k][1],fld=AMB_LV[k][2],n=P_(),B=selAmbBase(k),tot=B.length,cur=n[f]||'';
+  const ALL={dep:'Todos los departamentos',prov:'Todas las provincias',dis:'Todos los distritos'}[k];
+  const par={prov:'dep',dis:'provincia'}[k];const parLv={prov:'dep',dis:'prov'}[k];
+  const row=(v,t,c,sm)=>`<button class="row ropt ${cur===v?'on':''}" role="radio" aria-checked="${cur===v}" data-act="selAmbSet" data-arg="${k}|${esc(v)}"><span class="rdo" aria-hidden="true"></span><div class="grow"><b>${esc(t)}</b>${sm?`<small>${esc(sm)}</small>`:''}</div><span class="rcnt">${c}</span></button>`;
+  const cnt={},grp={};B.forEach(x=>{const v=x[fld];if(!v)return;cnt[v]=(cnt[v]||0)+1;const g=par?(x[par]||'—'):'';(grp[g]=grp[g]||new Set()).add(v)});
+  const srt=a=>[...a].sort((x,y)=>x.localeCompare(y,'es'));
+  let html=`<div class="card list optlist rgrp" role="radiogroup">${row('',ALL,tot)}</div>`;
+  const gs=srt(Object.keys(grp));
+  if(par&&gs.length>1)html+=gs.map(g=>`<div class="rgh">${esc(g)}</div><div class="card list optlist rgrp" role="radiogroup">${srt(grp[g]).map(v=>row(v,v,cnt[v])).join('')}</div>`).join('');
+  else html+=`<div class="rgh">${{dep:'Departamentos',prov:'Provincias',dis:'Distritos'}[k]}${par&&gs.length===1?' · '+esc(gs[0]):''}</div><div class="card list optlist rgrp" role="radiogroup">${srt(Object.keys(cnt)).map(v=>row(v,v,cnt[v])).join('')}</div>`;
+  sheet({title:'Filtrar por '+lab.toLowerCase(),html,actions:[]})};
  act.selAmbSet=function(a){const i=a.indexOf('|'),k=a.slice(0,i),v=a.slice(i+1),n=P_(),L=selLevels();n[AMB_LV[k][1]]=v;L.slice(L.indexOf(k)+1).forEach(x=>n[AMB_LV[x][1]]='');UI.sheet=null;save();render()};
 },0);
 
