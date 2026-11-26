@@ -3463,6 +3463,7 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 :root[data-pal=salvia]{--hdr:#9CAF88;--primary:#E8412C;--on-primary:#FFFFFF;--brand:#E8412C;--deep:#4F6143;--blue:#C9361F;--link:#C9361F;--blue-l:#FCE9E5;--blue-m:#E8412C;--info-bg:#ECEFE6;--chip:rgba(232,65,44,.1);--prog:#6E8460;--prog-bg:#E3E8DC;--pin-sel:#4F6143;--bg:#F7F5EF;--page:#ECE9E0;--line:#E3E0D6;--text:#2F3A28;--muted:#5E6656;--segtrack:#E8E5DC;--segbd:#DCD8CD}
 /* enlaces/estados activos con relleno de acento: texto oscuro legible */
 :root:is([data-pal=lima],[data-pal=amarillo]) .seg button.on,:root:is([data-pal=lima],[data-pal=amarillo]) .chips button.on{color:#2B2D31}
+:root[data-pal=abismo] .seg button.on,:root[data-pal=abismo] .chips button.on{color:#1F100B}
 :root[data-pal=noche] .seg button.on,:root[data-pal=noche] .chips button.on{color:#0E2A47}
 /* Salvia: cabecera clara con texto oscuro */
 /* modo oscuro */
@@ -3471,8 +3472,8 @@ html[data-theme=dark][data-syshead=rosa] .appbar.hero:not(.prof) .hprog b:not(.o
 :root[data-theme="dark"][data-pal=amarillo]{--hdr:#2E3036;--primary:#FFC93C;--on-primary:#1F2024;--blue:#FFC93C;--link:#FFC93C;--blue-l:#3A3018;--info-bg:#25262B;--chip:rgba(255,201,60,.14);--prog:#FFC93C;--prog-bg:#2A2B30;--bg:#16171A;--page:#0E0F11;--card:#1F2024;--line:#33353B;--text:#F2F2F3;--muted:#A9AAB0;--segtrack:#25262B;--segbd:#33353B}
 :root[data-theme="dark"][data-pal=salvia]{--hdr:#3F4D36;--primary:#E8412C;--on-primary:#fff;--blue:#FF8A78;--link:#FF8A78;--blue-l:#3A1D18;--info-bg:#1F251B;--chip:rgba(232,65,44,.16);--prog:#B5C7A1;--prog-bg:#252C20;--bg:#12160F;--page:#0B0E09;--card:#1B2117;--line:#2E3828;--text:#EEF1EA;--muted:#A9B3A0;--segtrack:#1F251B;--segbd:#2E3828}
 /* ajustes de legibilidad de las paletas nuevas */
-:root:is([data-pal=noche],[data-pal=lima],[data-pal=amarillo]) .tabbar button.on{color:var(--on-primary)!important}
-:root:is([data-pal=noche],[data-pal=lima],[data-pal=amarillo]) .tabbar button.on svg{color:var(--on-primary)!important}
+:root:is([data-pal=noche],[data-pal=lima],[data-pal=amarillo],[data-pal=abismo]) .tabbar button.on{color:var(--on-primary)!important}
+:root:is([data-pal=noche],[data-pal=lima],[data-pal=amarillo],[data-pal=abismo]) .tabbar button.on svg{color:var(--on-primary)!important}
 :root[data-pal=salvia]:not([data-theme=dark]) :is(.dlk,.hpl,.ptrc,.avbtn){color:#4F6143}
 :root[data-pal=salvia]:not([data-theme=dark]) :is(.hhome,.hhtop.hcin){color:#1F2A18}
 :root[data-pal=salvia]:not([data-theme=dark]) .hhome .hhpick.sec{color:#1F2A18;background:rgba(31,42,24,.1)}
@@ -3602,6 +3603,11 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 
 .dlban .dlbar{width:100%;margin-top:8px}
 .hoc .tbd.ok{background:var(--ok-bg,#e6f4ea);color:var(--ok,#1E7B3A)}
+
+/* ===== Paleta «Abismo y rosa» (Abyss #014E6A · Nebula #28AFCB · Pulse #FF3D8E; fondo beige y texto café) ===== */
+:root[data-pal=abismo]{--hdr:#014E6A;--primary:#FF3D8E;--on-primary:#1F100B;--brand:#FF3D8E;--deep:#014E6A;--blue:#C9145F;--link:#C9145F;--blue-l:#FFE3EE;--blue-m:#FF3D8E;--info-bg:#DCEEF2;--chip:rgba(40,175,203,.16);--prog:#0E8DAA;--prog-bg:#DCEEF2;--pin-sel:#014E6A;--bg:#F7F1E8;--page:#ECE5D9;--line:#E5DCCD;--text:#3B2A22;--muted:#6B5A50;--segtrack:#E9E1D3;--segbd:#DDD3C3}
+:root[data-pal=abismo]:not([data-theme=dark]){--primary-ink:#C9145F}
+:root[data-theme="dark"][data-pal=abismo]{--hdr:#013A4F;--primary:#FF6FAB;--on-primary:#1F100B;--brand:#FF6FAB;--blue:#FF8FBF;--link:#FF8FBF;--blue-l:#3A1628;--info-bg:#0F2A33;--chip:rgba(255,111,171,.16);--prog:#4CC3DB;--prog-bg:#0F2A33;--bg:#0D1417;--page:#070C0E;--card:#14202A;--line:#223640;--text:#F3EEE8;--muted:#B3A79D;--segtrack:#0F2A33;--segbd:#223640}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5259,7 +5265,7 @@ const PHI={"presentation-chart":{"l": "<path d=\"M216,42H134V24a6,6,0,0,0-12,0V4
 const phIcon=n=>`<svg class="tph" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><g class="tph-l">${PHI[n].l}</g><g class="tph-f">${PHI[n].f}</g></svg>`;
 const VIEW_OK=['home','sistema','tablero','guardados','perfil','ajustes','aj-apariencia','aj-vistas','aj-permisos','aj-gps','ficha-mapa','mapas'];
 const tabOf=r=>['guardados','sync','perfil','tablero'].includes(r)?r:'home';
-const PALS=[['a','Institucional','#C8102E','#C8102E'],['b','Roja y azul','#C8102E','#0056AC'],['vino','Rojo y vino','#C8102E','#7A1022'],['grafito','Rojo y grafito','#C8102E','#2E3035'],['rosa','Vino y rosa','#7A1022','#FBEDEE'],['blanco','Grafito y blanco','#2E3035','#FFFFFF'],['marino','Rojo y marino','#C8102E','#1E3A5F'],['marinop','Rojo y marino profundo','#C8102E','#0F2A4A'],['marinoa','Rojo y marino azulado','#C8102E','#21468A'],['oceano','Océano','#0B4F8A','#0F6E7A'],['bosque','Bosque','#1F6B45','#16543A'],['andina','Andina','#9C3F1E','#6E3418'],['indigo','Índigo','#3F3A9E','#2E2A78'],['petroleo','Petróleo','#0F5E5C','#0B4746'],['grafneu','Grafito neutro','#2E3035','#3E4C5E'],['noche','Azul noche','#0E2A47','#FF6B4A'],['lima','Grafito lima','#2B2D31','#C6FF3D'],['amarillo','Gris amarillo','#2B2D31','#FFC93C'],['salvia','Salvia','#9CAF88','#E8412C']];
+const PALS=[['a','Institucional','#C8102E','#C8102E'],['b','Roja y azul','#C8102E','#0056AC'],['vino','Rojo y vino','#C8102E','#7A1022'],['grafito','Rojo y grafito','#C8102E','#2E3035'],['rosa','Vino y rosa','#7A1022','#FBEDEE'],['blanco','Grafito y blanco','#2E3035','#FFFFFF'],['marino','Rojo y marino','#C8102E','#1E3A5F'],['marinop','Rojo y marino profundo','#C8102E','#0F2A4A'],['marinoa','Rojo y marino azulado','#C8102E','#21468A'],['oceano','Océano','#0B4F8A','#0F6E7A'],['bosque','Bosque','#1F6B45','#16543A'],['andina','Andina','#9C3F1E','#6E3418'],['indigo','Índigo','#3F3A9E','#2E2A78'],['petroleo','Petróleo','#0F5E5C','#0B4746'],['grafneu','Grafito neutro','#2E3035','#3E4C5E'],['noche','Azul noche','#0E2A47','#FF6B4A'],['lima','Grafito lima','#2B2D31','#C6FF3D'],['amarillo','Gris amarillo','#2B2D31','#FFC93C'],['salvia','Salvia','#9CAF88','#E8412C'],['abismo','Abismo y rosa','#014E6A','#FF3D8E']];
 const palName=()=>(PALS.find(x=>x[0]===(S.pal||'a'))||PALS[0])[1];
 const palPick=()=>`<div class="shgrid" role="radiogroup">${PALS.map(([k,l,c1,c2])=>`<button role="radio" aria-checked="${(S.pal||'a')===k}" class="shopt ${(S.pal||'a')===k?'on':''}" data-act="ajSet" data-path="pal" data-val="${k}"><i class="shsw" style="background:linear-gradient(135deg,${c1} 50%,${c2} 50%)"></i><span class="shl">${l}${k==='a'?'<small class="segdef">Por defecto</small>':''}</span></button>`).join('')}</div>`;
 function applyTheme(){const d=document.documentElement;if(S.cards==='compacta'){S.cards='sombra';S.density=S.density||'compacta'}if(S.sysCards&&!S.density)S.density=S.sysCards;if(S.cards==='plana')d.dataset.cards='plana';else delete d.dataset.cards;d.dataset.density=S.density==='amplia'?'amplia':'compacta';if(S.sysic==='tipo'||S.sysic==='neutro')d.dataset.sysic=S.sysic;else delete d.dataset.sysic;if(S.pal&&S.pal!=='a'&&PALS.some(x=>x[0]===S.pal))d.dataset.pal=S.pal;else delete d.dataset.pal;const shm={vino:'vino',grafito:'grafito',rosa:'rosa',blanco:'blanca',marino:'marino',marinop:'marinop',marinoa:'marinoa',oceano:'oceano',bosque:'bosque',andina:'andina',indigo:'indigo',petroleo:'petroleo',grafneu:'grafneu',salvia:'salvia'}[S.pal];if(shm)d.dataset.syshead=shm;else delete d.dataset.syshead;if(S.theme==='light'||S.theme==='dark')d.dataset.theme=S.theme;else delete d.dataset.theme}
@@ -6921,7 +6927,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 16:28</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 17:42</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
