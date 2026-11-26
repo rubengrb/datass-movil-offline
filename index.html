@@ -4211,7 +4211,7 @@ function histList(){const p=P_(),f=p.filter||'all',q=String(p.hq||'').normalize(
  if(S.histView==='cal'){const r=histMonth(p.hmo||0);if(p.hday)recs=recs.filter(x=>x.ts>=+p.hday&&x.ts<+p.hday+864e5);else recs=recs.filter(x=>x.ts>=r.a&&x.ts<r.b)}
  let _tot=visibleRecs();if(S.histView==='cal'){const r=histMonth(p.hmo||0);_tot=p.hday?_tot.filter(x=>x.ts>=+p.hday&&x.ts<+p.hday+864e5):_tot.filter(x=>x.ts>=r.a&&x.ts<r.b)}_tot=_tot.length;
  if(f==='obs')recs=recs.filter(r=>['observado','vencido'].includes(valState(r)));else if(f==='pend')recs=recs.filter(r=>r.sync!=='sincronizado'||r.valPend);else if(f!=='all')recs=recs.filter(r=>r.modulo===f);
- if(q)recs=recs.filter(r=>{const s0=sys(r.sysId);return [r.nombre,s0.sap,s0.cp,MODS[r.modulo].n,(typeof MODC!=='undefined'&&MODC[r.modulo])||''].join(' ').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().includes(q)});
+ if(q)recs=recs.filter(r=>{const s0=sys(r.sysId);return [r.nombre,s0.sap,s0.cp,s0.cpCod||'',s0.nombre,s0.distrito||'',MODS[r.modulo].n,(typeof MODC!=='undefined'&&MODC[r.modulo])||''].join(' ').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().includes(q)});
  recs=recs.slice().sort((a,b)=>b.ts-a.ts);const DN=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],groups=[];recs.forEach(r=>{const d=new Date(r.ts);d.setHours(0,0,0,0);const k=+d;let g=groups.find(x=>x.k===k);if(!g)groups.push(g={k,l:[]});g.l.push(r)});
  const t0=new Date().setHours(0,0,0,0),p2=x=>String(x).padStart(2,'0'),lab=k=>{const d=new Date(k);return (k===t0?'Hoy':k===t0-864e5?'Ayer':DN[d.getDay()])+' · '+p2(d.getDate())+'/'+p2(d.getMonth()+1)+(d.getFullYear()!==new Date().getFullYear()?'/'+d.getFullYear():'')};
  const FL={obs:'Observados',pend:'Por enviar'},parts=[...(q?[`«${p.hq.trim()}»`]:[]),...(f!=='all'?[FL[f]||((typeof MODC!=='undefined'&&MODC[f])||(MODS[f]||{}).n||f)]:[]),...(p.fsys?[sys(p.fsys).nombre]:[]),...(S.histView==='cal'&&p.hday?[(d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'))(new Date(+p.hday))]:[])];
@@ -4234,9 +4234,9 @@ screens.guardados=()=>{
  <div class="hchips2">${nobs?chip('obs','alert','Observados',nobs,'r'):''}${npend&&!prof().tablero?chip('pend','cloud','Por enviar',npend,'a'):''}${mods.map(([m,n])=>chip(m,MODS[m].ic,(typeof MODC!=='undefined'&&MODC[m])||MODS[m].n,n)).join('')}</div>
  `;
  const hero=`<section class="hhome hhist ${anim?'anim':''}"><div class="hhtop">${avBtn()}<div class="hhwho"><b>Historial</b><span>${isOp()?'Mis registros en este equipo':'Registros de mis sistemas'}</span></div><span class="hhcir" role="img" aria-label="${S.online?'Con conexión':'Sin conexión'}">${icon(S.online?'wifi':'wifioff')}</span></div>
- ${S.histView==='cal'?histCal(f!=='all'&&MODS[f]?base.filter(r=>r.modulo===f):base):heroRes}<div class="hhsrch">${icon('search')}<input class="inp" placeholder="Buscar por sistema o actividad" data-bind="nav.p.hq" data-live enterkeyhint="search" value="${esc(p.hq||'')}" aria-label="Buscar en el historial"><button class="hsx" data-act="srchClear" data-arg="hq" aria-label="Borrar búsqueda" ${(p.hq||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
+ ${S.histView==='cal'?histCal(f!=='all'&&MODS[f]?base.filter(r=>r.modulo===f):base):heroRes}<div class="hhsrch">${icon('search')}<input class="inp" placeholder="Busca por sistema, centro poblado o actividad" data-bind="nav.p.hq" data-live enterkeyhint="search" value="${esc(p.hq||'')}" aria-label="Buscar en el historial"><button class="hsx" data-act="srchClear" data-arg="hq" aria-label="Borrar búsqueda" ${(p.hq||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
  return {title:'Historial',back:false,nobar:true,keepTabs:true,body:`${hero}<div class="pad hhpad ${anim?'anim':''}">
- ${histFltBar(sc)}
+
  <div id="live" class="hin">${histList()}</div></div>`};
 };
 
@@ -6874,7 +6874,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:07</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:14</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
