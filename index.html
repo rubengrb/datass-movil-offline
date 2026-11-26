@@ -3570,6 +3570,13 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .fltl{font-size:14.5px;font-weight:600;color:var(--text)!important}
 .fltl b{font-weight:800;color:var(--text)}
 .fltl button{font-size:13px}
+/* píldora tonal de filtros activos */
+.fltl{display:block;margin:0 0 12px;padding:0!important;font-size:inherit}
+.fltl .fpill{display:inline-flex;align-items:center;gap:8px;max-width:100%;min-height:36px;padding:0 8px 0 12px;border:0;border-radius:999px;background:color-mix(in srgb,var(--primary) 14%,var(--card));color:var(--deep);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.fltl .fpill>svg{width:16px;height:16px;flex:none}
+.fltl .fpill span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fltl .fpill .fx{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--card);flex:none}
+.fltl .fpill .fx svg{width:14px;height:14px}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -4003,14 +4010,15 @@ function sysCardHome(s,dist){
  return card}
 const homeFilt=()=>myScope().length>3;
 /* Línea de filtros activos + limpiar */
-function fltLine(n,parts,tot){return parts.length?`<div class="fltl" role="status"><span>${tot!=null?`Mostrando <b>${n} de ${tot}</b>`:`<b>${n} resultado${n===1?'':'s'}</b>`}</span><button data-act="clearFilters">${icon('x')}Limpiar filtros</button></div>`:''}
+function fltPill(n,tot,unit,act,arg){const u0=unit||'resultados',u=tot===1?u0.replace(/s$/,''):u0,t=tot!=null?`${n} de ${tot} ${u}`:`${n} ${n===1?u0.replace(/s$/,''):u0}`;return `<div class="fltl" role="status"><button class="fpill" data-act="${act}"${arg!=null?` data-arg="${arg}"`:''} aria-label="${t}. Quitar filtros">${icon('filter')}<span>${t}</span><i class="fx">${icon('x')}</i></button></div>`}
+function fltLine(n,parts,tot,unit){return parts.length?fltPill(n,tot,unit,'clearFilters'):''}
 function fltEmpty(msg,active,actn){return `<div class="card empty fem">${icon('search')}<b>${msg}</b>${active?`<small>Prueba con otra búsqueda o quita los filtros.</small><button class="femlk" data-act="${actn||'clearFilters'}">${icon('x')}Limpiar filtros</button>`:''}</div>`}
 function homeList(){
  const n=P_(),fv=homeFilt(),nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz(n.q).trim(),ft=(fv||prof().tablero)?(n.ftype||'all'):'all',dm={};
  let list=myScope().filter(s=>{const st=sysState(s);return (!q||nz([s.nombre,s.sap,s.cp,s.cpCod,s.distrito,s.provincia].join(' ')).includes(q))&&(ft==='all'||(ft==='sap'&&s.kind==='sap')||(ft==='alc'&&s.kind==='alc')||(ft==='pend'&&(st.dn||st.unsy||st.obs))||(ft==='ready'&&isDl(s.id))||(ft==='todl'&&!isDl(s.id))||(ft==='obs'&&st.obs)||(ft==='nomon'&&noMonToday(s)))});
  if(fv&&n.near&&S.loc){list.forEach(s=>dm[s.id]=kmBetween(S.loc,s));list.sort((a,b)=>dm[a.id]-dm[b.id])}
  const FT={obs:'Observados',nomon:'Sin monitoreo hoy',sap:'Agua',alc:'Alcantarillado',pend:'Con pendientes',ready:'En el equipo',todl:'En la nube'},parts=[...(q?[`«${n.q.trim()}»`]:[]),...(ft!=='all'?[FT[ft]||ft]:[]),...(fv&&n.near?['Más cercanos']:[])];
- return fltLine(list.length,parts,myScope().length)+(list.map(s=>sysCardHome(s,dm[s.id])).join('')||fltEmpty(q?`No hay sistemas que coincidan con «${esc(n.q.trim())}».`:'No hay sistemas con ese filtro.',parts.length>0))}
+ return fltLine(list.length,parts,myScope().length,'sistemas')+(list.map(s=>sysCardHome(s,dm[s.id])).join('')||fltEmpty(q?`No hay sistemas que coincidan con «${esc(n.q.trim())}».`:'No hay sistemas con ese filtro.',parts.length>0))}
 LIVE.home=homeList;
 /* Fecha relativa para «Para continuar» (la fecha exacta va en el tooltip) */
 function relT(ts){if(!ts)return '';const d=new Date(ts),n=Date.now(),m=Math.round((n-ts)/6e4),p=x=>String(x).padStart(2,'0'),full=`${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
@@ -4258,7 +4266,7 @@ function hubHistBody(recs){if(!recs.length)return `<div class="pad"><div class="
  const list=recs.filter(r=>f==='all'||(f==='obs'?isObs(r):r.modulo===f));
  const chips=`<div class="chips hhf" role="group" aria-label="Filtrar historial">${opts.map(([k,t,n])=>`<button class="${f===k?'on':''}" aria-pressed="${f===k}" data-act="hubHF" data-arg="${f===k?'all':k}">${esc(t)} <b>${n}</b></button>`).join('')}</div>`;
  let html='',cur='';list.forEach(r=>{const d=new Date(r.ts),k=HMESL[d.getMonth()]+' '+d.getFullYear();if(k!==cur){if(cur)html+='</div>';html+=`<div class="sectitle">${k}</div><div class="hhlist">`;cur=k}html+=hubHistRow(r)});if(cur)html+='</div>';
- const fl=f!=='all'?`<div class="fltl" role="status"><span>Mostrando <b>${list.length} de ${recs.length}</b></span><button data-act="hubHF" data-arg="all">${icon('x')}Limpiar filtros</button></div>`:'';
+ const fl=f!=='all'?fltPill(list.length,recs.length,'resultados','hubHF','all'):'';
  return `<div class="pad">${chips}${fl}${html||`<div class="card empty">No hay registros con ese filtro.</div>`}</div>`}
 
 /* Hub: «Pendientes» — descarga (una sola vez) + observados del sistema, como tarjetas */
@@ -6368,7 +6376,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;const _cf=act.clearFilters;ac
   return ambito().filter(x=>(!n.fdep||x.dep===n.fdep)&&(!n.fprov||x.provincia===n.fprov)&&(!n.fdis||x.distrito===n.fdis)&&(!q||(x.nombre+' '+x.sap+' '+x.cp+' '+x.prest).toLowerCase().includes(q))&&(!fcp||x.cp===fcp)&&(!fpr||x.prest===fpr)&&(fk==='all'||(fk.startsWith('d:')?x.distrito===fk.slice(2):fk==='on'?d.includes(x.id):fk==='alc'?x.kind==='alc':x.kind!=='alc')))};
  LIVE.sel=()=>{const d=P_().draft||[],L=selList();const n0=P_(),act0=!!((n0.q||'').trim()||n0.fcp||n0.fpr||n0.fdep||n0.fprov||n0.fdis||(n0.fk&&n0.fk!=='all')),tot=ambito().length;
   if(!L.length)return fltEmpty('No hay sistemas con esos filtros.',act0,'selClear');
-  const fl=act0?`<div class="fltl" role="status"><span>Mostrando <b>${L.length} de ${tot}</b></span><button data-act="selClear">${icon('x')}Limpiar filtros</button></div>`:'';
+  const fl=act0?fltPill(L.length,tot,'sistemas','selClear'):'';
   const dlL=dlOf(),sv=scopeIds(),_md=new Set(ambito().map(z=>z.distrito)).size>1;
   const row=x=>{const on=d.includes(x.id),a=x.kind==='alc',inEq=dlL.includes(x.id),bz=inEq&&almBusy(x.id),lk=bz&&on;
    const was=sv.includes(x.id),tag=lk?`<span class="sltg ok">${icon('devphone')}En tu equipo</span>`:inEq?(on?`<span class="sltg ok">${icon('devphone')}En tu equipo</span>`:`<span class="sltg rm">${icon('trash')}Se quitará del equipo</span>`):was?(on?`<span class="sltg nd">${icon('clouddl')}Sin descargar</span>`:`<span class="sltg rm">${icon('x')}Se quitará de tu lista</span>`):'';
@@ -6883,7 +6891,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 22:17</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 07:14</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
