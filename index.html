@@ -4236,7 +4236,7 @@ screens.guardados=()=>{
  const hero=`<section class="hhome hhist ${anim?'anim':''}"><div class="hhtop">${avBtn()}<div class="hhwho"><b>Historial</b><span>${isOp()?'Mis registros en este equipo':'Registros de mis sistemas'}</span></div><span class="hhcir" role="img" aria-label="${S.online?'Con conexión':'Sin conexión'}">${icon(S.online?'wifi':'wifioff')}</span></div>
  ${S.histView==='cal'?histCal(f!=='all'&&MODS[f]?base.filter(r=>r.modulo===f):base):heroRes}<div class="hhsrch">${icon('search')}<input class="inp" placeholder="Busca por sistema, centro poblado o actividad" data-bind="nav.p.hq" data-live enterkeyhint="search" value="${esc(p.hq||'')}" aria-label="Buscar en el historial"><button class="hsx" data-act="srchClear" data-arg="hq" aria-label="Borrar búsqueda" ${(p.hq||'').trim()?'':'hidden'}>${icon('x')}</button></div></section>`;
  return {title:'Historial',back:false,nobar:true,keepTabs:true,body:`${hero}<div class="pad hhpad ${anim?'anim':''}">
-
+ ${(sc.length>5||(sc.length>1&&base.length>10))?`<div class="sel-wrap hin" style="margin-bottom:8px">${selectF('nav.p.fsys',[['','Todos los sistemas'],...sc.map(x=>[x.id,x.sap+' · '+x.nombre])],fs)}</div>`:''}
  <div id="live" class="hin">${histList()}</div></div>`};
 };
 
@@ -6254,7 +6254,7 @@ function pfSysList(sc,p){if(!sc.length){p=p||prof();const vis=!!p.tablero,op=!vi
  const row=(i,b,sm,n)=>`<button class="row ropt ${i===cur?'on':''}" role="radio" aria-checked="${i===cur}" data-act="pickSel" data-arg="${i}"><span class="rdo" aria-hidden="true"></span><div class="grow"><b>${b}</b>${sm?`<small>${sm}</small>`:''}</div>${n!=null?`<span class="rcnt">${n}</span>`:''}</button>`;
  let html='',all='';const grp={sap:[],alc:[]};
  opts.forEach((o,i)=>{const s=o.value&&sys(o.value);if(!s||!s.id){all+=row(i,esc(o.textContent),null,recs.length);return}
-  grp[s.kind==='alc'?'alc':'sap'].push(row(i,esc(s.nombre),esc(s.sap),recs.filter(r=>r.sysId===s.id).length))});
+  grp[s.kind==='alc'?'alc':'sap'].push(row(i,esc(s.nombre),esc(s.cp||s.distrito||s.sap),recs.filter(r=>r.sysId===s.id).length))});
  html=`<div class="card list optlist rgrp" role="radiogroup">${all}</div>`+[['sap','Agua potable'],['alc','Alcantarillado']].filter(([k])=>grp[k].length).map(([k,t])=>`<div class="rgh">${t}</div><div class="card list optlist rgrp">${grp[k].join('')}</div>`).join('');
  sheet({title:'Filtrar por sistema',html})}}
 
@@ -6874,7 +6874,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:14</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:25</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
