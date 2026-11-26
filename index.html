@@ -3622,6 +3622,32 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 
 .fmsheet{touch-action:none}.fmsheet .fmlist{touch-action:pan-y}
 
+.fvp{margin:0 0 4px}
+.fvh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.fvh .f{margin:0}
+.fvmo{display:inline-flex;align-items:center;gap:2px;border:0;background:none;font:inherit;font-size:13px;font-weight:600;color:var(--text);padding:8px 4px 8px 8px;border-radius:10px;cursor:pointer}
+.fvchev{display:inline-flex;transition:transform .2s}.fvchev svg{width:16px;height:16px;transform:rotate(-90deg)}.fvchev.up{transform:rotate(180deg)}
+.fvstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.fvd{border:0;background:var(--page,#EFEFF2);color:var(--text);border-radius:14px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;cursor:pointer;transition:background .15s,transform .1s}
+.fvd small{font-size:11px;color:var(--muted)}.fvd b{font-size:15px;font-weight:600}
+.fvd:active{transform:scale(.96)}
+.fvd.on{background:var(--hdr,#C8102E);color:#fff}.fvd.on small{color:rgba(255,255,255,.85)}
+.fvcal{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+.fvnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.fvnav b{font-size:14px}.fvnav span{display:flex;gap:8px}
+.fvar{width:32px;height:32px;border-radius:50%;border:0;background:var(--page,#EFEFF2);color:var(--text);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.fvar svg{width:16px;height:16px}.fvar.nx svg{transform:rotate(180deg)}
+.fvar:disabled{opacity:.35;cursor:default}
+.fvw,.fvg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center}
+.fvw{font-size:11px;color:var(--muted);margin-bottom:4px}
+.fvg{gap:2px}
+.fvc{border:0;background:none;font:inherit;font-size:14px;color:var(--text);height:36px;border-radius:50%;cursor:pointer}
+.fvc.hoy{box-shadow:inset 0 0 0 1.5px var(--hdr,#C8102E)}
+.fvc.on{background:var(--hdr,#C8102E);color:#fff;font-weight:600}
+.fvc:disabled{color:var(--muted);opacity:.35;text-decoration:line-through;cursor:default}
+.fvnote{font-size:12px;color:var(--muted);margin:8px 0 0;text-align:center}
+.fvsel{font-size:12px;color:var(--muted);margin:12px 0 0}.fvsel b{color:var(--text)}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -5155,7 +5181,7 @@ screens['mnt-nueva']=()=>{const s=sys(P_().sid),inv=invOf(s),p=P_();const sit=p.
  <div class="card" style="padding:16px"><b style="font-size:18px">${esc(s.nombre)} · ${s.sap}</b><div class="mini" style="margin-top:4px">Tipología: <b style="color:var(--text)">${TIPOL[s.tip].largo}</b></div><div class="mini" style="margin-top:8px;display:flex;gap:8px;align-items:center">${icon('box')} Inventario vigente: <b style="color:var(--text)">${inv.ver?unitsOf(inv).length+' unidades':'por verificar'}</b></div></div>
  <h2 class="q" style="margin-top:16px">¿En qué situación se realizará el registro?</h2>
  ${SITS.map(([k,t,ic,fg,bg])=>rcard(sit===k,'set',k,`<div class="sitic" style="background:${bg};color:${fg}">${icon(ic)}</div><div class="grow"><b>${t}</b></div>`,`data-path="nav.p.sit" data-val="${k}"`)).join('')}${err('sit')}
- <label class="f" for="fv">Fecha de la visita</label><input id="fv" type="date" class="inp" data-bind="nav.p.fv" value="${esc(p.fv||isoHoy())}">
+ ${fvPicker(p)}
  ${blocked?`<div class="note warn">${icon('alert')}<div>Este sistema aún no tiene inventario verificado. Primero registra una <b>Verificación de campo</b> para confirmar sus componentes.</div></div>`:''}
  ${inv.ver&&sit&&sit!=='ver'?`<div class="note">${icon('box')}<div>Inventario verificado el ${inv.fecha} · ${unitsOf(inv).length} unidades. Esta visita comenzará sin evaluaciones ni fotografías nuevas.</div></div>`:''}
  <div class="note">${icon('info')}<div>Las condiciones y fotografías se guardarán únicamente en esta visita.</div></div>
@@ -5244,7 +5270,7 @@ const mntAct={
  mntNueva(){const s=sys(P_().sid);const open=S.visits.find(v=>v.sysId===s.id&&!v.saved&&(!v.dni||v.dni===S.user.dni));if(open)return sheet({title:'Hay una visita en curso',body:`${SITN[open.sit]} del ${isoToDmy(open.fecha)} aún no se ha cerrado. Puedes continuarla o crear una visita nueva (son registros independientes).`,actions:[{label:'Continuar la visita en curso',act:'openVisit',arg:open.id,primary:true},{label:'Crear visita nueva',act:'mntNuevaForce'},{label:'Cancelar',act:'closeSheet'}]});go('mnt-nueva',{sit:'',fv:isoHoy()})},
  mntNuevaForce(){UI.sheet=null;go('mnt-nueva',{sit:'',fv:isoHoy()})},
  mntCrear(){const p=P_(),s=sys(p.sid);if(!p.sit){UI.err={sit:'Selecciona la situación de la visita.'};return render()}
-  const v={id:'V'+Date.now(),dni:S.user.dni,sysId:s.id,sit:p.sit,fecha:p.fv||isoHoy(),ev:{},saved:false};S.visits.push(v);S.nav.stack.pop();replace('mnt-comp',{vid:v.id});
+  const v={id:'V'+Date.now(),dni:S.user.dni,sysId:s.id,sit:p.sit,fecha:(p.fv&&p.fv<=isoHoy()?p.fv:isoHoy()),ev:{},saved:false};S.visits.push(v);S.nav.stack.pop();replace('mnt-comp',{vid:v.id});
   if(!invOf(s).ver)toast('Primero verifica el inventario del sistema.')},
  mntVerif(){const v=curVisit(),inv=invOf(sys(v.sysId));const vd={};inv.comps.forEach((c,i)=>{vd[i]={tiene:c.tiene===null?'':c.tiene?'Sí':'No',n:c.tiene?String(c.units.length):'1',mod:c.mod}});go('mnt-verif',{vd})},
  vdStep(a){const [i,d]=a.split('.');const x=P_().vd[i];x.n=String(Math.max(1,(parseInt(x.n)||0)+(+d||-1)));save();render()},
@@ -6940,7 +6966,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 18:27</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 18:38</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7236,6 +7262,13 @@ document.addEventListener('click',e=>{if(window._fmSw&&Date.now()-window._fmSw<5
 },0);
 
 function sysIdRow(s){const A={A1:'480121',A2:'480122',A3:'480123'};const id=s.sid||(s.kind==='alc'?A[s.id]:'');return id?`<div><span>${s.kind==='alc'?'Alcantarillado ID':'Sistema ID'}</span><b>${id}</b></div>`:''}
+
+function fvPicker(p){const hoy=isoHoy(),fv=(p.fv&&p.fv<=hoy)?p.fv:hoy,MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],MC=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],DL=['D','L','M','M','J','V','S'],pd=n=>String(n).padStart(2,'0'),iso=d=>`${d.getFullYear()}-${pd(d.getMonth()+1)}-${pd(d.getDate())}`;
+ const ft=new Date(fv+'T12:00:00'),ho=new Date(hoy+'T12:00:00'),open=!!p.fvOpen,vm=(p.fvM&&/^\d{4}-\d{2}$/.test(p.fvM)&&p.fvM<=hoy.slice(0,7))?p.fvM:fv.slice(0,7),[vy,vmo]=vm.split('-').map(Number);
+ let strip='';for(let k=6;k>=0;k--){const d=new Date(ho);d.setDate(d.getDate()-k);const i=iso(d),on=i===fv;strip+=`<button type="button" class="fvd ${on?'on':''}" data-act="fvPick" data-arg="${i}" aria-pressed="${on}" aria-label="${d.getDate()} de ${MES[d.getMonth()].toLowerCase()}${k===0?', hoy':''}"><small>${DL[d.getDay()]}</small><b>${d.getDate()}</b></button>`}
+ let cal='';if(open){const off=(new Date(vy,vmo-1,1).getDay()+6)%7,nd=new Date(vy,vmo,0).getDate(),isLast=vm>=hoy.slice(0,7);let cells='';for(let i=0;i<off;i++)cells+='<span></span>';for(let d=1;d<=nd;d++){const i=`${vy}-${pd(vmo)}-${pd(d)}`,fut=i>hoy,on=i===fv;cells+=`<button type="button" class="fvc ${on?'on':''} ${i===hoy?'hoy':''}" data-act="fvPick" data-arg="${i}" ${fut?'disabled aria-disabled="true"':''} aria-pressed="${on}">${d}</button>`}
+  cal=`<div class="fvcal"><div class="fvnav"><b>${MES[vmo-1]} ${vy}</b><span><button type="button" class="fvar" data-act="fvNav" data-arg="-1" aria-label="Mes anterior">${icon('back')}</button><button type="button" class="fvar nx" data-act="fvNav" data-arg="1" aria-label="Mes siguiente" ${isLast?'disabled aria-disabled="true"':''}>${icon('back')}</button></span></div><div class="fvw">${['L','M','M','J','V','S','D'].map(x=>`<span>${x}</span>`).join('')}</div><div class="fvg">${cells}</div><p class="fvnote">Los días posteriores a hoy no se pueden elegir.</p></div>`}
+ return `<div class="fvp"><div class="fvh"><label class="f" id="fvl">Fecha de la visita</label><button type="button" class="fvmo" data-act="fvMonth" aria-expanded="${open}">${MC[ft.getMonth()].replace(/^./,c=>c.toUpperCase())} ${ft.getFullYear()}<i class="fvchev ${open?'up':''}">${icon('chev')}</i></button></div><div class="fvstrip" role="group" aria-labelledby="fvl">${strip}</div>${cal}<p class="fvsel">Visita del <b>${isoToDmy(fv)}</b>${fv===hoy?' · hoy':''}</p></div>`}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
@@ -7524,6 +7557,9 @@ const act={
  monChangeRes(){const m=S.mon;if(!m||m.points.some(x=>x.done))return;const sid=m.sysIdx,ri=m.resIdx||0;S.mon=null;S.nav.stack=HS(sid);S.nav.route='mon-sistema';S.nav.p={sysIdx:sid,resIdx:ri};UI.mo='back';save();render(true)},
  setRes(i){S.nav.p.resIdx=+i;save();render()},
  openVisit(id){UI.sheet=null;const v=S.visits.find(x=>x.id===id);if(!v)return;S.nav.stack=[{route:'home',p:{}},{route:'sistema',p:{sid:v.sysId,htab:'act'}},{route:'mnt-home',p:{sid:v.sysId,mod:modOf(sys(v.sysId))}}];S.nav.route='mnt-comp';S.nav.p={sid:v.sysId,vid:id,mod:modOf(sys(v.sysId))};save();render(true)},
+ fvPick(i){if(!/^\d{4}-\d{2}-\d{2}$/.test(i)||i>isoHoy())return;const p=P_();p.fv=i;p.fvM=i.slice(0,7);save();render()},
+ fvMonth(){const p=P_();p.fvOpen=!p.fvOpen;if(p.fvOpen)p.fvM=((p.fv&&p.fv<=isoHoy())?p.fv:isoHoy()).slice(0,7);render()},
+ fvNav(d){const p=P_(),[y,m]=(p.fvM||isoHoy().slice(0,7)).split('-').map(Number),n=new Date(y,m-1+(+d),1),k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;if(k>isoHoy().slice(0,7))return;p.fvM=k;render()},
  ...cloAct,...mntAct
 };
 /* Limpieza y desinfección: componentes por tipo de sistema (sin cambios funcionales) */
