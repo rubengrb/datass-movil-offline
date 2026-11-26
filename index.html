@@ -3584,6 +3584,18 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .pfsys .pfdl.off,.pfall.off{opacity:.45}
 .pfsys .pfsm .grow .sltg{margin-top:4px}
 
+/* perfil: estado a la derecha con leyenda corta */
+.pfsys .pfcap{align-self:center;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:58px;padding:0 2px;margin-left:8px;flex:none;font-size:11px;line-height:1.1;background:none;border:0}
+.pfsys .pfcap svg{width:18px;height:18px}
+.pfsys .pfcap.ok{color:var(--ok)}
+.pfsys .pfdl.pfcap{width:auto;height:auto;border:0;border-radius:0;background:none;color:var(--text);display:flex}
+.pfsys .pfdl.pfcap .pfdlc{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--hdr,#C8102E);font-style:normal}
+.pfsys .pfdl.pfcap .pfdlc svg{width:16px;height:16px}
+.pfsys .pfdl.pfcap span{font-size:11px;font-weight:600}
+.pfsys .pfcap{min-width:0;margin-left:2px}
+.pfsys .pfch{padding:0 12px 0 2px}
+.pfsys .pfcap.ok,.pfsys .pfcap.ok span{color:var(--ok,#1E7B3A)!important}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -6897,7 +6909,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 15:48</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 15:57</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7020,9 +7032,8 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 {const _pf=pfSysList;pfSysList=function(sc,p){if(!sc.length||!needsDl())return _pf.apply(this,arguments);
  const cpN=s=>String(s.cp||'').replace(/^\s*\d+\s*-\s*/,'').toLowerCase().replace(/(^|\s)(\S)/g,(a,b,c)=>b+c.toUpperCase()).replace(/\s(De|Del|La|Las|Los|El|Y)(?=\s)/g,x=>x.toLowerCase());
  const row=s=>{const dl=isDl(s.id),q=opQ(s.id),pc=UI.dlp[s.id];const sub=!dl&&(pc!=null||q)?(pc!=null?`Descargando · ${Math.round(pc)}%`:'Se descargará al tener conexión'):`CP ${esc(s.cpCod||String(s.cp||'').match(/^\s*(\d+)/)?.[1]||'')} · ${esc(cpN(s))}`;
-  const tag=dl?`<span class="sltg ok">${icon('devphone')}En tu equipo</span>`:'';
-  const side=!dl&&!q?`<button class="pfdl${S.online?'':' off'}" data-act="dlSys" data-arg="${s.id}" aria-label="Descargar ${esc(s.nombre)}"${S.online?'':' aria-disabled="true"'}>${icon('download')}</button>`:'';
-  return `<div class="row pfsys ${dl?'':'nodl'}"><button class="pfsm" data-act="openSys" data-arg="${s.id}"><div class="ico ${s.kind==='alc'?'k-alc':'k-sap'}">${icon(s.kind==='alc'?'syssewer':'syswater')}</div><div class="grow"><b>${esc(s.sap)} · ${esc(s.nombre)}</b><small>${sub}</small>${tag}</div></button>${side}<button class="pfch" data-act="openSys" data-arg="${s.id}" aria-label="Abrir ${esc(s.nombre)}" tabindex="-1">${icon('chev','chev')}</button></div>`};
+  const side=dl?`<div class="pfcap ok" aria-label="En tu equipo">${icon('devphone')}<span>En equipo</span></div>`:!q?`<button class="pfdl pfcap dn${S.online?'':' off'}" data-act="dlSys" data-arg="${s.id}" aria-label="Descargar ${esc(s.nombre)}"${S.online?'':' aria-disabled="true"'}><i class="pfdlc">${icon('download')}</i><span>Descargar</span></button>`:'';
+  return `<div class="row pfsys ${dl?'':'nodl'}"><button class="pfsm" data-act="openSys" data-arg="${s.id}"><div class="ico ${s.kind==='alc'?'k-alc':'k-sap'}">${icon(s.kind==='alc'?'syssewer':'syswater')}</div><div class="grow"><b>${esc(s.sap)} · ${esc(s.nombre)}</b><small>${sub}</small></div></button>${side}<button class="pfch" data-act="openSys" data-arg="${s.id}" aria-label="Abrir ${esc(s.nombre)}" tabindex="-1">${icon('chev','chev')}</button></div>`};
  const A=sc.filter(s=>isDl(s.id)),B=sc.filter(s=>!isDl(s.id)),todo=B.map(s=>s.id).filter(id=>!opQ(id));
  const lk=todo.length>1?`<button class="row pfall${S.online?'':' off'}" data-act="dlTodos"><div class="ico">${icon('download')}</div><div class="grow"><b>Descargar todos</b><small>${todo.length} sistemas · ${mbTxt(opPendMB(todo))}</small></div></button>`:'';
  return `<div class="sectitle">${isOp()?'Mis sistemas':'Sistemas a tu cargo'} · ${sc.length}</div><div class="card list">${A.map(row).join('')}${B.map(row).join('')}${lk}</div>`}}
