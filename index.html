@@ -6897,7 +6897,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 15:46</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 15:48</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7155,6 +7155,18 @@ setTimeout(()=>{if(typeof act==='undefined'||!act.hubHF)return;const _hf=act.hub
  <p class="mini" style="margin:8px 2px 0">Se abren en el navegador. Necesitas conexión.</p>
  `;
  v.body=v.body.replace('<div class="sectitle">Cuenta</div>',blk+'<div class="sectitle">Cuenta</div>');return v}}
+
+/* entrada escalonada (fundido + ascenso suave) en Perfil, Ajustes y cada pestaña del hub; solo al entrar, no al volver atrás ni al redibujar */
+{const _ma=motionAfter;motionAfter=function(){const back=UI.mo==='back';const r=_ma.apply(this,arguments);try{entStagger(back)}catch(e){}return r}}
+function entStagger(back){
+ const r=S.nav.route;if(r!=='perfil'&&r!=='ajustes'&&r!=='sistema'){UI.entKey=null;return}
+ const p=S.nav.p||{},key=r==='sistema'?'sistema|'+p.sid+'|'+(p.htab||'act'):r;
+ if(key===UI.entKey)return;UI.entKey=key;
+ if(back||RM())return;
+ const sc=document.getElementById('scroll');if(!sc)return;
+ const box=r==='sistema'?(sc.querySelector(':scope > .fpanel.pad')||sc.querySelector(':scope > .fwrap .fpanel.pad')||sc.querySelector(':scope > .pad')):sc.querySelector('.pfscr > .pad');
+ if(!box)return;
+ [...box.children].filter(el=>el.offsetHeight>0).slice(0,12).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:420,easing:'cubic-bezier(.2,0,0,1)',delay:60+Math.min(i,7)*55,fill:'backwards'}))}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
