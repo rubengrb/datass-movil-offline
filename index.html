@@ -3609,6 +3609,12 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 :root[data-pal=abismo]:not([data-theme=dark]){--primary-ink:#C9145F}
 :root[data-theme="dark"][data-pal=abismo]{--hdr:#013A4F;--primary:#FF6FAB;--on-primary:#1F100B;--brand:#FF6FAB;--blue:#FF8FBF;--link:#FF8FBF;--blue-l:#3A1628;--info-bg:#0F2A33;--chip:rgba(255,111,171,.16);--prog:#4CC3DB;--prog-bg:#0F2A33;--bg:#0D1417;--page:#070C0E;--card:#14202A;--line:#223640;--text:#F3EEE8;--muted:#B3A79D;--segtrack:#0F2A33;--segbd:#223640}
 
+.fmhd{display:flex;align-items:center;gap:12px;margin:2px 0 8px}
+.fmhd .grow{min-width:0;flex:1}
+.fmhd b{display:block;font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fmhd small{display:block;font-size:12px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fmcnt{flex:none;font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--info-bg,#E8EEF7);color:var(--link,var(--hdr))}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -6757,9 +6763,9 @@ screens['ficha-mapa']=()=>{const p=P_(),s=sys(p.sid);if(!s)return screens.home()
  const pins=pts.map(x=>`<button class="mpt fpt st-info" style="left:${x.x*100}%;top:${Y(x.y)/H*100}%" data-act="fichaTip" data-arg="${x.pt.id}" aria-label="${esc(x.pt.nombre)}"><span>${icon(PT_ICON[x.k])}</span><small>${esc(x.pt.codigo||PT_ONE[x.k])}</small></button>`).join('');
  const rows=pts.map(x=>`<button class="fmrow" data-act="fichaFly" data-arg="${x.pt.id}"><span class="ico">${icon(PT_ICON[x.k])}</span><span class="grow"><b>${esc(x.pt.nombre)}</b><small>${esc(x.pt.codigo||PT_ONE[x.k])} · ${distTxt(x.m)}</small></span></button>`).join('');
  const body=`<div class="mapscr fmscr"><div class="mapcv" style="--mx:${(UI.mapT||{}).x||0}px;--my:${(UI.mapT||{}).y||0}px;--mz:${(UI.mapT||{}).z||1}"><svg class="fmbig" viewBox="${-W} ${-H} ${3*W} ${3*H}" aria-hidden="true">${(()=>{const base=niceMap(fseed(s),W,H,{});let o='';for(let j=-1;j<=1;j++)for(let i=-1;i<=1;i++){const sx=i?-1:1,sy=j?-1:1,tx=i===-1?0:i===1?2*W:0,ty=j===-1?0:j===1?2*H:0;o+=i||j?`<g transform="translate(${tx},${ty}) scale(${sx},${sy})">${base}</g>`:`<g>${niceMap(fseed(s),W,H,{label:s.cp})}</g>`}return o})()}</svg><span class="mme" style="left:${ux*100}%;top:${Y(uy)/H*100}%"><i></i></span>${pins}</div>
-  <header class="rphead"><button class="hcir" data-act="back" aria-label="Volver a la ficha">${icon('back')}</button><div class="rpht"><b>Ubicación de componentes</b><span>${esc(s.sap)} · ${esc(s.nombre)}</span></div>${connBtnHtml()}</header>
+  <header class="rphead"><button class="hcir" data-act="back" aria-label="Volver a la ficha">${icon('back')}</button><div class="rpht"><b>Ubicación de componentes</b></div>${connBtnHtml()}</header>
   <div class="mctl"><button class="mcb" data-act="mapZoom" data-arg="1" aria-label="Acercar">${icon('plus')}</button><button class="mcb" data-act="mapZoom" data-arg="-1" aria-label="Alejar">${icon('minus')}</button><button class="mcb" data-act="mapZoom" data-arg="0" aria-label="Ver todos los componentes">${icon('routepts')}</button><button class="mcb" data-act="mapMe" aria-label="Centrar en mi ubicación">${icon('near')}</button></div>
-  <div class="msheet fmsheet"><div class="mgrab"><i></i></div><p class="mss" style="margin-bottom:8px">${pts.length} componentes en el mapa</p><div class="fmlist">${rows}</div></div></div>`;
+  <div class="msheet fmsheet"><div class="mgrab"><i></i></div><div class="fmhd"><div class="grow"><b>${esc(s.nombre)}</b><small>CP ${cpNice(s)}</small></div><span class="fmcnt">${pts.length} ${pts.length===1?'componente':'componentes'}</span></div><div class="fmlist">${rows}</div></div></div>`;
  return {title:'Mapa del sistema',nobar:true,tabs:false,body}};
 {const _rf=render;render=function(){const r=_rf.apply(this,arguments);if(S.nav.route==='ficha-mapa'&&UI.fmFit){UI.fmFit=0;requestAnimationFrame(()=>requestAnimationFrame(()=>mapFit(false)))}return r}}
 /* la ficha siempre empieza mostrando todo: el acercamiento se reinicia al salir y volver */
@@ -6927,7 +6933,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 17:49</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 17:56</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
