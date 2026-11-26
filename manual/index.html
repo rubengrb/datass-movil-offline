@@ -21,6 +21,22 @@ blockquote{margin:14px 0;padding:10px 16px;background:#FFF7E8;border-left:4px so
 code{background:#F3F4F6;padding:1px 5px;border-radius:5px;font-size:.92em}
 .upd{color:var(--mut);font-size:13px;margin:0 0 18px}
 @media (max-width:860px){.wrap{grid-template-columns:1fr;padding:14px 10px 48px}nav#TOC{position:static;max-height:none}main{padding:18px 16px}h1{font-size:25px}}
+/* nav-progreso */
+header.top .pg{position:absolute;left:0;bottom:0;height:3px;width:0;background:#fff;opacity:.9;pointer-events:none}
+nav#TOC a{transition:background .15s,color .15s}
+nav#TOC a.act,.curm a.act{background:#FBEDEE;color:var(--red);font-weight:600;box-shadow:inset 3px 0 0 var(--red);border-radius:0 6px 6px 0}
+nav#TOC a.anc,.curm a.anc{color:var(--red);font-weight:600}
+.tocp{font-size:12px;color:var(--mut);margin:0 0 10px;padding:0 6px}.tocp i{display:block;height:4px;border-radius:2px;background:#ECEEF1;margin-top:5px;overflow:hidden}.tocp u{display:block;height:4px;width:0;background:var(--red);text-decoration:none;transition:width .15s}
+.cur{display:none;position:sticky;top:var(--hh,49px);z-index:4;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cur>button{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border:0;background:none;font:inherit;font-size:14px;color:var(--ink);text-align:left;cursor:pointer}
+.cur .n{flex:none;font-size:12px;color:var(--red);font-weight:700;background:#FBEDEE;border-radius:999px;padding:2px 8px}
+.cur .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.cur .c{flex:none;color:var(--mut);transition:transform .2s}.cur.open .c{transform:rotate(180deg)}
+.cur .curm{display:none;max-height:60vh;overflow:auto;border-top:1px solid var(--line);padding:6px 8px 10px;font-size:14px}.cur.open .curm{display:block}
+.curm ul{list-style:none;margin:0;padding-left:10px}.curm>ul{padding-left:0}.curm a{color:var(--ink);text-decoration:none;display:block;padding:6px 8px;border-radius:6px}.curm ul ul a{color:var(--mut);font-size:13px}
+@media (max-width:860px){html.js nav#TOC{display:none}html{scroll-padding-top:116px}.cur{display:block}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tocp u,nav#TOC a{transition:none}}
+/* /nav-progreso */
 </style></head><body>
 <header class="top"><b>Manual de
 usuario</b><a href="../">← Abrir la app</a></header>
@@ -1026,4 +1042,32 @@ observado. Toca el candado para ver cuál y resolverlo.</p>
 <p><strong>¿Cómo sé si tengo la última versión?</strong> Mira el número
 de versión al final de <strong>Ajustes</strong> y compáralo con el que
 te indique tu coordinador.</p>
-</main></div><script>document.querySelectorAll('main img').forEach(i=>{i.style.cursor='zoom-in';i.title='Toca para ampliar';i.onclick=()=>window.open(i.src,'_blank')})</script></body></html>
+</main></div><script>document.querySelectorAll('main img').forEach(i=>{i.style.cursor='zoom-in';i.title='Toca para ampliar';i.onclick=()=>window.open(i.src,'_blank')})</script><script>/* nav-progreso */
+(function(){var nav=document.getElementById('TOC');if(!nav)return;var root=document.documentElement;root.classList.add('js');
+var hd=document.querySelector('header.top'),pg=document.createElement('div');pg.className='pg';hd&&hd.appendChild(pg);
+function dep(a){var n=0,e=a;while((e=e.parentElement)&&e!==nav){if(e.tagName==='UL')n++}return n}
+var all=[].slice.call(nav.querySelectorAll('a')).map(function(a){var el=document.getElementById(decodeURIComponent((a.getAttribute('href')||'').slice(1)));return el?{a:a,el:el,d:dep(a),h:a.getAttribute('href')}:null}).filter(Boolean);
+if(!all.length)return;
+var top=all.filter(function(x){return x.d===1}),secs=top.length===1&&all.some(function(x){return x.d===2})?all.filter(function(x){return x.d===2}):top;
+var tp=document.createElement('div');tp.className='tocp';tp.innerHTML='<span>Leído <b>0%</b></span><i><u></u></i>';nav.insertBefore(tp,nav.firstChild);
+var cur=document.createElement('div');cur.className='cur';cur.innerHTML='<button type="button" aria-expanded="false"><span class="n"></span><span class="t"></span><span class="c" aria-hidden="true">▾</span></button><div class="curm"></div>';
+var cm=cur.querySelector('.curm');cm.innerHTML=nav.querySelector('ul').outerHTML;[].forEach.call(cm.querySelectorAll('[id]'),function(e){e.removeAttribute('id')});
+if(hd)hd.insertAdjacentElement('afterend',cur);else document.body.insertBefore(cur,document.body.firstChild);
+var btn=cur.querySelector('button');btn.onclick=function(){var o=cur.classList.toggle('open');btn.setAttribute('aria-expanded',o)};
+cm.addEventListener('click',function(e){if(e.target.closest('a'))cur.classList.remove('open');btn.setAttribute('aria-expanded','false')});
+function hh(){root.style.setProperty('--hh',(hd?hd.offsetHeight:0)+'px')}
+var tick=0,last=null;
+function upd(){tick=0;var H=Math.max(document.documentElement.scrollHeight-innerHeight,1),p=Math.max(0,Math.min(1,scrollY/H)),pc=Math.round(p*100);
+ pg.style.width=pc+'%';tp.querySelector('b').textContent=pc+'%';tp.querySelector('u').style.width=pc+'%';
+ var Y=118,act=all[0];for(var i=0;i<all.length;i++){if(all[i].el.getBoundingClientRect().top<=Y)act=all[i];else break}
+ if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)act=all[all.length-1];
+ var si=-1;for(var j=0;j<secs.length;j++){if(secs[j].el.getBoundingClientRect().top<=Y)si=j;else break}
+ if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)si=secs.length-1;
+ var anc=null;if(act.d>(secs[0]?secs[0].d:1)&&si>=0)anc=secs[si];
+ if(last!==act){last=act;[].forEach.call(document.querySelectorAll('nav#TOC a,.curm a'),function(a){var h=a.getAttribute('href');a.classList.toggle('act',h===act.h);a.classList.toggle('anc',!!anc&&h===anc.h&&h!==act.h)});
+  var vis=nav.offsetParent!==null;if(vis){var r=act.a.getBoundingClientRect(),nr=nav.getBoundingClientRect();if(r.top<nr.top+50||r.bottom>nr.bottom-10)nav.scrollTop+=r.top-nr.top-nav.clientHeight/3}}
+ var s=si>=0?secs[si]:null;cur.querySelector('.n').textContent=s?(si+1)+' de '+secs.length:'Inicio';cur.querySelector('.t').textContent=(s?s.a:act.a).textContent.replace(/\s+/g,' ').trim()}
+function q(){if(!tick)tick=requestAnimationFrame(upd)}
+addEventListener('scroll',q,{passive:true});addEventListener('resize',function(){hh();last=null;q()});addEventListener('hashchange',q);hh();upd();
+})();
+/* /nav-progreso */</script></body></html>
