@@ -3566,6 +3566,10 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .sll{overflow:hidden}
 .sll .slr{position:relative;width:calc(100% + 32px);margin:0 -16px;padding-left:16px;padding-right:16px;border-top:0}
 .sll .slr+.slr::before{content:"";position:absolute;top:0;left:16px;right:16px;border-top:1px solid var(--line);pointer-events:none}
+/* «Mostrando X de Y» al filtrar: más grande y con más contraste */
+.fltl{font-size:14.5px;font-weight:600;color:var(--text)!important}
+.fltl b{font-weight:800;color:var(--text)}
+.fltl button{font-size:13px}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6879,7 +6883,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 22:03</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 22:17</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -6914,7 +6918,7 @@ screens.almacen=()=>{const ids=almIds(),M=mapsOf(),L=mapDistritos(),maps=L.filte
  <div class="card"><div class="row"><div class="ico">${icon('camera')}</div><div class="grow"><b>${ph?`${ph} foto${ph===1?'':'s'} · ${f1(phMB)} MB`:'Sin fotos pendientes'}</b><small>Se borran del equipo cuando DATASS confirma la recepción</small></div>${ph?`<button class="btn sm ghost" data-act="syncAll">${icon('upload')} Enviar</button>`:''}</div></div>
  <p class="mini" style="margin:12px 2px 0">Quitar un sistema no borra nada en DATASS: pasa a «En la nube» y puedes volver a descargarlo con conexión. No se puede quitar mientras tenga una actividad en curso, registros por enviar o un registro observado por corregir.</p></div></div>`}};
 setTimeout(()=>{if(typeof act==='undefined')return;
- act.almLock=function(id){const b=almBusy(id),s=sys(id);if(!b)return render();sheet({title:`No puedes quitar ${s.sap||s.nombre} todavía`,html:`<p class="hint" style="margin:0"><b>${b.t}.</b> ${b.d}</p>`,actions:[{label:b.btn,act:'almGo',arg:id,primary:true},{label:'Entendido',act:'closeSheet'}]})};
+ act.almLock=function(id){const b=almBusy(id),s=sys(id);if(!b)return render();sheet({title:`No puedes quitar ${s.nombre} todavía`,html:`<p class="hint" style="margin:0"><b>${b.t}.</b> ${b.d}</p>`,actions:[{label:b.btn,act:'almGo',arg:id,primary:true},{label:'Entendido',act:'closeSheet'}]})};
  act.almGo=function(id){const b=almBusy(id);UI.sheet=null;renderOverlay();if(b&&act[b.act])act[b.act](b.arg)};
  act.almQuitar=function(id){if(almBusy(id))return act.almLock(id);const s=sys(id);sheet({title:`¿Quitar ${s.sap||s.nombre} del equipo?`,html:`<p class="hint" style="margin:0">Liberarás <b>${f1(almSz(id))} MB</b>. ${esc(s.nombre)} pasará a «En la nube». Sin conexión no podrás registrar en este sistema hasta volver a descargarlo.</p>`,actions:[{label:'Quitar del equipo',act:'almQuitarOk',arg:id,primary:true,danger:true},{label:'Cancelar',act:'closeSheet'}]})};
  act.almQuitarOk=function(id){if(almBusy(id))return act.almLock(id);const s=sys(id),mb=almSz(id),k=S.user.dni;S.dl=S.dl||{};S.dl[k]=(S.dl[k]||[]).filter(x=>String(x)!==String(id));UI.sheet=null;save();renderOverlay();render();toast(`${s.sap||s.nombre} se quitó del equipo · ${f1(mb)} MB liberados`,'ok')};
@@ -7060,7 +7064,7 @@ setTimeout(()=>{if(typeof act==='undefined')return;
 
 /* elegir/quitar: la fila cambia de alto con suavidad cuando aparece o se va la etiqueta */
 setTimeout(()=>{if(typeof act==='undefined')return;const _st=act.selToggle;
- act.selToggle=function(id){const q=`.slr[data-arg="${CSS.escape(String(id))}"]`,o=document.querySelector(q);if(o&&o.classList.contains('lk')){const bz=almBusy(id);return toast((bz?bz.t:'Tiene una actividad en curso')+' · se mantiene')}const h0=o?o.getBoundingClientRect().height:0,hadTag=!!(o&&o.querySelector('.sltg'));
+ act.selToggle=function(id){const q=`.slr[data-arg="${CSS.escape(String(id))}"]`,o=document.querySelector(q);if(o&&o.classList.contains('lk'))return act.almLock(id);const h0=o?o.getBoundingClientRect().height:0,hadTag=!!(o&&o.querySelector('.sltg'));
   const r=_st.apply(this,arguments);const n=document.querySelector(q);if(!n||!h0||RM())return r;
   const h1=n.getBoundingClientRect().height,tg=n.querySelector('.sltg');if(tg&&!hadTag)tg.classList.add('tgin');const sm=n.querySelector('.grow small');if(sm)sm.classList.add('tgin');
   if(Math.abs(h1-h0)<1)return r;n.style.height=h0+'px';n.style.overflow='hidden';n.getBoundingClientRect();
