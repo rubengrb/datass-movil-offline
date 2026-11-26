@@ -3919,8 +3919,8 @@ function homeName(){return S.user&&prof().tablero?'Sistemas a cargo':'Mis sistem
 function clVal(r,x){const s=String(x),m=s.match(/^(\d+(?:,\d+)?)\s*mg\/L$/);if(!r||r.modulo!=='mon'||!m)return esc(s);const v=parseFloat(m[1].replace(',','.'));
  const [c,t]=v<0.5?['r','Bajo · mínimo 0,5 mg/L']:v>1.5?['r','Alto · máximo 1,5 mg/L']:['g','Dentro del rango 0,5–1,5 mg/L'];
  return `<span class="clv ${c==='r'?'bad':''}"><i class="cdot c-${c}" data-tip="${t}" aria-label="${t}"></i>${esc(s)}</span>`}
-/* visualizadores: solo ven lo que ya llegó a DATASS (no lo que sigue en el celular de quien registró) */
-{const _vr=visibleRecs;visibleRecs=function(){const r=_vr.apply(this,arguments);try{if(S.user&&prof().tablero)return r.filter(x=>x.sync==='sincronizado')}catch(e){}return r}}
+/* visualizadores: solo ven lo que ya llegó a DATASS; los registradores, además, lo propio que aún no enviaron (lo pendiente de otro sigue en el celular de su autor) */
+{const _vr=visibleRecs;visibleRecs=function(){const r=_vr.apply(this,arguments);try{if(S.user&&prof().tablero)return r.filter(x=>x.sync==='sincronizado');if(S.user)return r.filter(x=>x.sync==='sincronizado'||x.autorDni===S.user.dni)}catch(e){}return r}}
 /* ================= Helpers de formulario ================= */
 function obsField(path,v,label='Observaciones',id='obs'){const fk='obs-'+id,fo=!!v||!!(UI.folds||{})[fk];return `<button type="button" class="foldbtn left ${fo?'open':''}" data-act="toggleFold" data-arg="${fk}" aria-expanded="${fo}">${icon('plus')} ${label} (opcional)</button><div class="fold ${fo?'open':''}" data-fold="${fk}"><div><label class="f" for="${id}">${label} <span class="opt">(opcional)</span></label><textarea id="${id}" class="inp" maxlength="250" placeholder="Ingrese una observación…" data-bind="${path}" data-count="${id}c">${esc(v||'')}</textarea><div class="counter" id="${id}c">${(v||'').length}/250</div></div></div>`}
 function seg(path,opts,val,labels){return `<div class="seg" role="radiogroup">${opts.map((o,i)=>`<button role="radio" aria-checked="${val===o}" class="${val===o?'on':''}" data-act="set" data-path="${path}" data-val="${esc(o)}">${val===o?icon('check'):''}${labels?labels[i]:o}</button>`).join('')}</div>`}
@@ -4248,9 +4248,10 @@ function hubHistBody(recs){if(!recs.length)return `<div class="pad"><div class="
  const p=P_(),f=p.hhf||'all',isObs=r=>['observado','vencido'].includes(valState(r)),mods=[...new Set(recs.map(r=>r.modulo))];
  const opts=[['all','Todos',recs.length],['obs','Observados',recs.filter(isObs).length],...(mods.length>1?mods.map(m=>[m,(typeof MODC!=='undefined'&&MODC[m])||MODS[m].n,recs.filter(r=>r.modulo===m).length]):[])].filter(([k,,n])=>k==='all'||n);
  const list=recs.filter(r=>f==='all'||(f==='obs'?isObs(r):r.modulo===f));
- const chips=`<div class="chips hhf" role="group" aria-label="Filtrar historial">${opts.map(([k,t,n])=>`<button class="${f===k?'on':''}" aria-pressed="${f===k}" data-act="hubHF" data-arg="${k}">${esc(t)} <b>${n}</b></button>`).join('')}</div>`;
+ const chips=`<div class="chips hhf" role="group" aria-label="Filtrar historial">${opts.map(([k,t,n])=>`<button class="${f===k?'on':''}" aria-pressed="${f===k}" data-act="hubHF" data-arg="${f===k?'all':k}">${esc(t)} <b>${n}</b></button>`).join('')}</div>`;
  let html='',cur='';list.forEach(r=>{const d=new Date(r.ts),k=HMESL[d.getMonth()]+' '+d.getFullYear();if(k!==cur){if(cur)html+='</div>';html+=`<div class="sectitle">${k}</div><div class="hhlist">`;cur=k}html+=hubHistRow(r)});if(cur)html+='</div>';
- return `<div class="pad">${chips}${html||`<div class="card empty">No hay registros con ese filtro.</div>`}</div>`}
+ const fl=f!=='all'?`<div class="fltl" role="status"><span>Mostrando <b>${list.length} de ${recs.length}</b></span><button data-act="hubHF" data-arg="all">${icon('x')}Limpiar filtros</button></div>`:'';
+ return `<div class="pad">${chips}${fl}${html||`<div class="card empty">No hay registros con ese filtro.</div>`}</div>`}
 
 /* Hub: «Pendientes» — descarga (una sola vez) + observados del sistema, como tarjetas */
 function hubPend(s){const now=Date.now(),cards=[];
@@ -6874,7 +6875,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:52</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 25/11 · 21:57</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
