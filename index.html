@@ -5009,6 +5009,7 @@ function cloCheckSig(){const c=S.clo;if(c&&c.prep.done&&c.prep.sig!==cloSig(c)){
 const TMR={id:null,mode:null,start:0};
 function timerBox(mode){const run=TMR.id&&TMR.mode===mode;return `<div class="timerbox ${run?'run':''}">${icon('timer')}<div class="grow"><div class="mini">${run?'<span class="tpulse"></span>'+(mode==='down'?'Contando…':'Midiendo…'):(mode==='down'?'Cronómetro de 60 s para la probeta':'Cronómetro de llenado del recipiente')}</div><b id="tmr-${mode}">${(()=>{const el=run?(Date.now()-TMR.start)/1000:0;return fmt(mode==='down'?Math.max(0,60-el):el,1)+' s'})()}</b></div><button class="btn tmrbtn ${run?'stop':''}" data-act="tmr" data-arg="${mode}" aria-live="polite">${run?'■ '+(mode==='down'?'Detener':'Detener y registrar'):'▶ Iniciar'}</button></div>`}
 function tmrStop(){clearInterval(TMR.id);TMR.id=null}
+function tmrPaint(mode){const b=document.getElementById('tmr-'+mode),bx=b&&b.closest('.timerbox');if(!bx){render();return}const sc=document.getElementById('scroll'),y=sc?sc.scrollTop:0;bx.outerHTML=timerBox(mode);if(sc)sc.scrollTop=y}
 const chip=(n,t)=>stepHead(n-1,t,cloTot());
 const cloHead=()=>({title:'Cloración',sub:'Preparación y calibración',tabs:false});
 const invalidNote=()=>UI.invalid?`<div class="note warn" style="margin:0 0 12px">${icon('alert')}<div>Cambiaste datos del cálculo. Los resultados se recalcularon: vuelve a confirmar la preparación y la calibración.</div></div>`:'';
@@ -5209,11 +5210,11 @@ const cloAct={
  tmr(mode){
   if(TMR.id&&TMR.mode===mode){const el=(Date.now()-TMR.start)/1000;tmrStop();
    if(mode==='up'){const k=S.clo.caudal;const i=k.t.findIndex(t=>t==='');const tv=el.toFixed(1).replace('.',',');if(i>=0)k.t[i]=tv;else k.t.push(tv);save();toast(`Tiempo registrado: ${fmt(el,1)} s`,'ok')}
-   render();return}
+   if(mode==='down')tmrPaint(mode);else{const sc=document.getElementById('scroll'),y=sc?sc.scrollTop:0;render();const s2=document.getElementById('scroll');if(s2)s2.scrollTop=y}return}
   tmrStop();TMR.mode=mode;TMR.start=Date.now();
   TMR.id=setInterval(()=>{const el=(Date.now()-TMR.start)/1000;const b=document.getElementById('tmr-'+mode);
    if(mode==='down'){const left=Math.max(0,60-el);if(b)b.textContent=fmt(left,1)+' s';if(left<=0){tmrStop();try{navigator.vibrate&&navigator.vibrate([300,120,300])}catch(e){}render();toast('¡Tiempo! Registra el volumen recogido en la probeta.','ok')}}
-   else if(b)b.textContent=fmt(el,1)+' s'},100);render()},
+   else if(b)b.textContent=fmt(el,1)+' s'},100);try{navigator.vibrate&&navigator.vibrate(25)}catch(e){}tmrPaint(mode)},
  verManual(){sheet({title:'Manual de preparación de la solución madre',html:`<div class="pdfview"><div class="pdfbar"><span>${icon('file')} manual_solucion_madre.pdf</span><span class="mini">pág. 1 de —</span></div><div class="pdfpage"><b>Manual de preparación y calibración</b><p>Documento pendiente de entrega por el área técnica (UTPS).</p><p class="mini">El aplicativo muestra aquí el PDF con un visor interno. Se descarga una sola vez para no aumentar el tamaño de la instalación.</p></div></div>`,actions:[{label:'Cerrar',act:'closeSheet'}]})},
  cloOtroFin(send){const c=S.clo,o=c.otro,s=sys(c.sysId),pt=cloPt();UI.err={};const D=num(o.D);
   if(o.D!==''&&!(D>=0&&D<=5))UI.err.od='La dosis debe estar entre 0 y 5 mg/L.';if(countPhotos(o.fotos)<1)UI.err.ofot='Agrega al menos 1 fotografía del equipo.';
@@ -7094,7 +7095,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:30</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:34</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
