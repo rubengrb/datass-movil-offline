@@ -3723,6 +3723,14 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .finfob .ico svg{width:32px;height:32px}
 .finfob p{font-size:18px;line-height:1.5;font-weight:500}
 #ovl .sheet .finfob p,:root[data-density] #ovl .sheet .finfob p{font-size:18px!important;line-height:1.5;font-weight:500;color:var(--text);margin:0}
+.dchips.n2,.dchips.n3{display:grid;gap:8px}
+.dchips.n2{grid-template-columns:1fr 1fr}
+.dchips.n3{grid-template-columns:1fr 1fr 1fr}
+.dfact{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;padding:12px;border:0;border-radius:var(--r-lg);background:var(--page,#EFEFF2);color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.dfact svg{width:22px;height:22px;color:var(--muted)}
+.dfact b{font-size:17px;font-weight:700;line-height:1.15;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 4px}
+.dfact b small{font-size:12px;font-weight:600;color:var(--muted)}
+.dfact span{font-size:12px;line-height:1.25;color:var(--muted)}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5055,13 +5063,13 @@ LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);const ind=r
 LIVE['clo-dosis']=()=>{const c=S.clo,r=cloCalc(c);if(!r.ok)return `<div class="dlive off">${icon('info')}<div>Completa los datos para ver cuánto producto se necesita.</div></div>`;return `<div class="dlive">${icon('flask')}<div class="grow"><div class="mini">${r.solid?'Hipoclorito de calcio requerido':'Hipoclorito de sodio requerido'}</div><b class="v">${r.solid?fmt(r.P,0)+' g':fmt(r.Vp,2)+' L'}</b><div class="mini">${r.solid?'al '+fmt(r.p,0)+' % de cloro disponible':'agua aproximada '+fmt(r.Va,2)+' L'} · solución madre ${fmt(r.Cs,0)} mg/L</div></div></div>`};
 screens['clo-dosis']=()=>{const c=S.clo,d=c.dos,k=c.caudal,Qi=cloQi(c),solid=d.producto==='cal';
  const fld=(ic,t,sub,inner,e,wide)=>{const ix=sub.indexOf('<span class="sugs">'),tx=ix<0?sub:sub.slice(0,ix),sg=ix<0?'':sub.slice(ix),key='f'+(e||t);(window.CLO_HELP=window.CLO_HELP||{})[key]={ic,t,tx};return `<div class="dfld ${wide?'wide':''} ${e&&UI.err[e]?'bad':''}"><div class="flab"><b>${t}</b><button type="button" class="finfo" data-act="fInfo" data-arg="${key}" aria-label="Más información sobre ${t}">${icon('info')}</button></div>${inner}${sg}${e?err(e):''}</div>`};
- const cinfo=(key,ic,t,tx,val)=>{(window.CLO_HELP=window.CLO_HELP||{})[key]={ic,t,tx};return `<button type="button" class="dchip" data-act="fInfo" data-arg="${key}" aria-label="${t}: ${val}. Más información">${icon(ic)}${val}${icon('info')}</button>`};
+ const cinfo=(key,ic,t,tx,val)=>{(window.CLO_HELP=window.CLO_HELP||{})[key]={ic,t,tx};const vi=String(val).indexOf(' '),vn=vi<0?val:val.slice(0,vi),vu=vi<0?'':val.slice(vi+1);return `<button type="button" class="dfact" data-act="fInfo" data-arg="${key}" aria-label="${t}: ${val}. Más información">${icon(ic)}<b>${vn}<small>${vu}</small></b><span>${t}</span></button>`};
  const row=(ic,t,sub,inner,e)=>`<div class="drow"><div class="ico">${icon(ic)}</div><div class="grow"><b>${t}</b><small>${sub}</small></div><div class="dinp">${inner}</div></div>${e?err(e):''}`;
  const sug=(path,vals,unit)=>`<span class="sugs">Sugerido: ${vals.map(v=>`<button data-act="set" data-path="${path}" data-val="${v}">${String(v).replace('.',',')}${unit?' '+unit:''}</button>`).join('')}</span>`;
  const inp=(path,unit,ph='')=>`<div class="inp-wrap"><input class="inp" inputmode="decimal" placeholder="${ph}" data-bind="${path}" data-live value="${esc(getPath(S,path)??'')}"><span class="u">${unit}</span></div>`;
  return {...cloHead(),body:`<div class="pad">${chip(c.metodo==='B'?7:6,'Datos de preparación')}${cloCtx(true)}<h2 class="q" style="margin-top:16px">Datos para preparar la solución</h2><p class="hint">Registra la información para calcular la cantidad de producto y el caudal ${c.metodo==='A'?'objetivo':'de la operación'}.</p>
  <div class="card dform"><div class="dsec"><span class="ico">${icon('drop')}</span>Datos confirmados</div>
- <div class="dchips">${cinfo('fQ','drop','Caudal confirmado','Caudal de agua a clorar.',fmt(Qi,2)+' L/s')}${cinfo('fH','clock','Funcionamiento','Horas de dosificación al día.',k.h+' h/día')}${c.metodo==='B'?cinfo('fG','timer',c.equipo==='T4'?'Caudal de inyección medido':'Entrega medida','Medición previa del equipo.',fmt(rowsQg(c.previa.rows),2)+' mL/min'):''}</div></div>
+ <div class="dchips n${c.metodo==='B'?3:2}">${cinfo('fQ','drop','Caudal confirmado','Caudal de agua a clorar.',fmt(Qi,2)+' L/s')}${cinfo('fH','clock','Funcionamiento','Horas de dosificación al día.',k.h+' h/día')}${c.metodo==='B'?cinfo('fG','timer',c.equipo==='T4'?'Caudal de inyección medido':'Entrega medida','Medición previa del equipo.',fmt(rowsQg(c.previa.rows),2)+' mL/min'):''}</div></div>
  <div class="card dform"><div class="dsec"><span class="ico">${icon('flask')}</span>Producto</div>
  <div class="dgrid">
  ${fld('flask','Producto','Desinfectante a utilizar.',selectF('clo.dos.producto',[['cal','Hipoclorito de calcio'],['sod','Hipoclorito de sodio (líquido)']],d.producto),'',1)}
@@ -7056,7 +7064,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 20:52</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 21:02</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
