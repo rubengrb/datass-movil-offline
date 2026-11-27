@@ -6976,7 +6976,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 19:09</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 19:21</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7572,9 +7572,9 @@ const act={
  monChangeRes(){const m=S.mon;if(!m||m.points.some(x=>x.done))return;const sid=m.sysIdx,ri=m.resIdx||0;S.mon=null;S.nav.stack=HS(sid);S.nav.route='mon-sistema';S.nav.p={sysIdx:sid,resIdx:ri};UI.mo='back';save();render(true)},
  setRes(i){S.nav.p.resIdx=+i;save();render()},
  openVisit(id){UI.sheet=null;const v=S.visits.find(x=>x.id===id);if(!v)return;S.nav.stack=[{route:'home',p:{}},{route:'sistema',p:{sid:v.sysId,htab:'act'}},{route:'mnt-home',p:{sid:v.sysId,mod:modOf(sys(v.sysId))}}];S.nav.route='mnt-comp';S.nav.p={sid:v.sysId,vid:id,mod:modOf(sys(v.sysId))};save();render(true)},
-  fvPick(i){if(!/^\d{4}-\d{2}-\d{2}$/.test(i)||i>isoHoy())return;const p=P_();p.fv=i;p.fvM=i.slice(0,7);if(UI.sheet)UI.sheet=null;save();render()},
+  fvPick(i){if(!/^\d{4}-\d{2}-\d{2}$/.test(i)||i>isoHoy())return;const p=P_();p.fv=i;p.fvM=i.slice(0,7);save();const el=document.querySelector('.fvp');if(el){el.outerHTML=fvPicker(p)}if(UI.sheet){UI.sheet=null;renderOverlay()}else if(!el)render()},
  fvMonth(){fvOpenCal()},
- fvNav(d){const p=P_(),[y,m]=(p.fvM||isoHoy().slice(0,7)).split('-').map(Number),n=new Date(y,m-1+(+d),1),k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;if(k>isoHoy().slice(0,7))return;p.fvM=k;fvOpenCal()},
+ fvNav(d){const p=P_(),[y,m]=(p.fvM||isoHoy().slice(0,7)).split('-').map(Number),n=new Date(y,m-1+(+d),1),k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;if(k>isoHoy().slice(0,7))return;p.fvM=k;const fv=(p.fv&&p.fv<=isoHoy())?p.fv:isoHoy(),h=fvCalHtml(fv,k),c=document.querySelector('.sheet .fvcal');if(UI.sheet)UI.sheet.html=h;if(c)c.outerHTML=h;else fvOpenCal()},
  ...cloAct,...mntAct
 };
 /* Limpieza y desinfección: componentes por tipo de sistema (sin cambios funcionales) */
