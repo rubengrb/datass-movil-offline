@@ -3772,6 +3772,16 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .mrow3.mcd .mst{grid-column:2/6;display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:600;color:var(--muted)}
 .mrow3.mcd .mst svg{width:16px;height:16px}.mrow3.mcd .mst.ok{color:var(--blue)}
 
+.mrow3.mcd.pend{border-style:dashed}
+.mrow3.mcd>b{width:26px;height:26px}
+.mrow3.mcd.done>b{background:var(--blue);color:var(--card)}
+.mrow3.mcd.sum{grid-template-columns:28px 1fr 40px;grid-template-rows:auto;align-items:center;cursor:pointer}
+.mrow3.mcd.sum .msum{display:flex;flex-direction:column;gap:2px}
+.mrow3.mcd.sum .msum b{font-size:var(--fs-md);font-weight:700;color:var(--text);width:auto;height:auto;background:none;border-radius:0;display:block}
+.mrow3.mcd.sum .msum small{font-size:var(--fs-sm);color:var(--muted);font-weight:600}
+.tsticky .timerbox .mini{min-height:0;display:block}
+#live .resbox .v{font-size:clamp(20px,6.4vw,var(--fs-2xl));white-space:nowrap}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -5094,13 +5104,13 @@ screens['clo-previa']=()=>{const c=S.clo,pv=c.previa,t4=c.equipo==='T4';
  <div class="illus">${techSvg(c.equipo,true)}</div>
  <label class="f">Líquido de prueba</label>${selectF('clo.previa.liq',['Agua limpia','Solución en uso'],pv.liq)}
  <div class="tsticky">${timerBox('down')}</div>
- <label class="f">Mediciones registradas</label><div class="mcards">${pv.rows.map((r,i)=>`<div class="mrow3 mcd"><b>${i+1}</b><div class="inp-wrap"><input class="inp" inputmode="decimal" placeholder="0" data-bind="clo.previa.rows.${i}.v" data-live value="${esc(r.v)}" aria-label="Volumen medición ${i+1}"><span class="u">mL</span></div><span class="u">en</span><div class="inp-wrap"><input class="inp" inputmode="decimal" data-bind="clo.previa.rows.${i}.t" data-live value="${esc(r.t)}" aria-label="Tiempo medición ${i+1}"><span class="u">s</span></div><button data-act="cloDelRow" data-arg="previa.${i}" aria-label="Eliminar medición ${i+1}" ${pv.rows.length<=1?'disabled':''}>${icon('trash')}</button><small class="mst" id="mst-${i}"></small></div>`).join('')}
+ <label class="f">Mediciones registradas</label><div class="mcards">${pv.rows.map((r,i)=>isFinite(rowQg(r))&&UI.editRow!==i?`<div class="mrow3 mcd sum done" data-act="cloEditRow" data-arg="${i}"><b>${i+1}</b><div class="msum"><b>${esc(r.v)} mL en ${esc(r.t)} s</b><small>${fmt(rowQg(r),1)} mL/min</small></div><button data-act="cloDelRow" data-arg="previa.${i}" aria-label="Eliminar medición ${i+1}" ${pv.rows.length<=1?'disabled':''}>${icon('trash')}</button></div>`:`<div class="mrow3 mcd pend"><b>${i+1}</b><div class="inp-wrap"><input class="inp" inputmode="decimal" placeholder="0" data-bind="clo.previa.rows.${i}.v" data-live value="${esc(r.v)}" aria-label="Volumen medición ${i+1}"><span class="u">mL</span></div><span class="u">en</span><div class="inp-wrap"><input class="inp" inputmode="decimal" data-bind="clo.previa.rows.${i}.t" data-live value="${esc(r.t)}" aria-label="Tiempo medición ${i+1}"><span class="u">s</span></div><button data-act="cloDelRow" data-arg="previa.${i}" aria-label="Eliminar medición ${i+1}" ${pv.rows.length<=1?'disabled':''}>${icon('trash')}</button><small class="mst" id="mst-${i}"></small></div>`).join('')}
  <button class="linkbtn" style="text-decoration:none;display:flex;gap:8px;align-items:center;padding:12px 0" data-act="cloAddRow" data-arg="previa">${icon('plus')} Repetir medición</button></div>
  <div id="live">${LIVE['clo-previa']()}</div>${err('qg')}
  ${flip('clo.previa.estable','El flujo se mantuvo estable durante las mediciones')}${err('est')}
  <div class="btns"><button class="btn" data-act="cloPrevNext">Continuar a los datos de preparación</button></div>
  <button class="linkbtn" data-act="cloDemoPrev">Cargar mediciones de ejemplo</button></div>`}};
-LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);queueMicrotask(()=>rows.forEach((r,i)=>{const e=document.getElementById('mst-'+i);if(!e)return;const q=rowQg(r),ok=isFinite(q);e.className='mst '+(ok?'ok':'pend');e.innerHTML=ok?icon('check')+fmt(q,1)+' mL/min':icon('clock')+'Pendiente: escribe el volumen';const c=e.closest('.mcd');if(c)c.classList.toggle('done',ok)}));const ind=rows.map(rowQg).filter(x=>x>0);
+LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);queueMicrotask(()=>rows.forEach((r,i)=>{const e=document.getElementById('mst-'+i);if(!e)return;const q=rowQg(r),ok=isFinite(q);e.className='mst '+(ok?'ok':'pend');e.innerHTML=ok?icon('check')+fmt(q,1)+' mL/min':icon('clock')+'Pendiente: escribe el volumen';const c=e.closest('.mcd');if(c){c.classList.toggle('done',ok);c.classList.toggle('pend',!ok)}}));const ind=rows.map(rowQg).filter(x=>x>0);
  return `<div class="resbox g" style="margin-top:12px">${icon('drop')}<div class="grow"><div class="mini">${S.clo.equipo==='T4'?'Caudal de inyección medido':'Caudal medido'}</div><b class="v">${isFinite(Qg)?fmt(Qg,2)+' mL/min':'—'}</b><div class="mini">${isFinite(Qg)?fmt(0.06*Qg,3)+' L/h · ':''}${ind.length} medición${ind.length===1?'':'es'} válidas</div></div><span class="badge ${isFinite(Qg)?'ok':'na'}">Resultado calculado</span></div>
  ${ind.length>1?`<div class="mini" style="margin-top:8px">Por medición: ${ind.map(x=>fmt(x,2)).join(' · ')} mL/min. Si las mediciones varían, repite la medición.</div>`:''}`};
 
@@ -5261,6 +5271,7 @@ const cloAct={
  cloPickMet(m){S.clo.metodo=m;save();render()},
  cloMetNext(){if(!S.clo.metodo){UI.err={met:'Selecciona un método.'};return render()}go(S.clo.metodo==='B'?'clo-previa':'clo-dosis')},
  cloAddRow(w){S.clo[w].rows.push({v:'',t:'60'});save();render()},
+ cloEditRow(i){UI.editRow=+i;render();const m=document.querySelectorAll('.mcd')[+i],f=m&&m.querySelector('input');if(f){try{f.focus();f.select()}catch(e){}}},
  cloDelRow(a){const [w,i]=a.split('.');const rows=S.clo[w].rows;if(rows.length>1)rows.splice(+i,1);save();render()},
  cloDemoPrev(){S.clo.previa.rows=[{v:'60',t:'60'},{v:'60',t:'60'},{v:'60',t:'60'}];S.clo.previa.estable=true;save();render()},
  cloPrevNext(){const pv=S.clo.previa;UI.err={};if(!(rowsQg(pv.rows)>0))UI.err.qg='Registra al menos una medición con volumen y tiempo mayores que cero.';else if(!pv.estable)UI.err.est='Confirma que el flujo fue estable o repite la medición.';if(Object.keys(UI.err).length){render();return scrollErr()}go('clo-dosis')},
@@ -7108,7 +7119,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:54</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:59</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
