@@ -3655,6 +3655,8 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .fvchip.otra:not(.on){border-style:dashed;color:var(--muted)}
 .fvchip.on{background:var(--hdr,#C8102E);border-color:var(--hdr,#C8102E);color:#fff}
 .fvchips{gap:8px}
+.fvcal.in{margin:0;border:0;padding:0;background:none}
+.fvc{width:38px;justify-self:center}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -6974,7 +6976,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 19:04</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 19:09</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7274,10 +7276,14 @@ function sysIdRow(s){const A={A1:'480121',A2:'480122',A3:'480123'};const id=s.si
 function fvPicker(p){const hoy=isoHoy(),fv=(p.fv&&p.fv<=hoy)?p.fv:hoy,MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],MC=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],DL=['D','L','M','M','J','V','S'],pd=n=>String(n).padStart(2,'0'),iso=d=>`${d.getFullYear()}-${pd(d.getMonth()+1)}-${pd(d.getDate())}`;
  const ft=new Date(fv+'T12:00:00'),ho=new Date(hoy+'T12:00:00'),open=!!p.fvOpen,vm=(p.fvM&&/^\d{4}-\d{2}$/.test(p.fvM)&&p.fvM<=hoy.slice(0,7))?p.fvM:fv.slice(0,7),[vy,vmo]=vm.split('-').map(Number);
  const dI=k=>{const d=new Date(ho);d.setDate(d.getDate()-k);return d},i0=iso(dI(0)),i1=iso(dI(1)),i2=iso(dI(2)),isOtra=![i0,i1,i2].includes(fv)||open,mk=(i,l,on)=>`<button type="button" class="fvchip ${on?'on':''}" data-act="fvPick" data-arg="${i}" aria-pressed="${on}">${l}</button>`;
- const strip=mk(i0,'Hoy',fv===i0&&!open)+mk(i1,'Ayer',fv===i1&&!open)+mk(i2,'Anteayer',fv===i2&&!open)+`<button type="button" class="fvchip otra ${isOtra?'on':''}" data-act="fvMonth" aria-expanded="${open}">${icon('cal')}${(![i0,i1,i2].includes(fv))?`${ft.getDate()} ${MC[ft.getMonth()]}`:'Otra fecha'}</button>`;
- let cal='';if(open){const off=(new Date(vy,vmo-1,1).getDay()+6)%7,nd=new Date(vy,vmo,0).getDate(),isLast=vm>=hoy.slice(0,7);let cells='';for(let i=0;i<off;i++)cells+='<span></span>';for(let d=1;d<=nd;d++){const i=`${vy}-${pd(vmo)}-${pd(d)}`,fut=i>hoy,on=i===fv;cells+=`<button type="button" class="fvc ${on?'on':''} ${i===hoy?'hoy':''}" data-act="fvPick" data-arg="${i}" ${fut?'disabled aria-disabled="true"':''} aria-pressed="${on}">${d}</button>`}
-  cal=`<div class="fvcal"><div class="fvnav"><b>${MES[vmo-1]} ${vy}</b><span><button type="button" class="fvar" data-act="fvNav" data-arg="-1" aria-label="Mes anterior">${icon('back')}</button><button type="button" class="fvar nx" data-act="fvNav" data-arg="1" aria-label="Mes siguiente" ${isLast?'disabled aria-disabled="true"':''}>${icon('back')}</button></span></div><div class="fvw">${['L','M','M','J','V','S','D'].map(x=>`<span>${x}</span>`).join('')}</div><div class="fvg">${cells}</div><p class="fvnote">Los días posteriores a hoy no se pueden elegir.</p></div>`}
+ const strip=mk(i0,'Hoy',fv===i0)+mk(i1,'Ayer',fv===i1)+mk(i2,'Anteayer',fv===i2)+`<button type="button" class="fvchip otra ${isOtra?'on':''}" data-act="fvMonth" aria-haspopup="dialog">${icon('cal')}${(![i0,i1,i2].includes(fv))?`${ft.getDate()} ${MC[ft.getMonth()]}`:'Otra fecha'}</button>`;
+ const cal='';
  return `<div class="fvp"><div class="fvh"><label class="f" id="fvl">Fecha de la visita</label></div><div class="fvchips" role="group" aria-labelledby="fvl">${strip}</div>${cal}<p class="fvsel">Visita del <b>${isoToDmy(fv)}</b>${fv===hoy?' · hoy':''}</p></div>`}
+
+function fvCalHtml(fv,vm){const hoy=isoHoy(),MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],pd=n=>String(n).padStart(2,'0'),[vy,vmo]=vm.split('-').map(Number),off=(new Date(vy,vmo-1,1).getDay()+6)%7,nd=new Date(vy,vmo,0).getDate(),isLast=vm>=hoy.slice(0,7);let cells='';for(let i=0;i<off;i++)cells+='<span></span>';
+ for(let d=1;d<=nd;d++){const i=`${vy}-${pd(vmo)}-${pd(d)}`,fut=i>hoy,on=i===fv;cells+=`<button type="button" class="fvc ${on?'on':''} ${i===hoy?'hoy':''}" data-act="fvPick" data-arg="${i}" ${fut?'disabled aria-disabled="true"':''} aria-pressed="${on}">${d}</button>`}
+ return `<div class="fvcal in"><div class="fvnav"><b>${MES[vmo-1]} ${vy}</b><span><button type="button" class="fvar" data-act="fvNav" data-arg="-1" aria-label="Mes anterior">${icon('back')}</button><button type="button" class="fvar nx" data-act="fvNav" data-arg="1" aria-label="Mes siguiente" ${isLast?'disabled aria-disabled="true"':''}>${icon('back')}</button></span></div><div class="fvw">${['L','M','M','J','V','S','D'].map(x=>`<span>${x}</span>`).join('')}</div><div class="fvg">${cells}</div><p class="fvnote">Los días posteriores a hoy no se pueden elegir.</p></div>`}
+function fvOpenCal(){const p=P_(),fv=(p.fv&&p.fv<=isoHoy())?p.fv:isoHoy(),vm=(p.fvM&&p.fvM<=isoHoy().slice(0,7))?p.fvM:fv.slice(0,7);p.fvM=vm;sheet({title:'Fecha de la visita',html:fvCalHtml(fv,vm),actions:[{label:'Cancelar',act:'closeSheet'}]})}
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
@@ -7566,9 +7572,9 @@ const act={
  monChangeRes(){const m=S.mon;if(!m||m.points.some(x=>x.done))return;const sid=m.sysIdx,ri=m.resIdx||0;S.mon=null;S.nav.stack=HS(sid);S.nav.route='mon-sistema';S.nav.p={sysIdx:sid,resIdx:ri};UI.mo='back';save();render(true)},
  setRes(i){S.nav.p.resIdx=+i;save();render()},
  openVisit(id){UI.sheet=null;const v=S.visits.find(x=>x.id===id);if(!v)return;S.nav.stack=[{route:'home',p:{}},{route:'sistema',p:{sid:v.sysId,htab:'act'}},{route:'mnt-home',p:{sid:v.sysId,mod:modOf(sys(v.sysId))}}];S.nav.route='mnt-comp';S.nav.p={sid:v.sysId,vid:id,mod:modOf(sys(v.sysId))};save();render(true)},
- fvPick(i){if(!/^\d{4}-\d{2}-\d{2}$/.test(i)||i>isoHoy())return;const p=P_();p.fv=i;p.fvM=i.slice(0,7);p.fvOpen=false;save();render()},
- fvMonth(){const p=P_();p.fvOpen=!p.fvOpen;if(p.fvOpen)p.fvM=((p.fv&&p.fv<=isoHoy())?p.fv:isoHoy()).slice(0,7);render()},
- fvNav(d){const p=P_(),[y,m]=(p.fvM||isoHoy().slice(0,7)).split('-').map(Number),n=new Date(y,m-1+(+d),1),k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;if(k>isoHoy().slice(0,7))return;p.fvM=k;render()},
+  fvPick(i){if(!/^\d{4}-\d{2}-\d{2}$/.test(i)||i>isoHoy())return;const p=P_();p.fv=i;p.fvM=i.slice(0,7);if(UI.sheet)UI.sheet=null;save();render()},
+ fvMonth(){fvOpenCal()},
+ fvNav(d){const p=P_(),[y,m]=(p.fvM||isoHoy().slice(0,7)).split('-').map(Number),n=new Date(y,m-1+(+d),1),k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;if(k>isoHoy().slice(0,7))return;p.fvM=k;fvOpenCal()},
  ...cloAct,...mntAct
 };
 /* Limpieza y desinfección: componentes por tipo de sistema (sin cambios funcionales) */
