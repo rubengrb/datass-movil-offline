@@ -3745,12 +3745,12 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .finfo svg{width:16px;height:16px}
 /* campos de Cloración: sin resaltado de toque; el estado se marca con el borde */
 .dfld .inp,.dfld select.inp,.dfld input,.dfld select{-webkit-tap-highlight-color:transparent!important;background-color:transparent}
-.dfld select.inp:focus,.dfld select.inp:active,.dfld .inp:focus{background-color:transparent;outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent)}
-.dfld select.inp:focus,.dfld select.inp:active,.dfld .inp:focus{border-color:var(--blue)}
+.dfld select.inp:focus,.dfld select.inp:active,.dfld .inp:focus{background-color:transparent;outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+.dfld select.inp:focus,.dfld select.inp:active,.dfld .inp:focus{border-color:var(--primary)}
 .dfld.bad .inp,.dfld.bad select.inp{border-color:var(--bad,#C8102E)}
 
 .sel-wrap,#app .sel-wrap,.sel-wrap *{-webkit-tap-highlight-color:transparent!important;-webkit-touch-callout:none}
-.dfld .sel-wrap:active select.inp,.dfld .sel-wrap:focus-within select.inp{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent)}
+.dfld .sel-wrap:active select.inp,.dfld .sel-wrap:focus-within select.inp{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -7086,7 +7086,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 22:30</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 22:33</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
