@@ -5449,6 +5449,38 @@ const mntAct={
 };
 
 
+/* Validación en vivo (regla general): al escribir se marca o se limpia el error del campo sin redibujar */
+function vErr(el,key,msg){UI.err=UI.err||{};if(msg)UI.err[key]=msg;else delete UI.err[key];
+ const w=el.closest('.dfld,.fld');if(!w)return;
+ if(w.classList.contains('dfld')){w.classList.toggle('bad',!!msg);let t=w.querySelector(':scope>.errtxt');
+  if(msg){if(!t){t=document.createElement('div');t.className='errtxt';t.setAttribute('role','alert');w.appendChild(t)}t.textContent=msg}else if(t)t.remove();return}
+ let t=w.nextElementSibling;const has=!!(t&&t.classList.contains('errtxt'));
+ if(msg){if(!has){t=document.createElement('div');t.className='errtxt';t.setAttribute('role','alert');w.after(t)}t.textContent=msg}else if(has)t.remove()}
+function vClear(key){const old=UI.err&&UI.err[key];if(!old)return;delete UI.err[key];document.querySelectorAll('.errtxt').forEach(t=>{if(t.textContent===old)t.remove()})}
+const VRULES=[
+ {re:/^login\.dni$/,key:'dni',fn:v=>{v=v.trim();return !/^\d{8}$/.test(v)?'Ingresa un DNI válido de 8 dígitos.':(!PROFILES[v]?'Este DNI no figura como usuario autorizado. Prueba con un usuario de demostración.':'')}},
+ {re:/^login\.pass$/,key:'pass',fn:v=>v.length<4?'La contraseña debe tener al menos 4 caracteres.':''},
+ {re:/^mon\.points\.\d+\.data\.cloro$/,key:'cloro',fn:v=>{const n=num(v);return isNaN(n)?'Ingresa la lectura de cloro residual.':(n<0||n>5?'El valor debe estar entre 0 y 5 mg/L.':'')}},
+ {re:/^mon\.points\.\d+\.data\.dniQ$/,key:'dni',fn:v=>/^\d{8}$/.test(v.trim())?'':'Ingresa un DNI de 8 dígitos.'},
+ {re:/^nav\.p\.np\.nombre$/,key:'nombre',fn:v=>v.trim()?'':'Ingresa un nombre breve y reconocible.'},
+ {re:/^nav\.p\.np\.incorp$/,key:'incorp',fn:v=>v.trim()?'':'Registra la tubería o ubicación donde se dosifica al agua.'},
+ {re:/^nav\.p\.on\.nombre$/,key:'nombre',fn:v=>v.trim()?'':'Ingresa el nombre del componente.'},
+ {re:/^nav\.p\.on\.n$/,key:'n',fn:v=>parseInt(v)>=1?'':'Ingresa 1 o más unidades.'},
+ {re:/^nav\.p\.sc$/,key:'sc',fn:v=>v.trim()?'':'Describe qué corregiste.'},
+ {re:/^clo\.modelo$/,key:'mod',fn:v=>v.trim()?'':'Describe el equipo instalado.'},
+ {re:/^clo\.otro\.D$/,key:'od',fn:v=>v!==''&&!(num(v)>=0&&num(v)<=5)?'La dosis debe estar entre 0 y 5 mg/L.':''},
+ {re:/^clo\.prep\.Vprep$/,key:'vprep',fn:v=>{if(v==='')return '';const n=num(v);if(!(n>0))return 'Ingresa un volumen mayor que cero.';const r=cloCalc(S.clo);return n>r.cap?'El volumen preparado supera la capacidad del tanque.':''}}
+];
+function liveVal(el){
+ const b=el.dataset.bind||'';if(!b)return;
+ if(/^clo\.dos\.\w+$/.test(b)){if(S.nav.route==='clo-dosis')cloLiveVal(el);return}
+ for(const r of VRULES){if(r.re.test(b)){vErr(el,r.key,r.fn(String(el.value??'')));return}}
+ /* errores agrupados (varios campos, un mensaje): se limpian cuando ya se cumplen */
+ if(!UI.err)return;
+ if(/^clo\.caudal\./.test(b)&&UI.err.qi&&S.clo){const c=S.clo,k=c.caudal;let ok;if(k.metodo==='rec')ok=vbOf(k)>0&&k.t.map(num).filter(x=>x>0).length>=3;else ok=num(k.lectura)>0;if(ok&&cloQi(c)>0)vClear('qi')}
+ if(/^clo\.previa\.rows\./.test(b)&&UI.err.qg&&rowsQg(S.clo.previa.rows)>0)vClear('qg');
+ if(/^clo\.cal\.rows\./.test(b)&&UI.err.cal&&S.clo){const x=cloReal(S.clo,cloCalc(S.clo));if(x.Qgf>0)vClear('cal')}
+}
 /* Validación mientras se escribe (Cloración · datos de preparación): marca o limpia el error del campo al instante, sin redibujar */
 function cloLiveVal(el){
  const m=/^clo\.dos\.(\w+)$/.exec(el.dataset.bind||'');if(!m||!S.clo)return;
@@ -7137,7 +7169,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 27/11 · 00:03</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 27/11 · 00:11</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
@@ -7448,7 +7480,7 @@ function fvOpenCal(){const p=P_(),fv=(p.fv&&p.fv<=isoHoy())?p.fv:isoHoy(),vm=(p.
 /* ================= Eventos ================= */
 document.addEventListener('input',e=>{
  const el=e.target;if(!el.dataset||!el.dataset.bind||el.dataset.rerender!==undefined)return;
- setPath(S,el.dataset.bind,el.value);save();
+ setPath(S,el.dataset.bind,el.value);save();liveVal(el);
  if(el.dataset.count){const c=document.getElementById(el.dataset.count);if(c)c.textContent=el.value.length+'/250'}
  if(el.dataset.live!==undefined)live(el);
 });
@@ -7458,13 +7490,13 @@ document.addEventListener('change',e=>{const el=e.target;
 function live(el){
  const b=el.dataset.bind;
  const h=document.querySelector(`[data-hint="${b}"]`);if(h)h.innerHTML=cloroHint(getPath(S,b));
- if(S.nav.route==='clo-dosis')cloLiveVal(el);if(LIVE[S.nav.route]){const l=document.getElementById('live');if(l)l.innerHTML=LIVE[S.nav.route]()}
+ if(LIVE[S.nav.route]){const l=document.getElementById('live');if(l)l.innerHTML=LIVE[S.nav.route]()}
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pw')act.login()});
 document.addEventListener('click',e=>{
  const el=e.target.closest('[data-act]');if(!el)return;
  const a=el.dataset.act;if(a==='closeSheetBg'&&e.target!==el)return;
- if(act[a]){e.preventDefault();act[a](el.dataset.arg,el)}
+ if(act[a]){e.preventDefault();{const ek={cloPickPt:'pt',cloPickEq:'eq',cloPickMet:'met',cloPickSys:'sel'}[a];if(ek&&UI.err)delete UI.err[ek]}act[a](el.dataset.arg,el)}
 });
 
 /* ================= Monitoreo y limpieza: helpers adaptados ================= */
@@ -7546,7 +7578,7 @@ const act={
  doDiscard(m){S[m]=null;UI.sheet=null;save();render();toast('Borrador descartado')},
  set(_,el){setPath(S,el.dataset.path,el.dataset.val);save();render()},
  toggle(_,el){const arr=getPath(S,el.dataset.path)||[];const v=el.dataset.val;const i=arr.indexOf(v);i<0?arr.push(v):arr.splice(i,1);setPath(S,el.dataset.path,arr);save();render()},
- flip(_,el){setPath(S,el.dataset.path,!getPath(S,el.dataset.path));save();render()},
+ flip(_,el){setPath(S,el.dataset.path,!getPath(S,el.dataset.path));if(UI.err&&/\.estable$/.test(el.dataset.path)&&getPath(S,el.dataset.path))delete UI.err.est;save();render()},
  /* Monitoreo */
  bigMap(){const s=sys(P_().sysIdx);sheet({title:s.nombre,html:mapSvg(s,true)+`<p style="margin-top:8px">Mapa base descargado para uso sin conexión. Distrito ${s.distrito}, provincia ${s.provincia}.</p>`,actions:[{label:'Cerrar',act:'closeSheet'}]})},
  startMon(){const p=P_();S.mon=newMon(p.sysIdx||mySaps()[0].id,p.resIdx||0);S.nav.stack=HS(S.mon.sysIdx);S.nav.route='mon-puntos';S.nav.p={};save();render(true);toast('Monitoreo diario iniciado')},
