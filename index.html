@@ -5081,7 +5081,7 @@ screens['clo-dosis']=()=>{const c=S.clo,d=c.dos,k=c.caudal,Qi=cloQi(c),solid=d.p
  </div></div>
  <div id="live">${LIVE['clo-dosis']()}</div>
  <div class="note">${icon('info')}<div>La dosis no tiene un valor predeterminado: usa la definida para este punto. Luego se calculará la cantidad de ${solid?'hipoclorito de calcio':'hipoclorito de sodio'} y el caudal ${c.metodo==='A'?'objetivo':'de autonomía'}.</div></div>
- <div class="btns"><button class="btn" data-act="cloCalcGo">Calcular preparación</button></div>
+ <div class="btns"><button class="btn" data-act="cloCalcGo">Ver resultado completo</button></div>
  <button class="linkbtn" data-act="cloDemoDos">Usar los datos del ejemplo ${c.metodo} del anexo</button></div>`}};
 
 screens['clo-calc']=()=>{cloCheckSig();const c=S.clo,r=cloCalc(c);
@@ -7056,7 +7056,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 20:44</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 20:52</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
