@@ -3762,6 +3762,16 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 
 .mrow3.tmrhl{background:var(--blue-l);border-radius:var(--r-md);transition:background .3s}
 
+.tsticky{position:sticky;top:calc(82px - var(--hp,0px));z-index:6;background:var(--bg);padding:2px 4px 8px;margin:0 -4px}.tsticky .timerbox{margin-top:8px}
+.mcards{display:flex;flex-direction:column;gap:8px}
+.mrow3.mcd{grid-template-columns:28px 1fr auto 1fr 40px;grid-template-rows:auto auto;gap:8px;padding:12px;background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg)}
+.mrow3.mcd+.mrow3.mcd{border-top:2px solid var(--line)}
+.mrow3.mcd.done{border-color:var(--line)}
+.mrow3.mcd>b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--blue-l);color:var(--blue);font-size:var(--fs-sm)}
+.mrow3.mcd.done>b{background:var(--blue);color:var(--on-primary)}
+.mrow3.mcd .mst{grid-column:2/6;display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:600;color:var(--muted)}
+.mrow3.mcd .mst svg{width:16px;height:16px}.mrow3.mcd .mst.ok{color:var(--blue)}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#C8102E">
@@ -5083,14 +5093,14 @@ screens['clo-previa']=()=>{const c=S.clo,pv=c.previa,t4=c.equipo==='T4';
  return {...cloHead(),body:`<div class="pad">${chip(6,t4?'Caudal de inyección':'Medición de entrega')}${cloCtx(true)}<h2 class="q" style="margin-top:16px">${t4?'Mide el caudal de inyección':'Mide primero la entrega del equipo'}</h2><p class="hint">${t4?'Mide la entrega de la bomba con el procedimiento del modelo, en condiciones representativas de descarga.':'Recoge la solución que entrega el equipo durante un tiempo definido.'}</p>
  <div class="illus">${techSvg(c.equipo,true)}</div>
  <label class="f">Líquido de prueba</label>${selectF('clo.previa.liq',['Agua limpia','Solución en uso'],pv.liq)}
- ${timerBox('down')}
- <label class="f">Mediciones registradas</label><div class="card" style="padding:4px 12px">${pv.rows.map((r,i)=>`<div class="mrow3"><b>${i+1}</b><div class="inp-wrap"><input class="inp" inputmode="decimal" placeholder="0" data-bind="clo.previa.rows.${i}.v" data-live value="${esc(r.v)}" aria-label="Volumen medición ${i+1}"><span class="u">mL</span></div><span class="u">en</span><div class="inp-wrap"><input class="inp" inputmode="decimal" data-bind="clo.previa.rows.${i}.t" data-live value="${esc(r.t)}" aria-label="Tiempo medición ${i+1}"><span class="u">s</span></div><button data-act="cloDelRow" data-arg="previa.${i}" aria-label="Eliminar medición ${i+1}" ${pv.rows.length<=1?'disabled':''}>${icon('trash')}</button></div>`).join('')}
+ <div class="tsticky">${timerBox('down')}</div>
+ <label class="f">Mediciones registradas</label><div class="mcards">${pv.rows.map((r,i)=>`<div class="mrow3 mcd"><b>${i+1}</b><div class="inp-wrap"><input class="inp" inputmode="decimal" placeholder="0" data-bind="clo.previa.rows.${i}.v" data-live value="${esc(r.v)}" aria-label="Volumen medición ${i+1}"><span class="u">mL</span></div><span class="u">en</span><div class="inp-wrap"><input class="inp" inputmode="decimal" data-bind="clo.previa.rows.${i}.t" data-live value="${esc(r.t)}" aria-label="Tiempo medición ${i+1}"><span class="u">s</span></div><button data-act="cloDelRow" data-arg="previa.${i}" aria-label="Eliminar medición ${i+1}" ${pv.rows.length<=1?'disabled':''}>${icon('trash')}</button><small class="mst" id="mst-${i}"></small></div>`).join('')}
  <button class="linkbtn" style="text-decoration:none;display:flex;gap:8px;align-items:center;padding:12px 0" data-act="cloAddRow" data-arg="previa">${icon('plus')} Repetir medición</button></div>
  <div id="live">${LIVE['clo-previa']()}</div>${err('qg')}
  ${flip('clo.previa.estable','El flujo se mantuvo estable durante las mediciones')}${err('est')}
  <div class="btns"><button class="btn" data-act="cloPrevNext">Continuar a los datos de preparación</button></div>
  <button class="linkbtn" data-act="cloDemoPrev">Cargar mediciones de ejemplo</button></div>`}};
-LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);const ind=rows.map(rowQg).filter(x=>x>0);
+LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);queueMicrotask(()=>rows.forEach((r,i)=>{const e=document.getElementById('mst-'+i);if(!e)return;const q=rowQg(r),ok=isFinite(q);e.className='mst '+(ok?'ok':'pend');e.innerHTML=ok?icon('check')+fmt(q,1)+' mL/min':icon('clock')+'Pendiente: escribe el volumen';const c=e.closest('.mcd');if(c)c.classList.toggle('done',ok)}));const ind=rows.map(rowQg).filter(x=>x>0);
  return `<div class="resbox g" style="margin-top:12px">${icon('drop')}<div class="grow"><div class="mini">${S.clo.equipo==='T4'?'Caudal de inyección medido':'Caudal medido'}</div><b class="v">${isFinite(Qg)?fmt(Qg,2)+' mL/min':'—'}</b><div class="mini">${isFinite(Qg)?fmt(0.06*Qg,3)+' L/h · ':''}${ind.length} medición${ind.length===1?'':'es'} válidas</div></div><span class="badge ${isFinite(Qg)?'ok':'na'}">Resultado calculado</span></div>
  ${ind.length>1?`<div class="mini" style="margin-top:8px">Por medición: ${ind.map(x=>fmt(x,2)).join(' · ')} mL/min. Si las mediciones varían, repite la medición.</div>`:''}`};
 
@@ -5687,7 +5697,7 @@ function fieldsInit(){
   l.parentNode.insertBefore(w,l);w.appendChild(l);w.appendChild(n)})}
 function hdrCollapse(prev){
  setThemeColor();{const t=document.querySelector('.tabbar');if(t)UI.tbN=+t.dataset.n}
- {/* cabecera protagonista: flota sobre el contenido para que al compactarse no mueva la página (evita el parpadeo) */const hb=document.querySelector('#app .appbar.hero'),sc0=document.getElementById('scroll');if(hb&&sc0){const was=hb.classList.contains('hcol');hb.classList.add('hprg');if(was)hb.classList.remove('hcol');hb.style.transition='none';const H=hb.offsetHeight;if(was)hb.classList.add('hcol');hb.offsetHeight;hb.style.transition='';const prevPad=parseFloat(sc0.style.paddingTop)||0,keep=sc0.scrollTop;sc0.style.paddingTop=H+'px';sc0.style.scrollPaddingTop=H+'px';if(prevPad&&prevPad!==H&&keep)sc0.scrollTop=keep+(H-prevPad);UI.heroH=H;heroSpace(hb,sc0);if(UI.keepC){UI.keepC=0;sc0.scrollTop=heroD(hb)}heroSync()}}
+ {/* cabecera protagonista: flota sobre el contenido para que al compactarse no mueva la página (evita el parpadeo) */const hb=document.querySelector('#app .appbar.hero'),sc0=document.getElementById('scroll');if(hb&&sc0){const was=hb.classList.contains('hcol');hb.classList.add('hprg');if(was)hb.classList.remove('hcol');hb.style.transition='none';const H=hb.offsetHeight;if(was)hb.classList.add('hcol');hb.offsetHeight;hb.style.transition='';const prevPad=parseFloat(sc0.style.paddingTop)||0,keep=sc0.scrollTop;sc0.style.paddingTop=H+'px';sc0.style.setProperty('--hp',H+'px');sc0.style.scrollPaddingTop=H+'px';if(prevPad&&prevPad!==H&&keep)sc0.scrollTop=keep+(H-prevPad);UI.heroH=H;heroSpace(hb,sc0);if(UI.keepC){UI.keepC=0;sc0.scrollTop=heroD(hb)}heroSync()}}
  const sc=document.getElementById('scroll'),bar=document.querySelector('.appbar'),tb=document.querySelector('.tabbar'),app=document.querySelector('#app .app')||document.getElementById('app');if(!sc)return;
  if(bar)bar.style.setProperty('--hh',bar.offsetHeight+'px');
  let hidden=false,last=sc.scrollTop,lock=0,acc=0,room=sc.scrollHeight-sc.clientHeight;const hh=bar?bar.offsetHeight:0;
@@ -7098,7 +7108,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:41</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:54</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
