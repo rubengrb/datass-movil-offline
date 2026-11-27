@@ -3751,6 +3751,19 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 
 .sel-wrap,#app .sel-wrap,.sel-wrap *{-webkit-tap-highlight-color:transparent!important;-webkit-touch-callout:none}
 .dfld .sel-wrap:active select.inp,.dfld .sel-wrap:focus-within select.inp{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+/* Cloración con el mismo campo que Monitoreo de cloro (.fld: etiqueta interna, 60 px, borde de línea, foco primario) */
+.dform .dgrid{grid-template-columns:1fr;gap:8px}
+.dfld .fld{margin:8px 0 4px}
+.dfld .fld .inp,.dfld .fld select.inp,.dfld .fld .inp:focus,.dfld .fld select.inp:focus,.dfld .fld select.inp:active{border:0!important;box-shadow:none!important;background:transparent!important;border-radius:var(--r-lg);padding:29px 64px 8px 46px!important;min-height:60px;font-weight:600;font-size:16px}
+.dfld .fld select.inp{padding-right:44px!important}
+.dfld .fld .sel-wrap:active select.inp,.dfld .fld .sel-wrap:focus-within select.inp{border:0!important;box-shadow:none!important}
+.dfld .fld>label.f{left:46px;max-width:calc(100% - 46px - 40px)}
+.dfi>svg{top:calc(50% + 8px)}
+.dfld .fld .inp-wrap .u{top:calc(50% + 8px);right:16px;font-weight:700}
+.dfld .fld>.finfo{position:absolute;top:2px;right:4px;margin:0;width:30px;height:30px;z-index:2;color:var(--muted)}
+.dfld .fld>.finfo svg{width:16px;height:16px}
+.dfld .fld:focus-within>label.f{color:var(--blue)}
+.dfld .fld+.errtxt{margin:2px 4px 8px;font-size:var(--fs-sm);font-weight:700;color:var(--red);padding:0}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5084,7 +5097,7 @@ LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);const ind=r
 
 LIVE['clo-dosis']=()=>{const c=S.clo,r=cloCalc(c);if(!r.ok)return `<div class="dlive off">${icon('info')}<div>Completa los datos para ver cuánto producto se necesita.</div></div>`;return `<div class="dlive">${icon('flask')}<div class="grow"><div class="mini">${r.solid?'Hipoclorito de calcio requerido':'Hipoclorito de sodio requerido'}</div><b class="v">${r.solid?fmt(r.P,0)+' g':fmt(r.Vp,2)+' L'}</b><div class="mini">${r.solid?'al '+fmt(r.p,0)+' % de cloro disponible':'agua aproximada '+fmt(r.Va,2)+' L'} · solución madre ${fmt(r.Cs,0)} mg/L</div></div></div>`};
 screens['clo-dosis']=()=>{const c=S.clo,d=c.dos,k=c.caudal,Qi=cloQi(c),solid=d.producto==='cal';
- const fld=(ic,t,sub,inner,e,wide)=>{const ix=sub.indexOf('<span class="sugs">'),tx=ix<0?sub:sub.slice(0,ix),sg='',key='f'+(e||t),fi={fp:'percent',fpl:'percent',fVfinal:'beaker',fD:'dosedrop',fVna:'tankrem'}[key]||ic;(window.CLO_HELP=window.CLO_HELP||{})[key]={ic:fi,t,tx};return `<div class="dfld ${wide?'wide':''} ${e&&UI.err[e]?'bad':''}"><div class="flab"><b>${t}</b><button type="button" class="finfo" data-act="fInfo" data-arg="${key}" aria-label="Más información sobre ${t}">${icon('info')}</button></div><div class="dfi">${icon(fi)}${inner}</div>${sg}${e?err(e):''}</div>`};
+ const fld=(ic,t,sub,inner,e,wide)=>{const ix=sub.indexOf('<span class="sugs">'),tx=ix<0?sub:sub.slice(0,ix),sg='',key='f'+(e||t),fi={fp:'percent',fpl:'percent',fVfinal:'beaker',fD:'dosedrop',fVna:'tankrem'}[key]||ic;(window.CLO_HELP=window.CLO_HELP||{})[key]={ic:fi,t,tx};return `<div class="dfld wide ${e&&UI.err[e]?'bad':''}"><div class="fld dfi"><label class="f">${t}</label>${icon(fi)}${inner}<button type="button" class="finfo" data-act="fInfo" data-arg="${key}" aria-label="Más información sobre ${t}">${icon('info')}</button></div>${e?err(e):''}</div>`};
  const cinfo=(key,ic,t,tx,val)=>{(window.CLO_HELP=window.CLO_HELP||{})[key]={ic,t,tx};const vi=String(val).indexOf(' '),vn=vi<0?val:val.slice(0,vi),vu=vi<0?'':val.slice(vi+1);return `<button type="button" class="dfact" data-act="fInfo" data-arg="${key}" aria-label="${t}: ${val}. Más información">${icon(ic)}<b>${vn}<small>${vu}</small></b><span>${t}</span></button>`};
  const row=(ic,t,sub,inner,e)=>`<div class="drow"><div class="ico">${icon(ic)}</div><div class="grow"><b>${t}</b><small>${sub}</small></div><div class="dinp">${inner}</div></div>${e?err(e):''}`;
  const sug=(path,vals,unit)=>`<span class="sugs"><i>Referencia común:</i>${vals.map(v=>`<button data-act="set" data-path="${path}" data-val="${v}">${String(v).replace('.',',')}${unit?' '+unit:''}</button>`).join('')}</span>`;
@@ -7086,7 +7099,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 22:52</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 23:09</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
