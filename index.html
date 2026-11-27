@@ -3695,6 +3695,7 @@ html[data-syshead=oceano] .appbar.hero:not(.prof) .hchipk{background:rgba(0,0,0,
 .dform .dsec{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--text);margin:0 0 12px}
 .dform .dsec svg{width:18px;height:18px;color:var(--ok,#1E7B3A)}
 .dform .dsec{padding:0}
+.dfld .flab{margin-bottom:8px}.dfld .flab b{font-size:13px;font-weight:600}
 
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -5026,7 +5027,7 @@ LIVE['clo-previa']=()=>{const rows=S.clo.previa.rows,Qg=rowsQg(rows);const ind=r
 
 LIVE['clo-dosis']=()=>{const c=S.clo,r=cloCalc(c);if(!r.ok)return `<div class="dlive off">${icon('info')}<div>Completa los datos para ver cuánto producto se necesita.</div></div>`;return `<div class="dlive">${icon('flask')}<div class="grow"><div class="mini">${r.solid?'Hipoclorito de calcio requerido':'Hipoclorito de sodio requerido'}</div><b class="v">${r.solid?fmt(r.P,0)+' g':fmt(r.Vp,2)+' L'}</b><div class="mini">${r.solid?'al '+fmt(r.p,0)+' % de cloro disponible':'agua aproximada '+fmt(r.Va,2)+' L'} · solución madre ${fmt(r.Cs,0)} mg/L</div></div></div>`};
 screens['clo-dosis']=()=>{const c=S.clo,d=c.dos,k=c.caudal,Qi=cloQi(c),solid=d.producto==='cal';
- const fld=(ic,t,sub,inner,e,wide)=>`<div class="dfld ${wide?'wide':''} ${e&&UI.err[e]?'bad':''}"><div class="flab"><span class="ico">${icon(ic)}</span><b>${t}</b></div>${inner}<small>${sub}</small>${e?err(e):''}</div>`;
+ const fld=(ic,t,sub,inner,e,wide)=>`<div class="dfld ${wide?'wide':''} ${e&&UI.err[e]?'bad':''}"><div class="flab"><b>${t}</b></div>${inner}<small>${sub}</small>${e?err(e):''}</div>`;
  const row=(ic,t,sub,inner,e)=>`<div class="drow"><div class="ico">${icon(ic)}</div><div class="grow"><b>${t}</b><small>${sub}</small></div><div class="dinp">${inner}</div></div>${e?err(e):''}`;
  const sug=(path,vals,unit)=>`<span class="sugs">Sugerido: ${vals.map(v=>`<button data-act="set" data-path="${path}" data-val="${v}">${String(v).replace('.',',')}${unit?' '+unit:''}</button>`).join('')}</span>`;
  const inp=(path,unit,ph='')=>`<div class="inp-wrap"><input class="inp" inputmode="decimal" placeholder="${ph}" data-bind="${path}" data-live value="${esc(getPath(S,path)??'')}"><span class="u">${unit}</span></div>`;
@@ -7027,7 +7028,7 @@ setTimeout(()=>{if(typeof TECH==='undefined'||typeof act==='undefined')return;
  act.cloEqInfoPick=function(k){UI.sheet=null;renderOverlay();act.cloPickEq(k)}},0);
 
 /* Ajustes: versión de la app al final (para saber si el equipo tiene la última) */
-{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 20:03</p></div>');return v}}
+{const _ajv=screens.ajustes;screens.ajustes=function(){const v=_ajv.apply(this,arguments);if(v&&v.body)v.body=v.body.replace(/<\/div>\s*$/,'<p class="appver">Versión 26/11 · 20:06</p></div>');return v}}
 
 /* ===== Almacenamiento: espacio que ocupa DATASS en el equipo y liberar espacio ===== */
 const ALM_D=30*864e5,f1=v=>(Math.round(v*10)/10).toFixed(1).replace('.',',');
